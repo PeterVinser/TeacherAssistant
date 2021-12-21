@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/users_search_view"
+        android:icon="@drawable/ic_search_icon"
+        android:title="@string/menu_toolbar_search_text"
+        android:hint="@string/search_users_hint"
+        android:iconifiedByDefault="false"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+</menu>

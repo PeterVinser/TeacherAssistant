@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="userProfile"
+            type="com.piotrokninski.teacherassistant.model.SearchedUserItem.UserProfile" />
+        
+        <import type="android.view.View"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/user_profile_item_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/user_profile_item_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="4dp"
+                    android:paddingTop="4dp"
+                    android:text="@{userProfile.user.fullName}"
+                    android:textSize="20sp"
+                    tools:text="Imię i nazwisko" />
+
+                <TextView
+                    android:id="@+id/user_profile_item_profession"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="@{userProfile.user.getProfession()}"
+                    tools:text="Uczeń" />
+
+                <TextView
+                    android:id="@+id/user_profile_item_subjects"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@{userProfile.user.subjects}"
+                    android:visibility="@{userProfile.user.subjects != null ? View.VISIBLE : View.GONE}"
+                    tools:text="Przedmioty" />
+
+                <TextView
+                    android:id="@+id/user_profile_item_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@{userProfile.user.summary}"
+                    tools:text="Opis" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</layout>

@@ -1,0 +1,115 @@
+<resources>
+    <string name="app_name">TeacherAssistant</string>
+    <string name="default_web_client_id_manual" translatable="false">1082333744560-fnosncf9j0b84tgc8dfk5ecm6hjeb2nv.apps.googleusercontent.com</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="title_activity_search">SearchActivity</string>
+
+    <string name="sidebar_open">Open</string>
+    <string name="sidebar_close">Close</string>
+    <string name="email_hint_text">Email</string>
+    <string name="email_title_text">Email:</string>
+    <string name="password_hint_text">Hasło</string>
+    <string name="sign_in_text">Zaloguj się</string>
+    <string name="sign_up_text">Zarejestruj się</string>
+    <string name="minimum_password_text">Minimum password</string>
+    <string name="menu_toolbar_calendar_text">Kalendarz</string>
+    <string name="menu_main_contacts_text">Kontakty</string>
+    <string name="menu_main_exercises_text">Zadania</string>
+    <string name="menu_user_account_settings_text">Ustawienia</string>
+    <string name="settings_sign_out_text">Wyloguj</string>
+    <string name="menu_main_home_text">Główna</string>
+    <string name="menu_main_courses_text">Zajęcia</string>
+    <string name="avatar_image_description">Avatar</string>
+
+    <string name="full_name_hint_text">Imię i nazwisko</string>
+    <string name="full_name_title_text">Imię i nazwisko:</string>
+    <string name="username_hint_text">Nazwa użytkownika</string>
+    <string name="username_title_text">Nazwa użytkownika:</string>
+    <string name="user_complete_text">Uzupełnij</string>
+    <string name="user_subjects_title_text">Przedmioty: </string>
+    <string name="user_localization_title_text">Lokalizacja: </string>
+    <string name="user_preferred_price_title_text">Stawka za godzinę zajęć: </string>
+
+    <string name="menu_toolbar_search_text">Szukaj</string>
+    <string name="menu_toolbar_user_text">Twoje konto</string>
+    <string name="menu_user_account_edit_text">Edytuj profil</string>
+    <string name="student_title_text">Uczeń</string>
+    <string name="tutor_title_text">Korepetytor</string>
+
+    <string name="student_view_text">Widok ucznia</string>
+    <string name="tutor_view_text">Widok korepetytora</string>
+
+    <string name="student_and_tutor_title_text">Uczeń/Korepetytor</string>
+    <string name="nobody_title_text">Nikt</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="main_fab_description">Dodaj</string>
+
+    <string name="search_users_hint">Znajdź użytkownika</string>
+    <string name="menu_search_text">Wyszukaj</string>
+    <string name="no_users_text">Brak użytkowników</string>
+    <string name="register_detail_subjects_hint">Twoje przedmioty</string>
+    <string name="register_detail_title">Uzupełnij rejestrację</string>
+    <string name="register_detail_localization_hint">Lokalizacja</string>
+    <string name="register_detail_summary_hint">Krótki opis</string>
+    <string name="user_profile_invite_button_text">Wyślij zaproszenie</string>
+    <string name="user_profile_approve_button_text">Potwierdź</string>
+    <string name="user_profile_cancel_button_text">Anuluj</string>
+    <string name="user_profile_delete_button_text">Usuń znajomego</string>
+    <string name="home_welcome_text">Witaj!</string>
+
+    <string name="home_friend_invitation_text">Zaproszenie</string>
+    <string name="invitation_title">Zaproszenie</string>
+    <string name="invitation_type_title">Zaproś użytkownika jako:</string>
+    <string name="invitation_type_student_text">Ucznia</string>
+    <string name="invitation_type_tutor_text">Korepetytora</string>
+    <string name="invitation_type_friend_text">Znajomego</string>
+    <string name="invitation_message_title">Napisz wiadomość</string>
+    <string name="invitation_message_hint">Cześć…</string>
+    <string name="dialog_cancel_text">Anuluj</string>
+    <string name="invitation_dialog_details_text">Dalej</string>
+    <string name="invitation_send_text">Wyślij</string>
+    <string name="invitation_details_radio_student_text">Uczeń</string>
+    <string name="invitation_details_radio_tutor_text">Korepetytor</string>
+    <string name="invitation_details_add_lesson_text">Dodaj zajęcia</string>
+    <string name="lesson_item_title">Zajęcia</string>
+    <string name="lesson_item_my_subjects_text">Tylko moje przedmioty</string>
+    <string name="lesson_item_previous_button_description">Previous lesson</string>
+    <string name="lesson_item_next_button_description">Next lesson</string>
+    <string name="lesson_item_subjects_temporal_text">Przedmiot</string>
+    <string name="lesson_item_time_title">Wybierz dni i czas spotkań</string>
+    <string name="lesson_item_add_meeting_text">Dodaj</string>
+    <string name="meeting_dialog_confirm_text">Zatwierdź</string>
+    <string name="meeting_dialog_title">Wybierz terminy spotkań</string>
+    <string name="monday_short_text">Pn</string>
+    <string name="tuesday_short_text">Wt</string>
+    <string name="wednesday_short_text">Śr</string>
+    <string name="thursday_short_text">Cz</string>
+    <string name="friday_short_text">Pt</string>
+    <string name="saturday_short_text">Sb</string>
+    <string name="sunday_short_text">Nd</string>
+    <string name="lesson_item_remove_button_description">Usuń zajęcia</string>
+    <string name="lesson_item_remove_text">Usuń</string>
+    <string name="user_profile_reject_button_text">Usuń zaproszenie</string>
+    <string name="received_invitation_reject_button_text">Usuń</string>
+    <string name="received_invitation_confirm_button_text">Potwierdź</string>
+    <string name="received_invitation_profile_button_text">Profil</string>
+    <string name="received_invitation_dialog_details_text">Szczegóły</string>
+
+    <string-array name="lesson_types">
+        <item>Stacjonarne</item>
+        <item>Zdalne</item>
+    </string-array>
+
+</resources>

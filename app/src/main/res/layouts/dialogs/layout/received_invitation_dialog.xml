@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="friendInvitation"
+            type="com.piotrokninski.teacherassistant.model.FriendInvitation" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/received_invitation_dialog_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@{friendInvitation.invitingUserFullName}"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            tools:text="Imię i nazwisko" />
+
+        <TextView
+            android:id="@+id/received_invitation_dialog_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textAlignment="textStart"
+            android:textSize="16sp"
+            tools:text="Opis" />
+
+        <TextView
+            android:id="@+id/received_invitation_dialog_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@{friendInvitation.invitationMessage}"
+            android:textAlignment="textStart"
+            android:textSize="16sp"
+            tools:text="Hej!" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/received_invitation_dialog_profile_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/received_invitation_profile_button_text"
+                app:icon="@drawable/ic_user_icon"
+                app:iconSize="24dp" />
+
+            <Button
+                android:id="@+id/received_invitation_dialog_details_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/received_invitation_dialog_details_text"
+                app:icon="@drawable/ic_details_icon"
+                app:iconSize="24dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/received_invitation_dialog_reject_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/received_invitation_reject_button_text"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/received_invitation_dialog_confirm_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/received_invitation_confirm_button_text"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

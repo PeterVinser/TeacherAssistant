@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/destination_home">
+    <fragment
+        android:id="@+id/destination_home"
+        android:name="com.piotrokninski.teacherassistant.view.main.HomeFragment"
+        android:label="@string/menu_main_home_text"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_user"
+            app:destination="@id/menu_toolbar_destination_user_account" />
+        <action
+            android:id="@+id/action_home_to_searchUsers"
+            app:destination="@id/users_search_view" />
+        <action
+            android:id="@+id/action_home_to_userProfile"
+            app:destination="@id/destination_user_profile" />
+        <action
+            android:id="@+id/action_home_to_calendar"
+            app:destination="@id/menu_toolbar_destination_calendar"/>
+        <action
+            android:id="@+id/action_home_to_receivedInvitationDetails"
+            app:destination="@id/destination_received_invitation_details"/>
+    </fragment>
+    <fragment
+        android:id="@+id/menu_toolbar_destination_calendar"
+        android:name="com.piotrokninski.teacherassistant.view.main.CalendarFragment"
+        android:label="@string/menu_toolbar_calendar_text"
+        tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/destination_contacts"
+        android:name="com.piotrokninski.teacherassistant.view.main.ContactsFragment"
+        android:label="@string/menu_main_contacts_text"
+        tools:layout="@layout/fragment_contacts" >
+        <action
+            android:id="@+id/action_contacts_to_user_profile"
+            app:destination="@id/destination_user_profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_exercises"
+        android:name="com.piotrokninski.teacherassistant.view.main.HomeworkFragment"
+        android:label="@string/menu_main_exercises_text"
+        tools:layout="@layout/fragment_homework" />
+    <fragment
+        android:id="@+id/destination_settings"
+        android:name="com.piotrokninski.teacherassistant.view.main.SettingsFragment"
+        android:label="@string/menu_user_account_settings_text"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/menu_toolbar_destination_user_account"
+        android:name="com.piotrokninski.teacherassistant.view.main.UserAccountFragment"
+        android:label="Twoje konto"
+        tools:layout="@layout/fragment_user_account" >
+        <action
+            android:id="@+id/action_userAccount_to_settings"
+            app:destination="@id/destination_settings"/>
+    </fragment>
+    <fragment
+        android:id="@+id/destination_courses"
+        android:name="com.piotrokninski.teacherassistant.view.main.NotesFragment"
+        android:label="@string/menu_main_courses_text"
+        tools:layout="@layout/fragment_notes" />
+    <fragment
+        android:id="@+id/users_search_view"
+        android:name="com.piotrokninski.teacherassistant.view.main.SearchUsersFragment"
+        tools:layout="@layout/fragment_search_users">
+        <action
+            android:id="@+id/action_searchedUsers_to_userProfile"
+            app:destination="@id/destination_user_profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_user_profile"
+        android:name="com.piotrokninski.teacherassistant.view.main.UserProfileFragment"
+        tools:layout="@layout/fragment_user_profile">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_userProfile_to_invitationDetails"
+            app:destination="@id/destination_invitation_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_invitation_details"
+        android:name="com.piotrokninski.teacherassistant.view.main.InvitationDetailsFragment"
+        tools:layout="@layout/fragment_invitation_details">
+        <argument
+            android:name="friendInvitation"
+            app:argType="com.piotrokninski.teacherassistant.model.FriendInvitation" />
+        <action
+            android:id="@+id/action_invitationDetails_to_home"
+            app:destination="@id/destination_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_received_invitation_details"
+        android:name="com.piotrokninski.teacherassistant.view.main.ReceivedInvitationDetailsFragment"
+        tools:layout="@layout/fragment_received_invitation_details"/>
+</navigation>

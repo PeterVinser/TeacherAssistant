@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="360dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/invitation_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/invitation_title"
+        android:textAlignment="center"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/invitation_type_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/invitation_type_title"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/invitation_dialog_type_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
+
+        <RadioButton
+            android:id="@+id/invitation_dialog_radio_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/invitation_type_student_text" />
+
+        <RadioButton
+            android:id="@+id/invitation_dialog_radio_tutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/invitation_type_tutor_text" />
+
+        <RadioButton
+            android:id="@+id/invitation_dialog_radio_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/invitation_type_friend_text" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/invitation_dialog_message_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/invitation_message_title"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/invitation_dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:autofillHints="no"
+        android:hint="@string/invitation_message_hint"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp">
+
+        <Button
+            android:id="@+id/invitation_dialog_cancel_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/dialog_cancel_text"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/invitation_dialog_next_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:text="@string/invitation_dialog_details_text"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

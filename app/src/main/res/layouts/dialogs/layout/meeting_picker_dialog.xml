@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/meeting_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/meeting_dialog_title"
+        android:textAlignment="center"
+        android:textSize="22sp" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/meeting_dialog_week_day_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        app:singleSelection="true">
+
+        <Button
+            android:id="@+id/meeting_dialog_monday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/monday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/meeting_dialog_tuesday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/tuesday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/meeting_dialog_wednesday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/wednesday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/meeting_dialog_thursday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/thursday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/meeting_dialog_friday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/friday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/meeting_dialog_saturday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/saturday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/meeting_dialog_sunday"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/weekDayPickerButtonWidth"
+            android:minWidth="0dp"
+            android:minHeight="48dp"
+            android:text="@string/sunday_short_text"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <TimePicker
+        android:id="@+id/meeting_dialog_time_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:timePickerMode="spinner" />
+
+    <TextView
+        android:id="@+id/meeting_dialog_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        tools:text="Poniedziałek, 11:30" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/meeting_dialog_cancel_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dialog_cancel_text"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/meeting_dialog_confirm_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@string/meeting_dialog_confirm_text"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

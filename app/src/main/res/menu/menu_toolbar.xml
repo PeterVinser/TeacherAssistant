@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_toolbar_destination_calendar"
+        android:icon="@drawable/ic_calendar_icon"
+        android:title="@string/menu_toolbar_calendar_text"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_toolbar_destination_search"
+        android:icon="@drawable/ic_search_icon"
+        android:title="@string/menu_toolbar_search_text"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_toolbar_destination_user_account"
+        android:icon="@drawable/ic_user_icon"
+        android:title="@string/menu_toolbar_user_text"
+        app:showAsAction="ifRoom" />
+</menu>
