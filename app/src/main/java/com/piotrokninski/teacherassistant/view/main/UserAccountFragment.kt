@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserAccountBinding
+import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.viewmodel.UserAccountFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.factory.UserAccountFragmentViewModelFactory
 
@@ -16,7 +17,7 @@ class UserAccountFragment : Fragment() {
 
     private lateinit var binding: FragmentUserAccountBinding
 
-    private lateinit var mUserAccountViewModel: UserAccountFragmentViewModel
+    private lateinit var userAccountViewModel: UserAccountFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +38,31 @@ class UserAccountFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(false)
 
+        binding.userAccountViewTypeButton.setOnCheckedChangeListener { compoundButton, b -> onViewTypeButtonClicked(b) }
+
         setupViewModel()
+    }
+
+    private fun onViewTypeButtonClicked(b: Boolean) {
+        //b is true when the button is set to student view
+        val viewType = if (b) {
+            AppConstants.VIEW_TYPE_STUDENT
+        } else {
+            AppConstants.VIEW_TYPE_TUTOR
+        }
+        (activity as MainActivity).updateViewType(viewType)
     }
 
     private fun setupViewModel() {
         val factory = UserAccountFragmentViewModelFactory()
-        mUserAccountViewModel = ViewModelProvider(this, factory).get(UserAccountFragmentViewModel::class.java)
+        userAccountViewModel = ViewModelProvider(this, factory).get(UserAccountFragmentViewModel::class.java)
 
-        binding.userViewModel = mUserAccountViewModel
+        binding.userViewModel = userAccountViewModel
         binding.lifecycleOwner = this
 
         observeEditing()
+
+        observeUser()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -57,8 +72,8 @@ class UserAccountFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_user_account_edit -> {
-                mUserAccountViewModel.editing.value = !mUserAccountViewModel.editing.value!!
-                val editing = mUserAccountViewModel.editing.value!!
+                userAccountViewModel.editing.value = !userAccountViewModel.editing.value!!
+                val editing = userAccountViewModel.editing.value!!
                 if (editing) {
                     item.setIcon(R.drawable.ic_accept_icon)
 
@@ -66,7 +81,7 @@ class UserAccountFragment : Fragment() {
                 } else {
                     item.setIcon(R.drawable.ic_edit_icon)
 
-                    mUserAccountViewModel.updateUserData()
+                    userAccountViewModel.updateUserData()
 
                     Toast.makeText(activity, "Zmiany zaakceptowane", Toast.LENGTH_SHORT).show()
                 }
@@ -84,7 +99,7 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun observeEditing() {
-        mUserAccountViewModel.editing.observe(viewLifecycleOwner, { editing ->
+        userAccountViewModel.editing.observe(viewLifecycleOwner, { editing ->
             binding.userAccountFullName.isFocusableInTouchMode = editing
             binding.userAccountFullName.isEnabled = editing
 
@@ -96,6 +111,16 @@ class UserAccountFragment : Fragment() {
 
             binding.userAccountSubjects.isFocusableInTouchMode = editing
             binding.userAccountSubjects.isEnabled = editing
+        })
+    }
+
+    private fun observeUser() {
+        userAccountViewModel.user.observe(viewLifecycleOwner, { user ->
+            if (user.student && user.tutor) {
+                binding.userAccountViewTypeButton.visibility = View.VISIBLE
+            } else {
+                binding.userAccountViewTypeButton.visibility = View.GONE
+            }
         })
     }
 }

@@ -99,6 +99,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun updateViewType(viewType: String) {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+
+        with (sharedPref.edit()) {
+            putString(AppConstants.VIEW_TYPE, viewType)
+            apply()
+        }
+
+        mainActivityViewModel.updateViewType()
+
+        when (viewType) {
+            AppConstants.VIEW_TYPE_STUDENT ->
+                Toast.makeText(this, "Zmieniono na widok ucznia", Toast.LENGTH_SHORT).show()
+
+            AppConstants.VIEW_TYPE_TUTOR ->
+                Toast.makeText(this, "Zmieniono na widok korepetytora", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     fun signOut() {
         FirebaseAuth.getInstance().signOut()
         Toast.makeText(this, "Wylogowano", Toast.LENGTH_SHORT).show()

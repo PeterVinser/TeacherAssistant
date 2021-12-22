@@ -101,7 +101,7 @@
     <string name="sunday_short_text">Nd</string>
     <string name="lesson_item_remove_button_description">Usuń zajęcia</string>
     <string name="lesson_item_remove_text">Usuń</string>
-    <string name="user_profile_reject_button_text">Usuń zaproszenie</string>
+    <string name="user_profile_reject_button_text">Usuń</string>
     <string name="received_invitation_reject_button_text">Usuń</string>
     <string name="received_invitation_confirm_button_text">Potwierdź</string>
     <string name="received_invitation_profile_button_text">Profil</string>

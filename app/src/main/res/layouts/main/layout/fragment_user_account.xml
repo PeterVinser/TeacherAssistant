@@ -244,8 +244,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textOff="@string/student_view_text"
-            android:textOn="@string/tutor_view_text"/>
+            android:textOn="@string/student_view_text"
+            android:textOff="@string/tutor_view_text"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

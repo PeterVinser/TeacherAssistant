@@ -42,6 +42,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
         (activity as MainActivity).isBottomNavVisible(false)
 
         binding.invitationDetailsCourseItem.root.visibility = View.GONE
+        binding.invitationDetailsCourseHeader.visibility = View.GONE
 
         arguments?.let {
             val safeArgs = InvitationDetailsFragmentArgs.fromBundle(it)
@@ -51,6 +52,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
         initTypeRadio()
 
         binding.invitationDetailsAddCourseButton.setOnClickListener {
+            binding.invitationDetailsCourseHeader.visibility = View.VISIBLE
             val type = binding.invitationDetailsCourseItem.courseItemTypeSpinner.selectedItem.toString()
             invitationDetailsViewModel.addCourse(type)
         }
@@ -92,6 +94,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     private fun observeCourse() {
         invitationDetailsViewModel.course.observe(viewLifecycleOwner, { course ->
             if (course == null) {
+                binding.invitationDetailsCourseHeader.visibility = View.GONE
                 binding.invitationDetailsCourseItem.root.visibility = View.GONE
                 binding.invitationDetailsCourseItem.courseItemTypeSpinner.setSelection(0)
                 binding.invitationDetailsCourseItem.courseItemSubjects.text = null
