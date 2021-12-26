@@ -1,10 +1,10 @@
-package com.piotrokninski.teacherassistant.repository
+package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.piotrokninski.teacherassistant.model.UserHint
 import com.piotrokninski.teacherassistant.model.UserHint.Companion.toUserHint
-import com.piotrokninski.teacherassistant.model.contract.FirestoreUserHintContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserHintContract
 import kotlinx.coroutines.tasks.await
 
 object FirestoreUserHintRepository {

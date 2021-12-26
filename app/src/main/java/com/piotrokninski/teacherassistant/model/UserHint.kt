@@ -2,7 +2,7 @@ package com.piotrokninski.teacherassistant.model
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.FirestoreUserHintContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserHintContract
 import java.lang.Exception
 
 data class UserHint(val userId: String,

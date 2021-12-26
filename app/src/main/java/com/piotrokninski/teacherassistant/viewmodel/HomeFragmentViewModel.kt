@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.HomeFeedItem
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendInvitationRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import kotlinx.coroutines.launch
 
 class HomeFragmentViewModel: ViewModel() {

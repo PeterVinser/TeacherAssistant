@@ -2,8 +2,8 @@ package com.piotrokninski.teacherassistant.model
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.FirestoreCourseContract
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 
 data class Course(val studentId: String,
                   val tutorId: String,

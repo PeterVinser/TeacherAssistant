@@ -6,13 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.repository.FirestoreUserRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.repository.room.AppDatabase
+import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 import kotlinx.coroutines.launch
 
 class UserAccountFragmentViewModel: ViewModel(), Observable {
 
-    //TODO inspect the usage of mutable and live data and its accessibility
+    private val userRepository: RoomUserRepository
+
     val editing = MutableLiveData<Boolean>()
 
     @Bindable
@@ -25,8 +28,15 @@ class UserAccountFragmentViewModel: ViewModel(), Observable {
 
 
     init {
+        val userDao = AppDatabase.getInstance().userDao
+        userRepository = RoomUserRepository(userDao)
+
         viewModelScope.launch {
             user.value = FirestoreUserRepository.getUserDataOnce(FirebaseAuth.getInstance().currentUser!!.uid)
+
+            if (user.value != null) {
+                userRepository.updateUser(user.value!!)
+            }
         }
         editing.value = false
     }

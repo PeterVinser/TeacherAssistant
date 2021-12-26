@@ -1,21 +1,33 @@
 package com.piotrokninski.teacherassistant.model
 
 import android.util.Log
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.FirestoreUserContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
+import com.piotrokninski.teacherassistant.model.contract.room.RoomUserContract
+import java.io.Serializable
 
-//Data class is commonly used when a class' purpose is to hold data
-data class User(val userId: String,
-                var fullName: String,
-                var username: String,
-                var email: String,
-                var student: Boolean,
-                var tutor: Boolean,
-                var subjects: String?,
-                var localization: String?,
-                var localizationRange: Double?,
-                var preferredPrice: String?,
-                var summary: String) {
+@Entity(tableName = RoomUserContract.TABLE_NAME)
+data class User (
+
+    @PrimaryKey
+    @ColumnInfo(name = RoomUserContract.USER_ID)
+    val userId: String,
+
+    var fullName: String,
+    var username: String,
+    var email: String,
+    var student: Boolean,
+    var tutor: Boolean,
+    var subjects: String?,
+    var localization: String?,
+    var localizationRange: Double?,
+    var preferredPrice: String?,
+    var summary: String
+
+    ) : Serializable {
 
     fun getProfession(): String {
         return if (student && tutor) {

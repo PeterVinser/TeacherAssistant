@@ -95,7 +95,7 @@ class LoginFragment : Fragment() {
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    (activity as OnSigned).onSignedSuccessful(false)
+                    (activity as StartActivity).onSignedSuccessful(null)
                 } else {
                     Toast.makeText(activity, "Firebase authentication failed", Toast.LENGTH_SHORT).show()
                 }
@@ -116,7 +116,7 @@ class LoginFragment : Fragment() {
         mAuth.signInWithEmailAndPassword(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
             .addOnCompleteListener(requireActivity()) {task ->
                 if (task.isSuccessful) {
-                    (activity as OnSigned).onSignedSuccessful(false)
+                    (activity as StartActivity).onSignedSuccessful(null)
                 } else {
                     if (binding.loginPassword.text.toString().length < 6) {
                         binding.loginPassword.error = getString(R.string.minimum_password_text)

@@ -3,6 +3,7 @@ package com.piotrokninski.teacherassistant.view.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -17,6 +18,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
+import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.MainActivityViewModel
@@ -42,31 +45,47 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
+        MainPreferences.instantiate(this)
 
         setupNavigation()
 
-        val registered = intent.getBooleanExtra(AppConstants.START_REGISTERED_EXTRA, false)
+        setupViewModel()
 
-        onUserRegistered(registered)
-
-        setViewModel()
+        onUserRegistered()
     }
 
-    private fun setViewModel() {
-        val factory = MainActivityViewModelFactory()
+    private fun setupViewModel() {
+        val sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
+        val factory = MainActivityViewModelFactory(sharedPreferences)
         mainActivityViewModel = ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
+
+        observeViewType()
     }
 
-    private fun onUserRegistered(registered: Boolean) {
-        if (registered) {
-            navController.navigate(R.id.action_home_to_user)
+    private fun observeViewType() {
+        mainActivityViewModel.viewType.observe(this, { viewType ->
+            
+        })
+    }
+
+    private fun onUserRegistered() {
+
+        val registeredUser = intent.getSerializableExtra(AppConstants.REGISTERED_USER_EXTRA) as User?
+
+        if (registeredUser != null) {
+//            navController.navigate(R.id.action_home_to_user)
+            mainActivityViewModel.initUser(registeredUser)
+
+            Log.d(TAG, "onUserRegistered: registered")
         }
     }
 
     private fun setupNavigation() {
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
         //Setting the action bar
         appBarConfiguration = AppBarConfiguration(navController.graph)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
@@ -100,14 +119,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateViewType(viewType: String) {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
 
-        with (sharedPref.edit()) {
-            putString(AppConstants.VIEW_TYPE, viewType)
-            apply()
-        }
-
-        mainActivityViewModel.updateViewType()
+        mainActivityViewModel.updateViewType(viewType)
 
         when (viewType) {
             AppConstants.VIEW_TYPE_STUDENT ->

@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.model.contract
+package com.piotrokninski.teacherassistant.model.contract.firestore
 
 object FirestoreCourseContract {
 

@@ -40,7 +40,7 @@
             app:destination="@id/destination_user_profile" />
     </fragment>
     <fragment
-        android:id="@+id/destination_exercises"
+        android:id="@+id/destination_homework"
         android:name="com.piotrokninski.teacherassistant.view.main.HomeworkFragment"
         android:label="@string/menu_main_exercises_text"
         tools:layout="@layout/fragment_homework" />
@@ -60,9 +60,9 @@
     </fragment>
     <fragment
         android:id="@+id/destination_courses"
-        android:name="com.piotrokninski.teacherassistant.view.main.NotesFragment"
+        android:name="com.piotrokninski.teacherassistant.view.main.CoursesFragment"
         android:label="@string/menu_main_courses_text"
-        tools:layout="@layout/fragment_notes" />
+        tools:layout="@layout/fragment_courses" />
     <fragment
         android:id="@+id/users_search_view"
         android:name="com.piotrokninski.teacherassistant.view.main.SearchUsersFragment"

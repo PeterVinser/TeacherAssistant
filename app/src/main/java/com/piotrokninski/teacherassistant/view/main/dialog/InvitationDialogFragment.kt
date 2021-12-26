@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.InvitationDialogBinding
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 
 class InvitationDialogFragment(
     private val callback: (invitationType: String, invitationMessage: String?) -> Unit): DialogFragment() {

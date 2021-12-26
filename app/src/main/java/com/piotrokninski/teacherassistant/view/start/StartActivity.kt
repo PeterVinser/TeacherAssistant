@@ -6,10 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
+import com.piotrokninski.teacherassistant.model.User
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 
-class StartActivity : AppCompatActivity(), OnSigned {
+class StartActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
 
@@ -28,14 +29,15 @@ class StartActivity : AppCompatActivity(), OnSigned {
         super.onStart()
 
         if (mAuth.currentUser != null) {
-            onSignedSuccessful(false)
+            onSignedSuccessful(null)
         }
     }
 
-    override fun onSignedSuccessful(registered: Boolean) {
+    fun onSignedSuccessful(user: User?) {
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(AppConstants.START_REGISTERED_EXTRA, registered)
+        intent.putExtra(AppConstants.REGISTERED_USER_EXTRA, user)
         startActivity(intent)
         finish()
     }
+
 }

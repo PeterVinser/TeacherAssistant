@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_menu_notes"
         android:title="@string/menu_main_courses_text" />
     <item
-        android:id="@+id/destination_exercises"
+        android:id="@+id/destination_homework"
         android:icon="@drawable/ic_menu_homework"
         android:title="@string/menu_main_exercises_text" />
     <item

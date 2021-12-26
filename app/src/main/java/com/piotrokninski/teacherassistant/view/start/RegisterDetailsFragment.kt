@@ -11,8 +11,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.databinding.FragmentRegisterDetailsBinding
 import com.piotrokninski.teacherassistant.model.User
 import com.piotrokninski.teacherassistant.model.UserHint
-import com.piotrokninski.teacherassistant.repository.FirestoreUserHintRepository
-import com.piotrokninski.teacherassistant.repository.FirestoreUserRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
+import com.piotrokninski.teacherassistant.repository.room.AppDatabase
+import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 
 class RegisterDetailsFragment : Fragment() {
 
@@ -69,7 +71,6 @@ class RegisterDetailsFragment : Fragment() {
                 if (it.isSuccessful) {
                     onUserRegistered(isStudent, isTutor, subjects, localization, summary)
                     Toast.makeText(activity, "Rejestracja udana!", Toast.LENGTH_SHORT).show()
-                    (activity as OnSigned).onSignedSuccessful(true)
                 } else {
                     Toast.makeText(activity, "Autentyfikacja nie powiodła się", Toast.LENGTH_SHORT).show()
                 }
@@ -80,9 +81,7 @@ class RegisterDetailsFragment : Fragment() {
         val userId = mAuth.currentUser!!.uid
 
         val user = User(userId, fullName, username, email, isStudent, isTutor, subjects, localization, null, null, summary)
-        val userHint = UserHint.createHint(userId, fullName)
 
-        FirestoreUserRepository.setUserData(user)
-        FirestoreUserHintRepository.setUserHintData(userHint)
+        (activity as StartActivity).onSignedSuccessful(user)
     }
 }

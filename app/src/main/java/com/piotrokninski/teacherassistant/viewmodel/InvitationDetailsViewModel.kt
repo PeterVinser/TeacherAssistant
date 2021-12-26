@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModel
 import com.piotrokninski.teacherassistant.model.Course
 import com.piotrokninski.teacherassistant.model.Friend
 import com.piotrokninski.teacherassistant.model.FriendInvitation
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendInvitationContract
-import com.piotrokninski.teacherassistant.repository.FirestoreCourseRepository
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendInvitationRepository
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 
 class InvitationDetailsViewModel(invitation: FriendInvitation) : ViewModel(), Observable {
     private val TAG = "InvitationDetailsViewMo"

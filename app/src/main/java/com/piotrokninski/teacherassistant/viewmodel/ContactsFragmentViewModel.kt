@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.Friend
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 import kotlinx.coroutines.launch
 
 class ContactsFragmentViewModel : ViewModel() {

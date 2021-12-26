@@ -1,6 +1,6 @@
 package com.piotrokninski.teacherassistant.model
 
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 
 sealed class HomeFeedItem {
     abstract val id: String

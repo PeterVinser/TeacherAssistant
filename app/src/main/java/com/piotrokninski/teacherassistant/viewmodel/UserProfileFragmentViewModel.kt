@@ -11,10 +11,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.Friend
 import com.piotrokninski.teacherassistant.model.FriendInvitation
 import com.piotrokninski.teacherassistant.model.User
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendInvitationRepository
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendRepository
-import com.piotrokninski.teacherassistant.repository.FirestoreUserRepository
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import kotlinx.coroutines.launch
 
 class UserProfileFragmentViewModel(private val searchedUserId: String): ViewModel(), Observable {

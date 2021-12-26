@@ -2,8 +2,8 @@ package com.piotrokninski.teacherassistant.model
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.repository.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 import java.lang.Exception
 
 data class Friend(val userId: String,

@@ -14,7 +14,7 @@ import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentInvitationDetailsBinding
 import com.piotrokninski.teacherassistant.model.FriendInvitation
-import com.piotrokninski.teacherassistant.model.contract.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.util.Util
 import com.piotrokninski.teacherassistant.view.main.dialog.MeetingPickerDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsViewModel

@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piotrokninski.teacherassistant.model.SearchedUserItem
-import com.piotrokninski.teacherassistant.repository.FirestoreUserHintRepository
-import com.piotrokninski.teacherassistant.repository.FirestoreUserRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.launch
 

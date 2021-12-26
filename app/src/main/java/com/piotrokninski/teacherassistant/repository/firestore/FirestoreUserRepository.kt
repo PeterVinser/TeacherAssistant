@@ -1,8 +1,8 @@
-package com.piotrokninski.teacherassistant.repository
+package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.contract.FirestoreUserContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
 import com.piotrokninski.teacherassistant.model.User
 import com.piotrokninski.teacherassistant.model.User.Companion.toUser
 import com.piotrokninski.teacherassistant.model.UserHint
