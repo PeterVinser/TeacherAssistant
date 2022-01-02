@@ -15,7 +15,6 @@
         android:layout_height="match_parent">
 
         <ScrollView
-            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +24,7 @@
                 android:id="@+id/user_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".view.main.UserAccountFragment">
+                tools:context=".view.main.fragment.UserAccountFragment">
 
                 <ImageView
                     android:id="@+id/user_account_image"

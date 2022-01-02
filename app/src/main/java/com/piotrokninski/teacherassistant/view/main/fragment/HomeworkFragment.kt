@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.piotrokninski.teacherassistant.R
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 
 class HomeworkFragment : Fragment() {
 
@@ -21,5 +22,6 @@ class HomeworkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as MainActivity).isBottomNavVisible(true)
     }
 }

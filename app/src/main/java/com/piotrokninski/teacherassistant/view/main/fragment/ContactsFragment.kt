@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.FragmentContactsBinding
 import com.piotrokninski.teacherassistant.model.Friend
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.ContactsAdapter
 import com.piotrokninski.teacherassistant.viewmodel.ContactsFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.factory.ContactsFragmentViewModelFactory
@@ -40,6 +41,7 @@ class ContactsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as MainActivity).isBottomNavVisible(true)
 
         initRecyclerView()
 

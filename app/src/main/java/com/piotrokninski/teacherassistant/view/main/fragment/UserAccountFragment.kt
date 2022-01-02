@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.*
@@ -7,9 +7,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.facebook.internal.gatekeeper.AppID
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserAccountBinding
 import com.piotrokninski.teacherassistant.util.AppConstants
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.viewmodel.UserAccountFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.factory.UserAccountFragmentViewModelFactory
 
@@ -50,7 +52,7 @@ class UserAccountFragment : Fragment() {
         } else {
             AppConstants.VIEW_TYPE_TUTOR
         }
-        (activity as MainActivity).updateViewType(viewType)
+        userAccountViewModel.updateViewType(viewType)
     }
 
     private fun setupViewModel() {
@@ -63,6 +65,8 @@ class UserAccountFragment : Fragment() {
         observeEditing()
 
         observeUser()
+
+        observeViewType()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -120,6 +124,16 @@ class UserAccountFragment : Fragment() {
                 binding.userAccountViewTypeButton.visibility = View.VISIBLE
             } else {
                 binding.userAccountViewTypeButton.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun observeViewType() {
+        userAccountViewModel.viewType.observe(viewLifecycleOwner, { viewType ->
+            when (viewType) {
+                AppConstants.VIEW_TYPE_STUDENT -> binding.userAccountViewTypeButton.isChecked = true
+
+                AppConstants.VIEW_TYPE_TUTOR -> binding.userAccountViewTypeButton.isChecked = false
             }
         })
     }

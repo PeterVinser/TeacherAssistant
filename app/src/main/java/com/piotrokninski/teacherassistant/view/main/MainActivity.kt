@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.view.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -119,8 +120,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateViewType(viewType: String) {
-
-        mainActivityViewModel.updateViewType(viewType)
 
         when (viewType) {
             AppConstants.VIEW_TYPE_STUDENT ->

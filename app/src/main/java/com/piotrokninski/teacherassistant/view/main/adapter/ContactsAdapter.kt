@@ -2,9 +2,7 @@ package com.piotrokninski.teacherassistant.view.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ContactListItemBinding
 import com.piotrokninski.teacherassistant.model.Friend
 
@@ -15,8 +13,8 @@ class ContactsAdapter(private val clickListener: (Friend) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding: ContactListItemBinding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.contact_list_item, parent, false)
+        val binding =
+            ContactListItemBinding.inflate(layoutInflater,  parent, false)
 
         return ContactsViewHolder(binding)
     }
@@ -37,6 +35,7 @@ class ContactsAdapter(private val clickListener: (Friend) -> Unit) :
 
     class ContactsViewHolder(private val binding: ContactListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(friend: Friend, clickListener: (Friend) -> Unit) {
             binding.friend = friend
             binding.contactItemLayout.setOnClickListener { clickListener(friend) }

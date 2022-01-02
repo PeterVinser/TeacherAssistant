@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,6 +30,8 @@ class MainActivityViewModel : ViewModel() {
 
         viewModelScope.launch {
             _viewType.value = MainPreferences.getViewType()
+
+            Log.d(TAG, "mainViewModel: view type is ${viewType.value}")
 
             saveCurrentUserData()
         }

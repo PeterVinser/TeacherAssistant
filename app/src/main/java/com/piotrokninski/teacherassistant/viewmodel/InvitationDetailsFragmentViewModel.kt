@@ -14,7 +14,7 @@ import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRe
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 
-class InvitationDetailsViewModel(invitation: FriendInvitation) : ViewModel(), Observable {
+class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewModel(), Observable {
     private val TAG = "InvitationDetailsViewMo"
 
     @Bindable
@@ -34,12 +34,12 @@ class InvitationDetailsViewModel(invitation: FriendInvitation) : ViewModel(), Ob
 
     fun sendInvitation() {
         if (course.value != null) {
-            val courseId = FirestoreCourseRepository.setCourse(course.value!!)
+            course.value = FirestoreCourseRepository.setCourse(course.value!!)
             if (friendInvitation.value!!.courseIds == null) {
                 friendInvitation.value!!.courseIds = ArrayList()
-                friendInvitation.value!!.courseIds!!.add(courseId)
+                friendInvitation.value!!.courseIds!!.add(course.value!!.courseId)
             } else {
-                friendInvitation.value!!.courseIds!!.add(courseId)
+                friendInvitation.value!!.courseIds!!.add(course.value!!.courseId)
             }
         }
         FirestoreFriendInvitationRepository.setFriendInvitationData(friendInvitation.value!!)

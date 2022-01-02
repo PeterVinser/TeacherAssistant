@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.*
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
 import com.piotrokninski.teacherassistant.model.HomeFeedItem
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.ReceivedInvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.HomeFragmentViewModel

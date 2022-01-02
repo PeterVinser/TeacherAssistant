@@ -33,7 +33,7 @@ class MeetingPickerDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        binding.meetingDialogWeekDayPicker.addOnButtonCheckedListener { group, checkedId, isChecked ->
+        binding.meetingDialogWeekDayPicker.addOnButtonCheckedListener { _, checkedId, _ ->
             when (checkedId) {
                 R.id.meeting_dialog_monday -> weekDay = WeekDays.MONDAY.toString()
 
@@ -53,7 +53,7 @@ class MeetingPickerDialogFragment(
             binding.meetingDialogTime.text = Util.formatMeetingTime(weekDay, hour, minute)
         }
 
-        binding.meetingDialogTimePicker.setOnTimeChangedListener { timePicker, i, i2 ->
+        binding.meetingDialogTimePicker.setOnTimeChangedListener { _, i, i2 ->
             hour = i
             minute = i2
 

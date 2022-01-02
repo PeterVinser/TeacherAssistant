@@ -1,8 +1,8 @@
 package com.piotrokninski.teacherassistant.model.contract.firestore
 
-object FirestoreCourseContract {
+object FirestoreNoteContract {
 
-    const val COLLECTION_NAME = "courses"
+    const val COLLECTION_NAME = "notes"
 
     const val COURSE_ID = "courseId"
 
@@ -12,11 +12,11 @@ object FirestoreCourseContract {
     const val STUDENT_FULL_NAME = "studentFullName"
     const val TUTOR_FULL_NAME = "tutorFullName"
 
-    const val COURSE_TYPE = "type"
-    const val TYPE_REMOTE = "remote"
-    const val TYPE_STATIONARY = "stationary"
+    const val TOPIC = "topic"
 
     const val SUBJECT = "subject"
 
-    const val MEETINGS_DATES = "meetingsDates"
+    const val DATE = "date"
+
+    const val NOTE = "note"
 }

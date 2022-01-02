@@ -2,6 +2,7 @@ package com.piotrokninski.teacherassistant.viewmodel
 
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepo
 import com.piotrokninski.teacherassistant.model.User
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
+import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import kotlinx.coroutines.launch
 
 class UserAccountFragmentViewModel: ViewModel(), Observable {
@@ -17,6 +19,9 @@ class UserAccountFragmentViewModel: ViewModel(), Observable {
     private val userRepository: RoomUserRepository
 
     val editing = MutableLiveData<Boolean>()
+
+    private val _viewType = MutableLiveData<String>()
+    val viewType: LiveData<String> = _viewType
 
     @Bindable
     val user = MutableLiveData<User>()
@@ -37,12 +42,21 @@ class UserAccountFragmentViewModel: ViewModel(), Observable {
             if (user.value != null) {
                 userRepository.updateUser(user.value!!)
             }
+
+            _viewType.value = MainPreferences.getViewType()
         }
+
         editing.value = false
     }
 
     fun updateUserData() {
         FirestoreUserRepository.setUserData(user.value!!)
+    }
+
+    fun updateViewType(viewType: String) {
+        MainPreferences.updateViewType(viewType)
+
+        _viewType.value = viewType
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

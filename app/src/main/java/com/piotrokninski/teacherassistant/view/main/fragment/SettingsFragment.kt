@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.piotrokninski.teacherassistant.databinding.FragmentSettingsBinding
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 
 class SettingsFragment : Fragment() {
 

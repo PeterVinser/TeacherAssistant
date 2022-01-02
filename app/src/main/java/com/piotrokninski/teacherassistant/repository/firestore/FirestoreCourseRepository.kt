@@ -11,15 +11,17 @@ import java.lang.Exception
 object FirestoreCourseRepository {
     private val TAG = "FirestoreCourseReposito"
 
-    fun setCourse(course: Course): String {
+    fun setCourse(course: Course): Course {
         val db = FirebaseFirestore.getInstance()
 
         val id = db.collection(FirestoreCourseContract.COLLECTION_NAME).document().id
 
+        course.courseId = id
+
         db.collection(FirestoreCourseContract.COLLECTION_NAME).document(id)
             .set(course)
 
-        return id
+        return course
     }
 
     suspend fun getStudiedCourses(userId: String): ArrayList<Course>? {

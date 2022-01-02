@@ -3,12 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/invitation_dialog.xml" value="0.1175925925925926" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/meeting_picker_dialog.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/new_note_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/course_list_item.xml" value="0.25" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/home_friend_invitation_list_item.xml" value="0.1175925925925926" />
         <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/invitation_course_item.xml" value="0.25" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/lesson_notes_item.xml" value="0.11944444444444445" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/note_list_item.xml" value="0.5" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_course_detail.xml" value="0.25" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_course_details.xml" value="0.22" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_courses.xml" value="0.33" />
         <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_invitation_details.xml" value="0.25" />
         <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_notes.xml" value="0.1175925925925926" />
         <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_received_invitation_details.xml" value="0.25" />
         <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_user_account.xml" value="0.13055555555555556" />
         <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_bottom.xml" value="0.1175925925925926" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_course.xml" value="0.2" />
+        <entry key="..\:/Users/aaksa/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_user_account.xml" value="0.1175925925925926" />
       </map>
     </option>
   </component>

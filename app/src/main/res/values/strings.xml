@@ -54,7 +54,7 @@
     <string name="student_and_tutor_title_text">Uczeń/Korepetytor</string>
     <string name="nobody_title_text">Nikt</string>
     <string name="title_activity_help">HelpActivity</string>
-    <string name="main_fab_description">Dodaj</string>
+    <string name="add_text">Dodaj</string>
 
     <string name="search_users_hint">Znajdź użytkownika</string>
     <string name="menu_search_text">Wyszukaj</string>
@@ -106,6 +106,21 @@
     <string name="received_invitation_confirm_button_text">Potwierdź</string>
     <string name="received_invitation_profile_button_text">Profil</string>
     <string name="received_invitation_dialog_details_text">Szczegóły</string>
+    <string name="courses_title">Twoje zajęcia</string>
+    <string name="course_item_dates_text">Terminy spotkań:</string>
+    <string name="courses_not_found_text">Nie jesteś zapisany na żadne zajęcia</string>
+    <string name="course_item_profession_hint">Uczeń/Korepetytor</string>
+    <string name="course_item_profession_text">%1$s:</string>
+    <string name="course_item_type_title">Tryb:</string>
+    <string name="menu_course_delete">Usuń zajęcia</string>
+    <string name="menu_course_edit">Edytuj zajęcia</string>
+    <string name="course_details_notes_title">Notatki</string>
+    <string name="course_details_add_note_text">Dodaj notatkę</string>
+    <string name="new_note_dialog_title">Nowa notatka</string>
+    <string name="note_dialog_name_hint">Temat</string>
+    <string name="note_dialog_date_hint">Data zajęć</string>
+    <string name="note_dialog_note_hint">Notatka</string>
+    <string name="course_details_no_notes">Brak notatek dla tych zajęć</string>
 
     <string-array name="lesson_types">
         <item>Stacjonarne</item>

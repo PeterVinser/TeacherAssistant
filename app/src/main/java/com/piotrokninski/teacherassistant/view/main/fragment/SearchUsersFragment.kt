@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +13,7 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentSearchUsersBinding
 import com.piotrokninski.teacherassistant.model.SearchedUserItem
 import com.piotrokninski.teacherassistant.util.AppConstants
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.SearchUsersAdapter
 import com.piotrokninski.teacherassistant.viewmodel.SearchUsersFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.factory.SearchUsersFragmentViewModelFactory

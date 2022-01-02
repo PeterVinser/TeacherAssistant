@@ -7,13 +7,13 @@
 
         <variable
             name="invitationViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.main.InvitationDetailsFragment">
+        tools:context=".view.main.fragment.InvitationDetailsFragment">
 
         <ScrollView
             android:id="@+id/ScrollView"

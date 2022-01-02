@@ -7,7 +7,7 @@
 
         <variable
             name="invitationViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsFragmentViewModel" />
     </data>
 
     <FrameLayout
@@ -31,7 +31,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/course_item_subjects"
+                        android:id="@+id/invitation_course_item_subjects"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -46,7 +46,7 @@
                         tools:ignore="TextContrastCheck" />
 
                     <Button
-                        android:id="@+id/course_item_remove_button"
+                        android:id="@+id/invitation_course_item_remove_button"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <CheckBox
-                    android:id="@+id/course_item_my_subjects"
+                    android:id="@+id/invitation_course_item_my_subjects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -75,7 +75,7 @@
 
 
                 <Spinner
-                    android:id="@+id/course_item_type_spinner"
+                    android:id="@+id/invitation_course_item_type_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/lesson_types"
@@ -88,18 +88,18 @@
                     android:layout_marginEnd="8dp">
 
                     <TextView
-                        android:id="@+id/course_item_time_title"
+                        android:id="@+id/invitation_course_item_time_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="@string/lesson_item_time_title"
+                        android:text="@string/meeting_dialog_title"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/course_item_add_meeting_button"
+                        android:id="@+id/invitation_course_item_add_meeting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minHeight="48dp"
@@ -113,7 +113,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/course_item_chip_group"
+                    android:id="@+id/invitation_course_item_chip_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp" />

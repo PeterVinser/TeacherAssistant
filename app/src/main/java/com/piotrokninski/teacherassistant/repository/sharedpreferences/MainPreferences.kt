@@ -3,6 +3,7 @@ package com.piotrokninski.teacherassistant.repository.sharedpreferences
 import android.content.Context
 import android.content.SharedPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
+import java.lang.IllegalStateException
 
 object MainPreferences {
 
@@ -19,6 +20,10 @@ object MainPreferences {
             }
             PREFS = prefs
         }
+    }
+
+    fun getInstance(): SharedPreferences {
+        return PREFS ?: throw IllegalStateException("Main preferences has not been instantiated")
     }
 
     fun getViewType(): String? {

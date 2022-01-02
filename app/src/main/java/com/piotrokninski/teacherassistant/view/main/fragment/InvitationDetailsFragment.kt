@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -16,16 +16,17 @@ import com.piotrokninski.teacherassistant.databinding.FragmentInvitationDetailsB
 import com.piotrokninski.teacherassistant.model.FriendInvitation
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.util.Util
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.MeetingPickerDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.InvitationDetailsViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.InvitationDetailsFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.factory.InvitationDetailsFragmentViewModelFactory
 
 class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private val TAG = "InvitationDetailsFragme"
 
     private lateinit var binding: FragmentInvitationDetailsBinding
 
-    private lateinit var invitationDetailsViewModel: InvitationDetailsViewModel
+    private lateinit var mInvitationDetailsFragmentViewModel: InvitationDetailsFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,17 +54,19 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
 
         binding.invitationDetailsAddCourseButton.setOnClickListener {
             binding.invitationDetailsCourseHeader.visibility = View.VISIBLE
-            val type = binding.invitationDetailsCourseItem.courseItemTypeSpinner.selectedItem.toString()
-            invitationDetailsViewModel.addCourse(type)
+            val type =
+                binding.invitationDetailsCourseItem.invitationCourseItemTypeSpinner.selectedItem.toString()
+            mInvitationDetailsFragmentViewModel.addCourse(type)
         }
 
-        binding.invitationDetailsCourseItem.courseItemTypeSpinner.onItemSelectedListener = this
+        binding.invitationDetailsCourseItem.invitationCourseItemTypeSpinner.onItemSelectedListener =
+            this
 
-        binding.invitationDetailsCourseItem.courseItemAddMeetingButton.setOnClickListener {
+        binding.invitationDetailsCourseItem.invitationCourseItemAddMeetingButton.setOnClickListener {
             onAddMeetingButtonClicked()
         }
 
-        binding.invitationDetailsCourseItem.courseItemRemoveButton.setOnClickListener {
+        binding.invitationDetailsCourseItem.invitationCourseItemRemoveButton.setOnClickListener {
             onRemoveCourseClicked()
         }
 
@@ -77,28 +80,28 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     }
 
     private fun setupViewModel(friendInvitation: FriendInvitation) {
-        val factory = InvitationDetailsViewModelFactory(friendInvitation)
+        val factory = InvitationDetailsFragmentViewModelFactory(friendInvitation)
 
-        invitationDetailsViewModel =
-            ViewModelProvider(this, factory).get(InvitationDetailsViewModel::class.java)
+        mInvitationDetailsFragmentViewModel =
+            ViewModelProvider(this, factory).get(InvitationDetailsFragmentViewModel::class.java)
 
-        binding.invitationViewModel = invitationDetailsViewModel
+        binding.invitationViewModel = mInvitationDetailsFragmentViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.invitationDetailsCourseItem.invitationViewModel = invitationDetailsViewModel
+        binding.invitationDetailsCourseItem.invitationViewModel = mInvitationDetailsFragmentViewModel
         binding.invitationDetailsCourseItem.lifecycleOwner = viewLifecycleOwner
 
         observeCourse()
     }
 
     private fun observeCourse() {
-        invitationDetailsViewModel.course.observe(viewLifecycleOwner, { course ->
+        mInvitationDetailsFragmentViewModel.course.observe(viewLifecycleOwner, { course ->
             if (course == null) {
                 binding.invitationDetailsCourseHeader.visibility = View.GONE
                 binding.invitationDetailsCourseItem.root.visibility = View.GONE
-                binding.invitationDetailsCourseItem.courseItemTypeSpinner.setSelection(0)
-                binding.invitationDetailsCourseItem.courseItemSubjects.text = null
-                binding.invitationDetailsCourseItem.courseItemChipGroup.removeAllViews()
+                binding.invitationDetailsCourseItem.invitationCourseItemTypeSpinner.setSelection(0)
+                binding.invitationDetailsCourseItem.invitationCourseItemSubjects.text = null
+                binding.invitationDetailsCourseItem.invitationCourseItemChipGroup.removeAllViews()
             } else {
                 binding.invitationDetailsCourseItem.root.visibility = View.VISIBLE
             }
@@ -107,7 +110,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
 
     private fun initTypeRadio() {
 
-        when (invitationDetailsViewModel.friendInvitation.value!!.invitationType) {
+        when (mInvitationDetailsFragmentViewModel.friendInvitation.value!!.invitationType) {
             FirestoreFriendInvitationContract.TYPE_STUDENT -> binding.invitationDetailsTypeRadio.check(
                 R.id.invitation_details_type_student
             )
@@ -119,21 +122,33 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     }
 
     private fun onSendClicked() {
-        if (invitationDetailsViewModel.course.value != null
-            && (invitationDetailsViewModel.course.value!!.subject == null || invitationDetailsViewModel.course.value!!.meetingsDates == null)) {
-            Toast.makeText(activity, "Uzupełnij szczegóły bądź usuń zajęcia", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "onSendClicked: ${invitationDetailsViewModel.course.value!!.subject}")
-            if (invitationDetailsViewModel.course.value!!.meetingsDates == null) Log.d(TAG, "onSendClicked: no meeting time selected")
+        if (mInvitationDetailsFragmentViewModel.course.value != null
+            && (mInvitationDetailsFragmentViewModel.course.value!!.subject == null || mInvitationDetailsFragmentViewModel.course.value!!.meetingsDates == null)
+        ) {
+            Toast.makeText(activity, "Uzupełnij szczegóły bądź usuń zajęcia", Toast.LENGTH_SHORT)
+                .show()
+            Log.d(TAG, "onSendClicked: ${mInvitationDetailsFragmentViewModel.course.value!!.subject}")
+            if (mInvitationDetailsFragmentViewModel.course.value!!.meetingsDates == null) Log.d(
+                TAG,
+                "onSendClicked: no meeting time selected"
+            )
         } else {
-            invitationDetailsViewModel.sendInvitation()
+            mInvitationDetailsFragmentViewModel.sendInvitation()
             findNavController(this).navigate(R.id.action_invitationDetails_to_home)
         }
     }
 
-    override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+    override fun onItemSelected(
+        adapterView: AdapterView<*>?,
+        view: View?,
+        position: Int,
+        id: Long
+    ) {
         if (adapterView != null) {
             //TODO fix the way the course type is assigned
-            invitationDetailsViewModel.setCourseType(adapterView.getItemAtPosition(position).toString())
+            mInvitationDetailsFragmentViewModel.setCourseType(
+                adapterView.getItemAtPosition(position).toString()
+            )
         }
     }
 
@@ -152,15 +167,15 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     }
 
     private fun onRemoveCourseClicked() {
-        invitationDetailsViewModel.removeCourse()
+        mInvitationDetailsFragmentViewModel.removeCourse()
     }
 
     private fun saveMeetingTime(weekDay: String, hour: Int, minute: Int) {
         val chip = Chip(activity)
-        val meetingTime = Util.formatMeetingTime(weekDay, hour, minute)
-        chip.text = meetingTime
-        binding.invitationDetailsCourseItem.courseItemChipGroup.addView(chip)
+        val meetingDate = Util.formatMeetingTime(weekDay, hour, minute)
+        chip.text = meetingDate
+        binding.invitationDetailsCourseItem.invitationCourseItemChipGroup.addView(chip)
 
-        invitationDetailsViewModel.addMeetingDate(meetingTime!!)
+        mInvitationDetailsFragmentViewModel.addMeetingDate(meetingDate!!)
     }
 }

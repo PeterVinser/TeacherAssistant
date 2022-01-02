@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.main.SearchUsersFragment">
+    tools:context=".view.main.fragment.SearchUsersFragment">
 
     <TextView
         android:id="@+id/search_users_not_found"

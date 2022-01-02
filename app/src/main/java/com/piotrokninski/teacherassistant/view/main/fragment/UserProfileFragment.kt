@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.view.main
+package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +12,7 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.UserProfileFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.factory.UserProfileFragmentViewModelFactory
