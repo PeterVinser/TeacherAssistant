@@ -121,6 +121,9 @@
     <string name="note_dialog_date_hint">Data zajęć</string>
     <string name="note_dialog_note_hint">Notatka</string>
     <string name="course_details_no_notes">Brak notatek dla tych zajęć</string>
+    <string name="courses_add_button_text">Dodaj zajęcia</string>
+    <string name="new_course_person_menu_hint">Wybierz osobę</string>
+    <string name="new_course_title">Nowe zajęcia</string>
 
     <string-array name="lesson_types">
         <item>Stacjonarne</item>

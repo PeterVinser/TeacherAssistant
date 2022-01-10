@@ -1,14 +1,18 @@
 package com.piotrokninski.teacherassistant.view.main
 
-import android.app.Activity
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -22,6 +26,7 @@ import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
 import com.piotrokninski.teacherassistant.model.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
+import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.MainActivityViewModel
 import com.piotrokninski.teacherassistant.viewmodel.factory.MainActivityViewModelFactory
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private lateinit var navController: NavController
+    private lateinit var navHostFragment: NavHostFragment
 
     private lateinit var mainActivityViewModel: MainActivityViewModel
 
@@ -58,20 +64,22 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         val sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
         val factory = MainActivityViewModelFactory(sharedPreferences)
-        mainActivityViewModel = ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
+        mainActivityViewModel =
+            ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
 
         observeViewType()
     }
 
     private fun observeViewType() {
         mainActivityViewModel.viewType.observe(this, { viewType ->
-            
+
         })
     }
 
     private fun onUserRegistered() {
 
-        val registeredUser = intent.getSerializableExtra(AppConstants.REGISTERED_USER_EXTRA) as User?
+        val registeredUser =
+            intent.getSerializableExtra(AppConstants.REGISTERED_USER_EXTRA) as User?
 
         if (registeredUser != null) {
 //            navController.navigate(R.id.action_home_to_user)
@@ -83,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
 
-        val navHostFragment =
+        navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
@@ -109,7 +117,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideKeyboard() {
-        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val currentFocusedView = this.currentFocus
         currentFocusedView?.let {
@@ -119,20 +128,67 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updateViewType(viewType: String) {
-
-        when (viewType) {
-            AppConstants.VIEW_TYPE_STUDENT ->
-                Toast.makeText(this, "Zmieniono na widok ucznia", Toast.LENGTH_SHORT).show()
-
-            AppConstants.VIEW_TYPE_TUTOR ->
-                Toast.makeText(this, "Zmieniono na widok korepetytora", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     fun signOut() {
         FirebaseAuth.getInstance().signOut()
         Toast.makeText(this, "Wylogowano", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, StartActivity::class.java))
+    }
+
+    fun checkCalendarPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.WRITE_CALENDAR
+                )
+            ) {
+                AlertDialog.Builder(this)
+                    .setTitle("Calendar write permission")
+                    .setMessage("Do you want to allow the access to calendar?")
+                    .setPositiveButton("Ask me") { _, _ ->
+                        requestCalendarPermission()
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                        notifyCalendarFragment(false)
+                    }
+                    .show()
+            } else {
+                requestCalendarPermission()
+            }
+        } else {
+            notifyCalendarFragment(true)
+        }
+    }
+
+    private fun requestCalendarPermission() {
+        val permissions = arrayOf(Manifest.permission.WRITE_CALENDAR)
+        ActivityCompat.requestPermissions(this, permissions, AppConstants.PERMISSION_CALENDAR)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            AppConstants.PERMISSION_CALENDAR -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    notifyCalendarFragment(true)
+                } else {
+                    notifyCalendarFragment(false)
+                }
+            }
+        }
+    }
+
+    private fun notifyCalendarFragment(permissionGranted: Boolean) {
+        val activeFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
+        if (activeFragment is CalendarFragment) {
+            activeFragment.onPermissionResult(permissionGranted)
+        }
     }
 }

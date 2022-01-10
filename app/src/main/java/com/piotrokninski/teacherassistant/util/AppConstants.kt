@@ -13,4 +13,6 @@ object AppConstants {
     const val VIEW_TYPE_DEFAULT = "viewTypeDefault"
     const val VIEW_TYPE_STUDENT = "viewTypeStudent"
     const val VIEW_TYPE_TUTOR = "viewTypeTutor"
+
+    const val PERMISSION_CALENDAR = 123
 }

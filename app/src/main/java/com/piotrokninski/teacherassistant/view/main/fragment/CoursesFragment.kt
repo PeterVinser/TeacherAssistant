@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCoursesBinding
 import com.piotrokninski.teacherassistant.model.Course
 import com.piotrokninski.teacherassistant.view.main.MainActivity
@@ -43,7 +44,13 @@ class CoursesFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).isBottomNavVisible(true)
 
+        binding.coursesAddButton.setOnClickListener { onAddCourseClicked() }
+
         setupViewModel()
+    }
+
+    private fun onAddCourseClicked() {
+        findNavController(this).navigate(R.id.action_courses_to_newCourse)
     }
 
     private fun initRecyclerView(viewType: String) {

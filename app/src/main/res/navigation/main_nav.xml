@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_courses_to_courseDetails"
             app:destination="@id/destination_course_details"/>
+        <action
+            android:id="@+id/action_courses_to_newCourse"
+            app:destination="@id/destination_new_course" />
     </fragment>
     <fragment
         android:id="@+id/users_search_view"
@@ -108,5 +111,10 @@
         <argument
             android:name="course"
             app:argType="com.piotrokninski.teacherassistant.model.Course" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_new_course"
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewCourseFragment"
+        tools:layout="@layout/fragment_new_course">
     </fragment>
 </navigation>

@@ -1,16 +1,46 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.piotrokninski.teacherassistant.R
+import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
+import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
+import com.piotrokninski.teacherassistant.view.main.MainActivity
+
 class CalendarFragment : Fragment() {
+
+    private lateinit var binding: FragmentCalendarBinding
+
+    private var calendarPermissionAsked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar, container, false)
+    ): View {
+
+        (activity as MainActivity).isBottomNavVisible(false)
+
+        binding = FragmentCalendarBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.calendarAddEvent.setOnClickListener {
+
+            if (!calendarPermissionAsked) {
+                calendarPermissionAsked = true
+                (activity as MainActivity).checkCalendarPermissions()
+            }
+        }
+    }
+
+    fun onPermissionResult(permissionGranted: Boolean) {
+        if (permissionGranted) {
+            CalendarProvider.insertEvent(requireContext())
+        }
+        calendarPermissionAsked = false
     }
 }
