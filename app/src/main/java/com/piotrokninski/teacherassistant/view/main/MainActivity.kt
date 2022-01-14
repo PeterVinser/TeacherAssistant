@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -26,6 +27,7 @@ import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
 import com.piotrokninski.teacherassistant.model.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
+import com.piotrokninski.teacherassistant.util.PermissionsHelper
 import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.MainActivityViewModel
@@ -135,37 +137,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun checkCalendarPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_CALENDAR
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.WRITE_CALENDAR
-                )
-            ) {
-                AlertDialog.Builder(this)
-                    .setTitle("Calendar write permission")
-                    .setMessage("Do you want to allow the access to calendar?")
-                    .setPositiveButton("Ask me") { _, _ ->
-                        requestCalendarPermission()
-                    }
-                    .setNegativeButton("No") { _, _ ->
-                        notifyCalendarFragment(false)
-                    }
-                    .show()
-            } else {
-                requestCalendarPermission()
-            }
-        } else {
-            notifyCalendarFragment(true)
-        }
-    }
-
-    private fun requestCalendarPermission() {
-        val permissions = arrayOf(Manifest.permission.WRITE_CALENDAR)
-        ActivityCompat.requestPermissions(this, permissions, AppConstants.PERMISSION_CALENDAR)
+        PermissionsHelper.checkCalendarPermissions(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -174,18 +146,10 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            AppConstants.PERMISSION_CALENDAR -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    notifyCalendarFragment(true)
-                } else {
-                    notifyCalendarFragment(false)
-                }
-            }
-        }
+        PermissionsHelper.onRequestPermissionsResult(this, requestCode, grantResults)
     }
 
-    private fun notifyCalendarFragment(permissionGranted: Boolean) {
+    fun notifyCalendarFragment(permissionGranted: Boolean) {
         val activeFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
         if (activeFragment is CalendarFragment) {
             activeFragment.onPermissionResult(permissionGranted)

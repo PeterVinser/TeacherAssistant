@@ -33,7 +33,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
 
     //The user that is currently logged in
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-    private lateinit var currentUser: LiveData<User>
+    private lateinit var currentUser: User
 
     //The user that has been searched
     private val _user = MutableLiveData<User>()
@@ -51,7 +51,9 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
         viewModelScope.launch {
             _user.value = FirestoreUserRepository.getUserDataOnce(searchedUserId)
 
-            currentUser = userRepository.getUser(currentUserId)
+            currentUser = userRepository.getUser(currentUserId)!!
+
+            Log.d(TAG, "CurrentUser: ${currentUser.fullName}")
 
             friendInvitation = FirestoreFriendInvitationRepository.getFriendInvitationDataOnce(currentUserId, searchedUserId)
             friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
@@ -96,7 +98,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
 
     fun sendInvitation(invitationType: String, invitationMessage: String?) {
 
-        val invitation = FriendInvitation(currentUserId, currentUser.value!!.fullName,
+        val invitation = FriendInvitation(currentUserId, currentUser.fullName,
             user.value!!.userId, user.value!!.fullName, invitationType, invitationMessage, null)
 
         FriendInvitation.sendInvitation(invitation)
@@ -107,7 +109,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
     //Used when the detailed invitation is required (moving to the InvitationDetailsFragment)
     fun prepareInvitation(invitationType: String, invitationMessage: String?): FriendInvitation {
 
-        return FriendInvitation(currentUserId, currentUser.value!!.fullName,
+        return FriendInvitation(currentUserId, currentUser.fullName,
             user.value!!.userId, user.value!!.fullName, invitationType, invitationMessage, null)
     }
 

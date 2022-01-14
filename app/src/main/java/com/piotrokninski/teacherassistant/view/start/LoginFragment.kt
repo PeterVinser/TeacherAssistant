@@ -25,10 +25,10 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
 
-    private lateinit var mAuth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var mCallbackManager: CallbackManager
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var callbackManager: CallbackManager
 
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
@@ -49,16 +49,16 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        mAuth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id_manual))
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-        mCallbackManager = CallbackManager.Factory.create()
+        callbackManager = CallbackManager.Factory.create()
 
         // Inflate the layout for this fragment
         return binding.root
@@ -85,14 +85,14 @@ class LoginFragment : Fragment() {
     }
 
     private fun onGoogleLoginClicked() {
-        val signInIntent = mGoogleSignInClient.signInIntent
+        val signInIntent = googleSignInClient.signInIntent
         resultLauncher.launch(signInIntent)
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
-        mAuth.signInWithCredential(credential)
+        auth.signInWithCredential(credential)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     (activity as StartActivity).onSignedSuccessful(null)
@@ -113,8 +113,8 @@ class LoginFragment : Fragment() {
             return
         }
 
-        mAuth.signInWithEmailAndPassword(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
-            .addOnCompleteListener(requireActivity()) {task ->
+        auth.signInWithEmailAndPassword(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
+            .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     (activity as StartActivity).onSignedSuccessful(null)
                 } else {

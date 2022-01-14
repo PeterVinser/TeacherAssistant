@@ -18,7 +18,11 @@ class RoomUserRepository(private val dao: UserDAO) {
         return dao.deleteUser(user)
     }
 
-    fun getUser(userId: String): LiveData<User> {
+    fun getLiveUser(userId: String): LiveData<User> {
+        return dao.getLiveUser(userId)
+    }
+
+    suspend fun getUser(userId: String): User? {
         return dao.getUser(userId)
     }
 }

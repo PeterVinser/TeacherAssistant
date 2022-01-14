@@ -12,13 +12,13 @@ import com.piotrokninski.teacherassistant.view.main.MainActivity
 
 class StartActivity : AppCompatActivity() {
 
-    private lateinit var mAuth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
 
-        mAuth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -28,7 +28,7 @@ class StartActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        if (mAuth.currentUser != null) {
+        if (auth.currentUser != null) {
             onSignedSuccessful(null)
         }
     }

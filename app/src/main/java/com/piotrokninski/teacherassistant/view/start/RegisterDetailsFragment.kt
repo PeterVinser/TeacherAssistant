@@ -10,17 +10,12 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.databinding.FragmentRegisterDetailsBinding
 import com.piotrokninski.teacherassistant.model.User
-import com.piotrokninski.teacherassistant.model.UserHint
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
-import com.piotrokninski.teacherassistant.repository.room.AppDatabase
-import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 
 class RegisterDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterDetailsBinding
 
-    private lateinit var mAuth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var fullName: String
     private lateinit var username: String
@@ -33,7 +28,7 @@ class RegisterDetailsFragment : Fragment() {
     ): View {
         binding = FragmentRegisterDetailsBinding.inflate(inflater, container, false)
 
-        mAuth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         return binding.root
     }
@@ -66,7 +61,7 @@ class RegisterDetailsFragment : Fragment() {
             return
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) {
                 if (it.isSuccessful) {
                     onUserRegistered(isStudent, isTutor, subjects, localization, summary)
@@ -78,7 +73,7 @@ class RegisterDetailsFragment : Fragment() {
     }
 
     private fun onUserRegistered(isStudent: Boolean, isTutor: Boolean, subjects: String?, localization: String?, summary: String) {
-        val userId = mAuth.currentUser!!.uid
+        val userId = auth.currentUser!!.uid
 
         val user = User(userId, fullName, username, email, isStudent, isTutor, subjects, localization, null, null, summary)
 
