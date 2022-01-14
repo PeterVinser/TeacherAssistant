@@ -4,10 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.NoteListItemBinding
-import com.piotrokninski.teacherassistant.model.Note
+import com.piotrokninski.teacherassistant.model.course.Note
 import com.piotrokninski.teacherassistant.util.AppConstants
 
 class NotesAdapter(

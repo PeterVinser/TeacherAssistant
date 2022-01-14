@@ -1,6 +1,8 @@
 package com.piotrokninski.teacherassistant.util
 
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 private const val TAG = "Util"
 object Util {
@@ -31,5 +33,15 @@ object Util {
         } else {
             null
         }
+    }
+
+    fun <T> T.serializeToMap(): Map<String, Any> {
+        return convert()
+    }
+
+    private inline fun <I, reified O> I.convert(): O {
+        val gson = Gson()
+        val json = gson.toJson(this)
+        return gson.fromJson(json, object : TypeToken<O>() {}.type)
     }
 }

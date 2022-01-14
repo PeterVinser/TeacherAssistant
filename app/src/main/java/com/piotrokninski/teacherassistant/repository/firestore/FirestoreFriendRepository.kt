@@ -2,8 +2,8 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.Friend
-import com.piotrokninski.teacherassistant.model.Friend.Companion.toFriend
+import com.piotrokninski.teacherassistant.model.friend.Friend
+import com.piotrokninski.teacherassistant.model.friend.Friend.Companion.toFriend
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
 import kotlinx.coroutines.tasks.await

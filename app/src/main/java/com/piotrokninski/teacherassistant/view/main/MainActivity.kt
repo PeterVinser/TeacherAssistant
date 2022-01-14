@@ -1,19 +1,15 @@
 package com.piotrokninski.teacherassistant.view.main
 
-import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -24,14 +20,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
-import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.util.PermissionsHelper
 import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
-import com.piotrokninski.teacherassistant.viewmodel.MainActivityViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.MainActivityViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.MainActivityViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.MainActivityViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,11 +52,26 @@ class MainActivity : AppCompatActivity() {
 
         MainPreferences.instantiate(this)
 
+        createNotificationChannel()
+
         setupNavigation()
 
         setupViewModel()
 
         onUserRegistered()
+    }
+
+    private fun createNotificationChannel() {
+        val channelId = getString(R.string.default_notification_channel_id)
+        val channelName = getString(R.string.default_notification_channel_name)
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager?.createNotificationChannel(
+            NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_LOW
+            )
+        )
     }
 
     private fun setupViewModel() {

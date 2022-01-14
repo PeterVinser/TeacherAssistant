@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.ContactListItemBinding
-import com.piotrokninski.teacherassistant.model.Friend
+import com.piotrokninski.teacherassistant.model.friend.Friend
 
 class ContactsAdapter(private val clickListener: (Friend) -> Unit) :
     RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>() {

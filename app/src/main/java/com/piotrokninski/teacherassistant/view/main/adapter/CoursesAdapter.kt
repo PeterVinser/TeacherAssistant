@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.CourseListItemBinding
-import com.piotrokninski.teacherassistant.model.Course
+import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.util.AppConstants
 
 class CoursesAdapter(

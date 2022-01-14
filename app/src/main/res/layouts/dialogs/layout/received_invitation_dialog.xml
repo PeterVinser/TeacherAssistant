@@ -9,7 +9,7 @@
 
         <variable
             name="friendInvitation"
-            type="com.piotrokninski.teacherassistant.model.FriendInvitation" />
+            type="com.piotrokninski.teacherassistant.model.friend.FriendInvitation" />
     </data>
 
     <LinearLayout

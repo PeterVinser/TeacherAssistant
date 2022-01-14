@@ -95,7 +95,7 @@
         tools:layout="@layout/fragment_invitation_details">
         <argument
             android:name="friendInvitation"
-            app:argType="com.piotrokninski.teacherassistant.model.FriendInvitation" />
+            app:argType="com.piotrokninski.teacherassistant.model.friend.FriendInvitation" />
         <action
             android:id="@+id/action_invitationDetails_to_home"
             app:destination="@id/destination_home" />
@@ -110,7 +110,7 @@
         tools:layout="@layout/fragment_course_details">
         <argument
             android:name="course"
-            app:argType="com.piotrokninski.teacherassistant.model.Course" />
+            app:argType="com.piotrokninski.teacherassistant.model.course.Course" />
     </fragment>
     <fragment
         android:id="@+id/destination_new_course"

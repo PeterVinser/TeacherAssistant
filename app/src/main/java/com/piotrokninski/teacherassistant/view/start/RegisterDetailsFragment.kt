@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.databinding.FragmentRegisterDetailsBinding
-import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.model.user.User
 
 class RegisterDetailsFragment : Fragment() {
 

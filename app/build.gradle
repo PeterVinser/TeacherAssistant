@@ -67,19 +67,28 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.1'
 
+    //Firebase
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.0.1'
-
-    implementation 'com.facebook.android:facebook-login:11.3.0'
 
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
 
+    implementation 'com.google.firebase:firebase-functions:20.0.1'
+
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+
+    //Google
+    implementation 'com.google.android.gms:play-services-auth:20.0.1'
+    implementation 'com.google.code.gson:gson:2.8.7'
+
+    //Facebook
+    implementation 'com.facebook.android:facebook-login:11.3.0'
+
+    //Room
     implementation "androidx.room:room-runtime:2.4.0"
     kapt "androidx.room:room-compiler:2.4.0"
-
     implementation "androidx.room:room-ktx:2.4.0"
 
     implementation 'com.android.support:multidex:1.0.3'

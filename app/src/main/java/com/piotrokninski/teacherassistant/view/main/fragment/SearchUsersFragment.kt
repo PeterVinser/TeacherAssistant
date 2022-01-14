@@ -15,8 +15,8 @@ import com.piotrokninski.teacherassistant.model.SearchedUserItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.SearchUsersAdapter
-import com.piotrokninski.teacherassistant.viewmodel.SearchUsersFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.SearchUsersFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.SearchUsersFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.SearchUsersFragmentViewModelFactory
 
 class SearchUsersFragment : Fragment() {
     private val TAG = "SearchUsersFragment"
@@ -67,7 +67,8 @@ class SearchUsersFragment : Fragment() {
 
     private fun setupViewModel() {
         val factory = SearchUsersFragmentViewModelFactory()
-        searchUsersFragmentViewModel = ViewModelProvider(this, factory).get(SearchUsersFragmentViewModel::class.java)
+        searchUsersFragmentViewModel = ViewModelProvider(this, factory).get(
+            SearchUsersFragmentViewModel::class.java)
 
         searchUsersFragmentViewModel.searchedUsersItems.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {

@@ -2,8 +2,8 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.Note
-import com.piotrokninski.teacherassistant.model.Note.Companion.toNote
+import com.piotrokninski.teacherassistant.model.course.Note
+import com.piotrokninski.teacherassistant.model.course.Note.Companion.toNote
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreNoteContract
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception

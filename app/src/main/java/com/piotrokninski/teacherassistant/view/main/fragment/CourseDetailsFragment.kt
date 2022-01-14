@@ -9,15 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCourseDetailsBinding
-import com.piotrokninski.teacherassistant.model.Course
-import com.piotrokninski.teacherassistant.model.Note
+import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.model.course.Note
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
-import com.piotrokninski.teacherassistant.view.main.adapter.CoursesAdapter
 import com.piotrokninski.teacherassistant.view.main.adapter.NotesAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.NewNoteDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.CourseDetailsFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.CourseDetailsFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.CourseDetailsFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.CourseDetailsFragmentViewModelFactory
 
 class CourseDetailsFragment : Fragment() {
 

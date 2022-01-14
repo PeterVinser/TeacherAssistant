@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.room.dao.UserDAO
 import java.lang.NullPointerException
 

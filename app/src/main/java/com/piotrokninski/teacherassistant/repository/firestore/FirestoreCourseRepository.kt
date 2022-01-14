@@ -2,8 +2,8 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.Course
-import com.piotrokninski.teacherassistant.model.Course.Companion.toCourse
+import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.model.course.Course.Companion.toCourse
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
@@ -49,6 +49,7 @@ object FirestoreCourseRepository {
             null
         }
     }
+
     suspend fun getTaughtCourses(userId: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 

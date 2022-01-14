@@ -14,8 +14,8 @@ import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFrie
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.UserProfileFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.UserProfileFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserProfileFragmentViewModelFactory
 
 class UserProfileFragment : Fragment() {
     private val TAG = "UserProfileFragment"
@@ -67,7 +67,6 @@ class UserProfileFragment : Fragment() {
         if (invitationType == FirestoreFriendInvitationContract.TYPE_FRIEND) {
             userProfileViewModel.sendInvitation(invitationType, invitationMessage)
         } else {
-
             val action = UserProfileFragmentDirections.actionUserProfileToInvitationDetails(userProfileViewModel.prepareInvitation(invitationType, invitationMessage))
             findNavController(this).navigate(action)
         }

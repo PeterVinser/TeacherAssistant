@@ -130,4 +130,14 @@
         <item>Zdalne</item>
     </string-array>
 
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name">Topic</string>
+
+    <string name="msg_token_fmt">InstanceID Token: %1$s</string>
+
+    <string name="msg_subscribed">Subscribed to myTopic</string>
+    <string name="msg_subscribed_failed">Subscription has failed</string>
+
+    <string name="fcm_message">FCM Message</string>
+
 </resources>

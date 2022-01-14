@@ -2,7 +2,7 @@ package com.piotrokninski.teacherassistant.repository.room.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.model.contract.room.RoomUserContract
 
 @Dao

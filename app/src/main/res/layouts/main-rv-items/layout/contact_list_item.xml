@@ -6,7 +6,7 @@
     <data>
         <variable
             name="friend"
-            type="com.piotrokninski.teacherassistant.model.Friend" />
+            type="com.piotrokninski.teacherassistant.model.friend.Friend" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,5 +1,7 @@
 package com.piotrokninski.teacherassistant.model
 
+import com.piotrokninski.teacherassistant.model.user.User
+
 sealed class SearchedUserItem {
 
     abstract val id: String

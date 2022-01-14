@@ -14,8 +14,8 @@ import com.piotrokninski.teacherassistant.model.HomeFeedItem
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.ReceivedInvitationDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.HomeFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.HomeFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.HomeFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.HomeFragmentViewModelFactory
 
 class HomeFragment : Fragment() {
 

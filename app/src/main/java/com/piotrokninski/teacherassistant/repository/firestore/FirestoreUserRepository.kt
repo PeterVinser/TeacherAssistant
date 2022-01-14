@@ -3,9 +3,9 @@ package com.piotrokninski.teacherassistant.repository.firestore
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
-import com.piotrokninski.teacherassistant.model.User
-import com.piotrokninski.teacherassistant.model.User.Companion.toUser
-import com.piotrokninski.teacherassistant.model.UserHint
+import com.piotrokninski.teacherassistant.model.user.User
+import com.piotrokninski.teacherassistant.model.user.User.Companion.toUser
+import com.piotrokninski.teacherassistant.model.user.UserHint
 import kotlinx.coroutines.tasks.await
 
 object FirestoreUserRepository {
@@ -13,6 +13,7 @@ object FirestoreUserRepository {
 
     fun setUserData(user: User) {
         val db = FirebaseFirestore.getInstance()
+
         db.collection(FirestoreUserContract.COLLECTION_NAME).document(user.userId)
             .set(user)
     }

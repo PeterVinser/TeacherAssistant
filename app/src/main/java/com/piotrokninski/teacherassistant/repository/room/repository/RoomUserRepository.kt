@@ -1,7 +1,7 @@
 package com.piotrokninski.teacherassistant.repository.room.repository
 
 import androidx.lifecycle.LiveData
-import com.piotrokninski.teacherassistant.model.User
+import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.room.dao.UserDAO
 
 class RoomUserRepository(private val dao: UserDAO) {

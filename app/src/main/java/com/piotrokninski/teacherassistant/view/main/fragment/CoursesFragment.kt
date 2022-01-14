@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCoursesBinding
-import com.piotrokninski.teacherassistant.model.Course
+import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CoursesAdapter
-import com.piotrokninski.teacherassistant.viewmodel.CoursesFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.CoursesFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.CoursesFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.CoursesFragmentViewModelFactory
 
 class CoursesFragment : Fragment() {
 

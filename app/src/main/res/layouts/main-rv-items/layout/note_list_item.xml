@@ -6,7 +6,7 @@
 
         <variable
             name="note"
-            type="com.piotrokninski.teacherassistant.model.Note" />
+            type="com.piotrokninski.teacherassistant.model.course.Note" />
     </data>
 
     <FrameLayout

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
-import com.piotrokninski.teacherassistant.model.FriendInvitation
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.HomeFeedItem
 
 class ReceivedInvitationDialogFragment(private val invitation: HomeFeedItem.Invitation,

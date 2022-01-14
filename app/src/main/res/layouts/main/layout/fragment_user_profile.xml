@@ -6,7 +6,7 @@
     <data>
         <variable
             name="userProfileViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.UserProfileFragmentViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

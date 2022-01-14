@@ -7,13 +7,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.facebook.internal.gatekeeper.AppID
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserAccountBinding
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
-import com.piotrokninski.teacherassistant.viewmodel.UserAccountFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.factory.UserAccountFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.UserAccountFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserAccountFragmentViewModelFactory
 
 class UserAccountFragment : Fragment() {
 

@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentLoginBinding
+import com.piotrokninski.teacherassistant.model.user.UserNotificationSettings
 
 class LoginFragment : Fragment() {
 
@@ -93,8 +94,8 @@ class LoginFragment : Fragment() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
         auth.signInWithCredential(credential)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     (activity as StartActivity).onSignedSuccessful(null)
                 } else {
                     Toast.makeText(activity, "Firebase authentication failed", Toast.LENGTH_SHORT).show()
