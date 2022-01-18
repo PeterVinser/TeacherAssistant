@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
 import com.piotrokninski.teacherassistant.model.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.ReceivedInvitationDialogFragment
@@ -29,6 +31,13 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        this.arguments.let {
+            val userId = it?.getString(FirestoreFriendInvitationContract.INVITING_USER_ID)
+            if (userId != null) {
+                navigateToProfile(userId)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -71,10 +80,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onProfileClicked(invitation: HomeFeedItem.Invitation) {
-        val action = HomeFragmentDirections.actionHomeToUserProfile(invitation.friendInvitation.invitingUserId)
+    fun navigateToProfile(userId: String) {
+        val action = HomeFragmentDirections.actionHomeToUserProfile(userId)
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             .navigate(action)
+    }
+
+    private fun onProfileClicked(invitation: HomeFeedItem.Invitation) {
+        navigateToProfile(invitation.friendInvitation.invitingUserId)
     }
 
     private fun onDetailsClicked(invitation: HomeFeedItem.Invitation) {

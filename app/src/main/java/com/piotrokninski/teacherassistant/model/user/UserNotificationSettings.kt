@@ -5,8 +5,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.messaging.FirebaseMessaging
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserNotificationSettingsContract
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserNotificationSettingsRepository
-import java.lang.Exception
-import java.lang.IllegalStateException
 
 data class UserNotificationSettings(val tokens: Map<String, Boolean>) {
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.piotrokninski.teacherassistant.cloudfunctions.FirebaseCloudFunctions
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.HomeFeedItem
@@ -40,13 +41,13 @@ class ReceivedInvitationDialogFragment(private val invitation: HomeFeedItem.Invi
         }
 
         binding.receivedInvitationDialogRejectButton.setOnClickListener {
-            FriendInvitation.deleteInvitation(invitation.friendInvitation.invitedUserId, invitation.friendInvitation.invitingUserId)
+            FirebaseCloudFunctions.rejectFriendInvitation(invitation.friendInvitation)
             refreshCallback
             dismiss()
         }
 
         binding.receivedInvitationDialogConfirmButton.setOnClickListener {
-            FriendInvitation.approveInvitation(invitation.friendInvitation)
+            FirebaseCloudFunctions.approveFriendInvitation(invitation.friendInvitation)
             refreshCallback
             dismiss()
         }

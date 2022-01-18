@@ -15,17 +15,21 @@ object FirestoreUserNotificationSettingsRepository {
 
         db.collection(FirestoreUserNotificationSettingsContract.COLLECTION_NAME).document(userId)
             .set(userNotificationSettings)
+
+        Log.d(TAG, "setUserNotificationSettings: the token has been set")
     }
 
-    fun updateNotificationToken(userId: String, token: String, value: Boolean) {
+    fun updateNotificationToken(userId: String, token: String, deviceAvailable: Boolean) {
         val db = FirebaseFirestore.getInstance()
 
         val updateToken = mapOf(
-            "tokens.$token" to value
+            "tokens.$token" to deviceAvailable
         )
 
         db.collection(FirestoreUserNotificationSettingsContract.COLLECTION_NAME).document(userId)
             .update(updateToken)
+
+        Log.d(TAG, "updateNotificationToken: token updated")
     }
 
     suspend fun getUserNotificationSettings(userId: String): UserNotificationSettings? {

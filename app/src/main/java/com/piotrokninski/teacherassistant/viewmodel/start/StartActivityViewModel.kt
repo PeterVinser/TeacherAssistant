@@ -7,9 +7,9 @@ import kotlinx.coroutines.launch
 
 class StartActivityViewModel: ViewModel() {
 
-    fun setNotifications(userId: String) {
+    fun setNotifications(userId: String, deviceAvailable: Boolean) {
         viewModelScope.launch {
-            UserNotificationSettings.setDeviceNotificationToken(userId, true)
+            UserNotificationSettings.setDeviceNotificationToken(userId, deviceAvailable)
         }
     }
 }

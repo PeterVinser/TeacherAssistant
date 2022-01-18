@@ -5,13 +5,12 @@ import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.piotrokninski.teacherassistant.cloudfunctions.FirebaseCloudFunctions
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 
 class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewModel(), Observable {
@@ -34,16 +33,12 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
 
     fun sendInvitation() {
         if (course.value != null) {
-            course.value = FirestoreCourseRepository.setCourse(course.value!!)
             if (friendInvitation.value!!.courseIds == null) {
                 friendInvitation.value!!.courseIds = ArrayList()
-                friendInvitation.value!!.courseIds!!.add(course.value!!.courseId)
-            } else {
-                friendInvitation.value!!.courseIds!!.add(course.value!!.courseId)
             }
         }
-        FirestoreFriendInvitationRepository.setFriendInvitationData(friendInvitation.value!!)
-        setFriends()
+
+        FirebaseCloudFunctions.sendFriendInvitation(friendInvitation.value!!, course.value)
     }
 
     private fun setFriends() {

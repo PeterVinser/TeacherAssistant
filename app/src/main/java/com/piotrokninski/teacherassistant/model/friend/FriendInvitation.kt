@@ -25,9 +25,16 @@ data class FriendInvitation(val invitingUserId: String,
                 val invitedUserFullName = getString(FirestoreFriendInvitationContract.INVITED_USER_FULL_NAME)
                 val invitationType = getString(FirestoreFriendInvitationContract.INVITATION_TYPE)
                 val invitationMessage = getString(FirestoreFriendInvitationContract.INVITATION_MESSAGE)
-                val courseIds = get(FirestoreFriendInvitationContract.COURSE_IDS) as ArrayList<String>
+
+                val courseIds = get(FirestoreFriendInvitationContract.COURSE_IDS) as ArrayList<String>?
+
+                Log.d(TAG, "toFriendInvitation: called")
+
+                Log.d(TAG, "toFriendInvitation: ${toString()}")
 
                 if (invitingUserId != null && invitedUserId != null) {
+                    Log.d(TAG, "toFriendInvitation: succeeded")
+
                     FriendInvitation(invitingUserId, invitingUserFullName!!, invitedUserId, invitedUserFullName!!,
                         invitationType!!, invitationMessage, courseIds)
                 } else {

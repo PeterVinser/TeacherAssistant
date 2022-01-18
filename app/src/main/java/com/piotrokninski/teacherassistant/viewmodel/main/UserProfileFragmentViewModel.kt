@@ -56,8 +56,9 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
 
             Log.d(TAG, "CurrentUser: ${currentUser.fullName}")
 
-            friendInvitation = FirestoreFriendInvitationRepository.getFriendInvitationDataOnce(currentUserId, searchedUserId)
             friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
+
+            friendInvitation =  FirestoreFriendInvitationRepository.getFriendInvitationDataOnce(currentUserId, searchedUserId)
 
             updateFriendStatus()
         }
@@ -91,7 +92,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
     fun rejectInvitation() {
         if (friendStatus.value == FirestoreFriendContract.STATUS_INVITING) {
 
-            FriendInvitation.deleteInvitation(currentUserId, user.value!!.userId)
+            FirebaseCloudFunctions.rejectFriendInvitation(friendInvitation!!)
 
             updateFriendStatus()
         }
@@ -100,48 +101,46 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
     fun sendInvitation(invitationType: String, invitationMessage: String?) {
 
         val invitation = FriendInvitation(currentUserId, currentUser.fullName,
-            user.value!!.userId, user.value!!.fullName, invitationType, invitationMessage, null)
+            searchedUserId, user.value!!.fullName, invitationType, invitationMessage, null)
 
-        FirebaseCloudFunctions.sendInvitation(invitation)
+        FirebaseCloudFunctions.sendFriendInvitation(invitation, null)
 
-//        FriendInvitation.sendInvitation(invitation)
+        friendInvitation = invitation
 
-//        updateFriendStatus()
+        updateFriendStatus()
     }
 
     //Used when the detailed invitation is required (moving to the InvitationDetailsFragment)
     fun prepareInvitation(invitationType: String, invitationMessage: String?): FriendInvitation {
 
         return FriendInvitation(currentUserId, currentUser.fullName,
-            user.value!!.userId, user.value!!.fullName, invitationType, invitationMessage, null)
+            searchedUserId, user.value!!.fullName, invitationType, invitationMessage, null)
     }
 
     private suspend fun approveInvitation() {
 
         Log.d(TAG, "approveInvitation: called")
 
-        FriendInvitation.approveInvitation(friendInvitation!!)
+        FirebaseCloudFunctions.approveFriendInvitation(friendInvitation!!)
 
-        friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, user.value!!.userId)
+        friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
 
         updateFriendStatus()
     }
 
     private fun cancelInvitation() {
-        FriendInvitation.deleteInvitation(user.value!!.userId, currentUserId)
+        FirebaseCloudFunctions.cancelFriendInvitation(currentUserId, searchedUserId)
     }
 
     private fun deleteFriend() {
 
         Log.d(TAG, "deleteFriend: called")
-        
-        //Deleting the friend in current user collection
-        Friend.deleteFriend(currentUserId, user.value!!.userId)
 
-        //Deleting the current user as friend in friend's collection
-        Friend.deleteFriend(user.value!!.userId, currentUserId)
+        FirebaseCloudFunctions.deleteFriend(currentUserId, searchedUserId)
 
         friend = null
+
+        updateFriendStatus()
     }
 
     private fun blocked() {

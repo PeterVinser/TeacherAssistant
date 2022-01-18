@@ -102,8 +102,12 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
                 binding.invitationDetailsCourseItem.invitationCourseItemTypeSpinner.setSelection(0)
                 binding.invitationDetailsCourseItem.invitationCourseItemSubjects.text = null
                 binding.invitationDetailsCourseItem.invitationCourseItemChipGroup.removeAllViews()
+
+                binding.invitationDetailsAddCourseButton.visibility = View.VISIBLE
             } else {
                 binding.invitationDetailsCourseItem.root.visibility = View.VISIBLE
+
+                binding.invitationDetailsAddCourseButton.visibility = View.GONE
             }
         })
     }

@@ -1,7 +1,7 @@
 package com.piotrokninski.teacherassistant.model.contract.firestore
 
 object FirestoreFriendInvitationContract {
-    const val COLLECTION_NAME = "friendsInvitations"
+    const val COLLECTION_NAME = "friendInvitations"
 
     //New contract
     const val INVITING_USER_ID = "invitingUserId"

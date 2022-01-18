@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,11 +21,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.util.PermissionsHelper
+import com.piotrokninski.teacherassistant.util.notifications.FcmManager
 import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
+import com.piotrokninski.teacherassistant.view.main.fragment.HomeFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.MainActivityViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.MainActivityViewModelFactory
@@ -102,11 +106,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun onInvitationReceived(): String? {
+
+        return intent.extras?.getString(FirestoreFriendInvitationContract.INVITING_USER_ID)
+    }
+
     private fun setupNavigation() {
 
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+
+        onInvitationReceived().let { userId ->
+            if (userId != null) {
+                val args = bundleOf(FirestoreFriendInvitationContract.INVITING_USER_ID to userId)
+                navController.setGraph(navController.graph, args)
+            }
+        }
 
         //Setting the action bar
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -142,8 +158,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun signOut() {
+
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        FcmManager.unsubscribeFromTopic(userId)
+
+//        mainActivityViewModel.setNotifications(userId, false)
+
         FirebaseAuth.getInstance().signOut()
         Toast.makeText(this, "Wylogowano", Toast.LENGTH_SHORT).show()
+
         startActivity(Intent(this, StartActivity::class.java))
     }
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.model.user.UserHint
+import com.piotrokninski.teacherassistant.model.user.UserNotificationSettings
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
@@ -46,6 +47,12 @@ class MainActivityViewModel : ViewModel() {
             FirestoreUserHintRepository.setUserHintData(userHint)
 
             userRepository.insertUser(user)
+        }
+    }
+
+    fun setNotifications(userId: String, deviceAvailable: Boolean) {
+        viewModelScope.launch {
+            UserNotificationSettings.setDeviceNotificationToken(userId, deviceAvailable)
         }
     }
 
