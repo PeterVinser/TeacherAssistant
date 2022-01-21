@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.cloudfunctions.FirebaseCloudFunctions
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
-import com.piotrokninski.teacherassistant.model.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem
 
 class ReceivedInvitationDialogFragment(private val invitation: HomeFeedItem.Invitation,
                                        private val profileCallback: (invitation: HomeFeedItem.Invitation) -> Unit,

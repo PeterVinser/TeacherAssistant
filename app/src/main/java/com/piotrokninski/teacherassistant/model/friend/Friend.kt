@@ -3,8 +3,6 @@ package com.piotrokninski.teacherassistant.model.friend
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
-import java.lang.Exception
 
 data class Friend(val userId: String,
                   val fullName: String,
@@ -24,10 +22,6 @@ data class Friend(val userId: String,
                 Log.e(TAG, "toFriend: ", e)
                 null
             }
-        }
-
-        fun deleteFriend(userId: String, friendId: String) {
-            FirestoreFriendRepository.deleteFriendData(userId, friendId)
         }
 
         private const val TAG = "Friend"

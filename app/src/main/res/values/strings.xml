@@ -139,5 +139,22 @@
     <string name="msg_subscribed_failed">Subscription has failed</string>
 
     <string name="fcm_message">FCM Message</string>
+    <string name="empty_homework_text">Przepraszamy, brak dostępnych zadań</string>
+    <string name="contact_item_message_placeholder_text">Hej…</string>
+    <string name="contact_item_profile_button_description">Profile button</string>
+    <string name="contact_friends_toggle_button_text">Kontakty</string>
+    <string name="contacts_invitations_toggle_button_text">Zaproszenia</string>
+    <string name="contacts_no_invitations_found_text">Brak zaproszeń</string>
+    <string name="header_item_title_placeholder">Tytuł</string>
 
+    <string name="header_item_students">Uczniowie</string>
+    <string name="header_item_tutors">Korepetytorzy</string>
+    <string name="header_item_friends">Znajomi</string>
+
+    <string name="header_item_sent_invitations">Wysłane</string>
+    <string name="header_item_received_invitations">Odebrane</string>
+
+    <string name="friend_invitaiton_item_title_student">%1$s - Uczeń</string>
+    <string name="friend_invitaiton_item_title_tutor">%1$s - Korepetytor</string>
+    <string name="friend_invitaiton_item_title_friend">%14s - Znajomy</string>
 </resources>

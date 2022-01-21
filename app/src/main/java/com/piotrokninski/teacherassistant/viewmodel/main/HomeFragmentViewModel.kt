@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.model.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import kotlinx.coroutines.launch
 
@@ -24,7 +24,7 @@ class HomeFragmentViewModel: ViewModel() {
 
     fun getItems() {
         viewModelScope.launch {
-            val invitingFriends = FirestoreFriendInvitationRepository.getFriendsInvitations(FirebaseAuth.getInstance().currentUser!!.uid)
+            val invitingFriends = FirestoreFriendInvitationRepository.getReceivedFriendsInvitations(FirebaseAuth.getInstance().currentUser!!.uid)
 
             val auxList = ArrayList<HomeFeedItem.Invitation>()
             invitingFriends.forEach { friend ->

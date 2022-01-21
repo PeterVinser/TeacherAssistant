@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.HomeFriendInvitationListItemBinding
-import com.piotrokninski.teacherassistant.model.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import java.lang.ClassCastException
 

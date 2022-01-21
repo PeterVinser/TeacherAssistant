@@ -6,7 +6,7 @@
 
         <variable
             name="userProfile"
-            type="com.piotrokninski.teacherassistant.model.SearchedUserItem.UserProfile" />
+            type="com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem.UserProfile" />
         
         <import type="android.view.View"/>
     </data>

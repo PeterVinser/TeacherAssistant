@@ -36,14 +36,14 @@ class UserAccountFragmentViewModel: ViewModel(), Observable {
         val userDao = AppDatabase.getInstance().userDao
         userRepository = RoomUserRepository(userDao)
 
+        _viewType.value = MainPreferences.getViewType()
+
         viewModelScope.launch {
             user.value = FirestoreUserRepository.getUserDataOnce(FirebaseAuth.getInstance().currentUser!!.uid)
 
             if (user.value != null) {
                 userRepository.updateUser(user.value!!)
             }
-
-            _viewType.value = MainPreferences.getViewType()
         }
 
         editing.value = false

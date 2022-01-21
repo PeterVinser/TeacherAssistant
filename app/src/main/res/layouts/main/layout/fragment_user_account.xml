@@ -235,16 +235,35 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <ToggleButton
-            android:id="@+id/user_account_view_type_button"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/user_account_toggle_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            app:selectionRequired="true"
+            app:singleSelection="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textOn="@string/student_view_text"
-            android:textOff="@string/tutor_view_text"/>
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/user_account_student_toggle_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/student_view_text"
+                android:minWidth="160dp"
+                style="?attr/materialButtonOutlinedStyle"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/user_account_tutor_toggle_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tutor_view_text"
+                android:minWidth="160dp"
+                style="?attr/materialButtonOutlinedStyle"/>
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -73,8 +73,8 @@ object FirebaseCloudFunctions {
     fun deleteFriend(firstUserId: String, secondUserId: String) {
 
         val data = mapOf(
-            firstUserId to firstUserId,
-            secondUserId to secondUserId
+            "firstUserId" to firstUserId,
+            "secondUserId" to secondUserId
         )
 
         functions

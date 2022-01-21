@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentSearchUsersBinding
-import com.piotrokninski.teacherassistant.model.SearchedUserItem
+import com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.SearchUsersAdapter

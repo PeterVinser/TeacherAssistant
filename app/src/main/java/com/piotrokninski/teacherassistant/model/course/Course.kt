@@ -13,6 +13,7 @@ data class Course(
     val tutorId: String,
     val studentFullName: String,
     val tutorFullName: String,
+    val status: String,
     var type: String?,
     var subject: String?,
     var meetingsDates: ArrayList<String>?
@@ -27,6 +28,7 @@ data class Course(
                 val tutorId = getString(FirestoreCourseContract.TUTOR_ID)!!
                 val studentFullName = getString(FirestoreCourseContract.STUDENT_FULL_NAME)!!
                 val tutorFullName = getString(FirestoreCourseContract.TUTOR_FULL_NAME)!!
+                val status = getString(FirestoreCourseContract.STATUS)!!
                 val type = getString(FirestoreCourseContract.COURSE_TYPE)
                 val subject = getString(FirestoreCourseContract.SUBJECT)
                 val meetingsDates = get(FirestoreCourseContract.MEETINGS_DATES) as ArrayList<String>
@@ -37,6 +39,7 @@ data class Course(
                     tutorId,
                     studentFullName,
                     tutorFullName,
+                    status,
                     type,
                     subject,
                     meetingsDates
@@ -51,18 +54,30 @@ data class Course(
         fun createCourseWithInvitation(friendInvitation: FriendInvitation): Course {
             return when (friendInvitation.invitationType) {
                 FirestoreFriendInvitationContract.TYPE_STUDENT -> {
-                    Course("",
-                        friendInvitation.invitedUserId, friendInvitation.invitingUserId,
-                        friendInvitation.invitedUserFullName, friendInvitation.invitingUserFullName,
-                        null, null, null
+                    Course(
+                        "",
+                        friendInvitation.invitedUserId,
+                        friendInvitation.invitingUserId,
+                        friendInvitation.invitedUserFullName,
+                        friendInvitation.invitingUserFullName,
+                        FirestoreCourseContract.STATUS_PENDING,
+                        null,
+                        null,
+                        null
                     )
                 }
 
                 FirestoreFriendInvitationContract.TYPE_TUTOR -> {
-                    Course("",
-                        friendInvitation.invitingUserId, friendInvitation.invitedUserId,
-                        friendInvitation.invitingUserFullName, friendInvitation.invitedUserFullName,
-                        null, null, null
+                    Course(
+                        "",
+                        friendInvitation.invitingUserId,
+                        friendInvitation.invitedUserId,
+                        friendInvitation.invitingUserFullName,
+                        friendInvitation.invitedUserFullName,
+                        FirestoreCourseContract.STATUS_PENDING,
+                        null,
+                        null,
+                        null
                     )
                 }
 

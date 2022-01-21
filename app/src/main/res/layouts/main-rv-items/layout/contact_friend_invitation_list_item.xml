@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="friendInvitationItem"
+            type="com.piotrokninski.teacherassistant.model.adapteritem.ContactItem.FriendInvitationItem" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/contact_friend_invitation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/contact_friend_invitation_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/full_name_hint_text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/contact_friend_invitation_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@{friendInvitationItem.friendInvitation.invitationMessage}"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>

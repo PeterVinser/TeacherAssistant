@@ -2,36 +2,28 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation.Companion.toFriendInvitation
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
+import com.piotrokninski.teacherassistant.model.friend.Friend
+import com.piotrokninski.teacherassistant.model.friend.Friend.Companion.toFriend
 import kotlinx.coroutines.tasks.await
 
 object FirestoreFriendInvitationRepository {
     private const val TAG = "FirestoreFriendInvitati"
 
-    fun setFriendInvitationData(friendInvitation: FriendInvitation) {
+    suspend fun getFriendInvitationDataOnce(
+        invitedUserId: String,
+        invitingUserId: String
+    ): FriendInvitation? {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreUserContract.COLLECTION_NAME).document(friendInvitation.invitedUserId)
-            .collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(friendInvitation.invitingUserId)
-            .set(friendInvitation)
-    }
-
-    fun deleteFriendInvitationData(invitedFriendId: String, invitingFriendId: String) {
-        val db = FirebaseFirestore.getInstance()
-
-        db.collection(FirestoreUserContract.COLLECTION_NAME).document(invitedFriendId)
-            .collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(invitingFriendId)
-            .delete()
-    }
-
-    suspend fun getFriendInvitationDataOnce(invitedUserId: String, invitingUserId: String): FriendInvitation? {
-        val db = FirebaseFirestore.getInstance()
-
-        val friendsInvitationsCollectionRef = db.collection(FirestoreUserContract.COLLECTION_NAME).document(invitedUserId)
-            .collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(invitingUserId)
+        val friendsInvitationsCollectionRef =
+            db.collection(FirestoreUserContract.COLLECTION_NAME).document(invitedUserId)
+                .collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
+                .document(invitingUserId)
 
         return try {
             friendsInvitationsCollectionRef.get().await().toFriendInvitation()
@@ -47,8 +39,9 @@ object FirestoreFriendInvitationRepository {
         //TODO change the return to return try and add nullable return type
         val friendsInvitations = ArrayList<FriendInvitation>()
 
-        val friendsInvitationsCollectionRef = db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
-            .collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
+        val friendsInvitationsCollectionRef =
+            db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
+                .collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
 
         try {
             friendsInvitationsCollectionRef.get().await().forEach { invitation ->
@@ -61,22 +54,69 @@ object FirestoreFriendInvitationRepository {
         return friendsInvitations
     }
 
-    suspend fun getFriendsInvitations(userId: String): ArrayList<FriendInvitation> {
+    suspend fun getReceivedFriendsInvitations(userId: String): ArrayList<FriendInvitation> {
         val db = FirebaseFirestore.getInstance()
 
-        val friendsInvitations = ArrayList<FriendInvitation>()
+        val friendInvitations = ArrayList<FriendInvitation>()
 
-        val friendsInvitationsCollectionRef = db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
-            .collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
+        val friendInvitationsCollectionRef =
+            db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
+                .collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
 
         try {
-            friendsInvitationsCollectionRef.get().await().forEach { invitation ->
-                invitation?.toFriendInvitation()?.let { friendsInvitations.add(it) }
+            friendInvitationsCollectionRef.get().await().forEach { invitation ->
+                invitation?.toFriendInvitation()?.let { friendInvitations.add(it) }
             }
         } catch (e: Exception) {
             Log.e(TAG, "getFriendsInvitations: ", e)
         }
 
-        return friendsInvitations
+        return friendInvitations
+    }
+
+    suspend fun getSentFriendInvitations(userId: String): ArrayList<FriendInvitation> {
+        val db = FirebaseFirestore.getInstance()
+
+        val friendInvitations = ArrayList<FriendInvitation>()
+
+        val invitedFriends = ArrayList<Friend>()
+
+        val friendsCollectionRef =
+            db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
+                .collection(FirestoreFriendContract.COLLECTION_NAME)
+
+        val invitedFriendsQuery = friendsCollectionRef.whereEqualTo(
+            FirestoreFriendContract.STATUS,
+            FirestoreFriendContract.STATUS_INVITED
+        )
+
+        try {
+            invitedFriendsQuery.get().await().forEach { friend ->
+                friend?.toFriend()?.let { invitedFriends.add(it) }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "getSentFriendInvitations: ", e)
+        }
+
+        if (invitedFriends.isNotEmpty()) {
+
+            invitedFriends.forEach { friend ->
+                val friendInvitationsRef = db.collection(FirestoreUserContract.COLLECTION_NAME).document(friend.userId)
+                    .collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(userId)
+
+                val invitation = try {
+                    friendInvitationsRef.get().await().toFriendInvitation()
+                } catch (e: Exception) {
+                    Log.e(TAG, "getSentFriendInvitations: ", e)
+                    null
+                }
+
+                if (invitation != null) {
+                    friendInvitations.add(invitation)
+                }
+            }
+        }
+
+        return friendInvitations
     }
 }

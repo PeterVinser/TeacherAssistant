@@ -3,12 +3,10 @@ package com.piotrokninski.teacherassistant.view.main.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.UserHintListItemBinding
 import com.piotrokninski.teacherassistant.databinding.UserProfileListItemBinding
-import com.piotrokninski.teacherassistant.model.SearchedUserItem
+import com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 
 class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) :
@@ -33,22 +31,25 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.itemViewType == AppConstants.HINTS_SEARCH_MODE) {
-            (holder as UserHintViewHolder).bind(
-                searchedUsers[position] as SearchedUserItem.UserHint,
-                clickListener
-            )
-        }
-        if (holder.itemViewType == AppConstants.PROFILES_SEARCH_MODE) {
-            (holder as UserProfileViewHolder).bind(
-                searchedUsers[position] as SearchedUserItem.UserProfile,
-                clickListener
-            )
+
+        when (holder.itemViewType) {
+            AppConstants.HINTS_SEARCH_MODE -> {
+                (holder as UserHintViewHolder).bind(
+                    searchedUsers[position] as SearchedUserItem.UserHint,
+                    clickListener
+                )
+            }
+
+            AppConstants.PROFILES_SEARCH_MODE -> {
+                (holder as UserProfileViewHolder).bind(
+                    searchedUsers[position] as SearchedUserItem.UserProfile,
+                    clickListener
+                )
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount: ${searchedUsers.size}")
         return searchedUsers.size
     }
 
@@ -71,12 +72,11 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
         companion object {
             fun initBinding(parent: ViewGroup): UserHintListItemBinding {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return DataBindingUtil.inflate(
+                return UserHintListItemBinding.inflate(
                     layoutInflater,
-                    R.layout.user_hint_list_item,
                     parent,
                     false
-                ) as UserHintListItemBinding
+                )
             }
         }
 
@@ -94,12 +94,11 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
         companion object {
             fun initBinding(parent: ViewGroup): UserProfileListItemBinding {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return DataBindingUtil.inflate(
+                return UserProfileListItemBinding.inflate(
                     layoutInflater,
-                    R.layout.user_profile_list_item,
                     parent,
                     false
-                ) as UserProfileListItemBinding
+                )
             }
         }
 

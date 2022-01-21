@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentContactsBinding
-import com.piotrokninski.teacherassistant.model.friend.Friend
+import com.piotrokninski.teacherassistant.model.adapteritem.ContactItem
+import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.ContactsAdapter
 import com.piotrokninski.teacherassistant.viewmodel.main.ContactsFragmentViewModel
@@ -21,7 +23,7 @@ class ContactsFragment : Fragment() {
     private lateinit var binding: FragmentContactsBinding
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ContactsAdapter
+    private lateinit var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private lateinit var contactsViewModel: ContactsFragmentViewModel
 
@@ -46,24 +48,65 @@ class ContactsFragment : Fragment() {
         initRecyclerView()
 
         setupViewModel()
+
+        binding.contactsFriendsToggleButton.isChecked = true
+
+        binding.contactsToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            onToggleButtonClicked(
+                checkedId,
+                isChecked
+            )
+        }
     }
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = ContactsAdapter { friend: Friend -> friendClicked(friend) }
+        adapter = ContactsAdapter (requireContext()) { contactItem: ContactItem ->
+            contactItemClicked(
+                contactItem
+            )
+        }
         recyclerView.adapter = adapter
     }
 
-    private fun friendClicked(friend: Friend) {
-        val action = ContactsFragmentDirections.actionContactsToUserProfile(friend.userId)
-        findNavController(this).navigate(action)
+    private fun contactItemClicked(contactItem: ContactItem) {
+        when (contactItem) {
+            is ContactItem.FriendItem -> {
+                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactItem.userId)
+                findNavController(this).navigate(action)
+            }
+
+            is ContactItem.FriendInvitationItem -> {
+                val userId = when (contactItem.sentReceived) {
+                    AppConstants.SENT_INVITATIONS -> {
+                        contactItem.friendInvitation.invitedUserId
+                    }
+
+                    AppConstants.RECEIVED_INVITATIONS -> {
+                        contactItem.friendInvitation.invitingUserId
+                    }
+
+                    else -> throw IllegalArgumentException("Not a valid argument")
+                }
+
+                val action = ContactsFragmentDirections.actionContactsToUserProfile(userId)
+                findNavController(this).navigate(action)
+            }
+
+            is ContactItem.HeaderItem -> {}
+        }
     }
 
     private fun setupViewModel() {
         val factory = ContactsFragmentViewModelFactory()
-        contactsViewModel = ViewModelProvider(this, factory).get(ContactsFragmentViewModel::class.java)
+        contactsViewModel =
+            ViewModelProvider(this, factory).get(ContactsFragmentViewModel::class.java)
 
-        contactsViewModel.friends.observe(viewLifecycleOwner, {
+        observeContactItems()
+    }
+
+    private fun observeContactItems() {
+        contactsViewModel.contactItems.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.contactsNotFound.visibility = View.GONE
@@ -71,8 +114,23 @@ class ContactsFragment : Fragment() {
                 recyclerView.visibility = View.GONE
                 binding.contactsNotFound.visibility = View.VISIBLE
             }
-            adapter.setFriends(it)
+            (adapter as ContactsAdapter).setContactItems(it)
         })
+
+    }
+
+    private fun onToggleButtonClicked(checkedId: Int, isChecked: Boolean) {
+        if (isChecked) {
+            when (checkedId) {
+                R.id.contacts_friends_toggle_button -> {
+                    contactsViewModel.getFriends()
+                }
+
+                R.id.contacts_invitations_toggle_button -> {
+                    contactsViewModel.getInvitations()
+                }
+            }
+        }
     }
 
     override fun onResume() {

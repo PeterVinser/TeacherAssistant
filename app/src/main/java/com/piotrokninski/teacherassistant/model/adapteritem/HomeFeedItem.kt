@@ -1,4 +1,4 @@
-package com.piotrokninski.teacherassistant.model
+package com.piotrokninski.teacherassistant.model.adapteritem
 
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation

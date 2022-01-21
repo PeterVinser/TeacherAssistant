@@ -13,6 +13,7 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.UserAccountFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserAccountFragmentViewModelFactory
+import java.lang.IllegalArgumentException
 
 class UserAccountFragment : Fragment() {
 
@@ -39,19 +40,28 @@ class UserAccountFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(false)
 
-        binding.userAccountViewTypeButton.setOnCheckedChangeListener { compoundButton, b -> onViewTypeButtonClicked(b) }
+        binding.userAccountStudentToggleButton
+
+        binding.userAccountToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked -> onToggleButtonClicked(checkedId, isChecked) }
 
         setupViewModel()
     }
 
-    private fun onViewTypeButtonClicked(b: Boolean) {
-        //b is true when the button is set to student view
-        val viewType = if (b) {
-            AppConstants.VIEW_TYPE_STUDENT
-        } else {
-            AppConstants.VIEW_TYPE_TUTOR
+    private fun onToggleButtonClicked(checkedId: Int, isChecked: Boolean) {
+
+        if (isChecked) {
+            val viewType = when (checkedId) {
+                R.id.user_account_student_toggle_button -> AppConstants.VIEW_TYPE_STUDENT
+
+                R.id.user_account_tutor_toggle_button -> AppConstants.VIEW_TYPE_TUTOR
+
+                else -> {
+                    throw IllegalArgumentException("No such id is legal: $checkedId")
+                }
+            }
+
+            userAccountViewModel.updateViewType(viewType)
         }
-        userAccountViewModel.updateViewType(viewType)
     }
 
     private fun setupViewModel() {
@@ -61,11 +71,11 @@ class UserAccountFragment : Fragment() {
         binding.userViewModel = userAccountViewModel
         binding.lifecycleOwner = this
 
+        initViewType()
+
         observeEditing()
 
         observeUser()
-
-        observeViewType()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -120,20 +130,19 @@ class UserAccountFragment : Fragment() {
     private fun observeUser() {
         userAccountViewModel.user.observe(viewLifecycleOwner, { user ->
             if (user.student && user.tutor) {
-                binding.userAccountViewTypeButton.visibility = View.VISIBLE
+                binding.userAccountToggleButton.visibility = View.VISIBLE
             } else {
-                binding.userAccountViewTypeButton.visibility = View.GONE
+                binding.userAccountToggleButton.visibility = View.GONE
             }
         })
     }
 
-    private fun observeViewType() {
-        userAccountViewModel.viewType.observe(viewLifecycleOwner, { viewType ->
-            when (viewType) {
-                AppConstants.VIEW_TYPE_STUDENT -> binding.userAccountViewTypeButton.isChecked = true
+    private fun initViewType() {
+        when (userAccountViewModel.viewType.value) {
 
-                AppConstants.VIEW_TYPE_TUTOR -> binding.userAccountViewTypeButton.isChecked = false
-            }
-        })
+            AppConstants.VIEW_TYPE_STUDENT -> binding.userAccountStudentToggleButton.isChecked = true
+
+            AppConstants.VIEW_TYPE_TUTOR -> binding.userAccountTutorToggleButton.isChecked = true
+        }
     }
 }

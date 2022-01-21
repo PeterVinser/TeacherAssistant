@@ -24,12 +24,13 @@ object FirestoreCourseRepository {
         return course
     }
 
-    suspend fun getStudiedCourses(userId: String): ArrayList<Course>? {
+    suspend fun getStudiedCourses(userId: String, status: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 
         val coursesRef = db.collection(FirestoreCourseContract.COLLECTION_NAME)
 
         val query = coursesRef.whereEqualTo(FirestoreCourseContract.STUDENT_ID, userId)
+            .whereEqualTo(FirestoreCourseContract.STATUS, status)
 
         return try {
 
@@ -50,12 +51,13 @@ object FirestoreCourseRepository {
         }
     }
 
-    suspend fun getTaughtCourses(userId: String): ArrayList<Course>? {
+    suspend fun getTaughtCourses(userId: String, status: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 
         val coursesRef = db.collection(FirestoreCourseContract.COLLECTION_NAME)
 
         val query = coursesRef.whereEqualTo(FirestoreCourseContract.TUTOR_ID, userId)
+            .whereEqualTo(FirestoreCourseContract.STATUS, status)
 
         return try {
 
