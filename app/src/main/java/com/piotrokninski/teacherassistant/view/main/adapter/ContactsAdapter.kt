@@ -8,14 +8,17 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ContactFriendInvitationListItemBinding
 import com.piotrokninski.teacherassistant.databinding.ContactFriendListItemBinding
 import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.ContactItem
+import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.util.AppConstants
 
-class ContactsAdapter(private val context: Context, private val clickListener: (ContactItem) -> Unit) :
+class ContactsAdapter(
+    private val context: Context,
+    private val clickListener: (ContactAdapterItem) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val contactItems = ArrayList<ContactItem>()
+    private val contactItems = ArrayList<ContactAdapterItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -39,7 +42,7 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
         when (holder.itemViewType) {
             AppConstants.CONTACT_FRIEND_ITEM -> {
                 (holder as FriendViewHolder).bind(
-                    contactItems[position] as ContactItem.FriendItem,
+                    contactItems[position] as ContactAdapterItem.FriendAdapterItem,
                     clickListener
                 )
             }
@@ -47,7 +50,7 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
             AppConstants.CONTACT_FRIEND_INVITATION_ITEM -> {
                 (holder as FriendInvitationViewHolder).bind(
                     context,
-                    contactItems[position] as ContactItem.FriendInvitationItem,
+                    contactItems[position] as ContactAdapterItem.FriendInvitationAdapterItem,
                     clickListener
                 )
             }
@@ -55,7 +58,7 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
             AppConstants.HEADER_ITEM -> {
                 (holder as HeaderViewHolder).bind(
                     context,
-                    contactItems[position] as ContactItem.HeaderItem
+                    contactItems[position] as ContactAdapterItem.HeaderAdapterItem
                 )
             }
         }
@@ -65,17 +68,17 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
         return contactItems.size
     }
 
-    fun setContactItems(contactItems: List<ContactItem>) {
+    fun setContactItems(contactAdapterItems: List<ContactAdapterItem>) {
         this.contactItems.clear()
-        this.contactItems.addAll(contactItems)
+        this.contactItems.addAll(contactAdapterItems)
         notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (contactItems[position]) {
-            is ContactItem.FriendItem -> AppConstants.CONTACT_FRIEND_ITEM
-            is ContactItem.FriendInvitationItem -> AppConstants.CONTACT_FRIEND_INVITATION_ITEM
-            is ContactItem.HeaderItem -> AppConstants.HEADER_ITEM
+            is ContactAdapterItem.FriendAdapterItem -> AppConstants.CONTACT_FRIEND_ITEM
+            is ContactAdapterItem.FriendInvitationAdapterItem -> AppConstants.CONTACT_FRIEND_INVITATION_ITEM
+            is ContactAdapterItem.HeaderAdapterItem -> AppConstants.HEADER_ITEM
         }
     }
 
@@ -93,9 +96,12 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
             }
         }
 
-        fun bind(friendItem: ContactItem.FriendItem, clickListener: (ContactItem.FriendItem) -> Unit) {
-            binding.friendItem = friendItem
-            binding.contactItemLayout.setOnClickListener { clickListener(friendItem) }
+        fun bind(
+            friendAdapterItem: ContactAdapterItem.FriendAdapterItem,
+            clickListener: (ContactAdapterItem.FriendAdapterItem) -> Unit
+        ) {
+            binding.friendItem = friendAdapterItem
+            binding.contactItemLayout.setOnClickListener { clickListener(friendAdapterItem) }
         }
     }
 
@@ -113,28 +119,46 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
             }
         }
 
-        fun bind(context: Context, friendInvitationItem: ContactItem.FriendInvitationItem, clickListener: (ContactItem.FriendInvitationItem) -> Unit) {
-            binding.friendInvitationItem = friendInvitationItem
+        fun bind(
+            context: Context,
+            friendInvitationAdapterItem: ContactAdapterItem.FriendInvitationAdapterItem,
+            clickListener: (ContactAdapterItem.FriendInvitationAdapterItem) -> Unit
+        ) {
+            binding.friendInvitationItem = friendInvitationAdapterItem
 
-            val fullName = when (friendInvitationItem.sentReceived) {
-                AppConstants.SENT_INVITATIONS -> friendInvitationItem.friendInvitation.invitedUserFullName
+            val fullName = when (friendInvitationAdapterItem.sentReceived) {
+                AppConstants.SENT_INVITATIONS -> friendInvitationAdapterItem.friendInvitation.invitedUserFullName
 
-                AppConstants.RECEIVED_INVITATIONS -> friendInvitationItem.friendInvitation.invitingUserFullName
-
-                else -> throw IllegalArgumentException("The argument is not valid")
-            }
-
-            binding.contactFriendInvitationFullName.text = when (friendInvitationItem.friendInvitation.invitationType) {
-                FirestoreFriendInvitationContract.TYPE_STUDENT -> context.getString(R.string.friend_invitaiton_item_title_student, fullName)
-
-                FirestoreFriendInvitationContract.TYPE_TUTOR -> context.getString(R.string.friend_invitaiton_item_title_tutor, fullName)
-
-                FirestoreFriendInvitationContract.TYPE_FRIEND -> context.getString(R.string.friend_invitaiton_item_title_friend, fullName)
+                AppConstants.RECEIVED_INVITATIONS -> friendInvitationAdapterItem.friendInvitation.invitingUserFullName
 
                 else -> throw IllegalArgumentException("The argument is not valid")
             }
 
-            binding.contactFriendInvitationLayout.setOnClickListener { clickListener(friendInvitationItem) }
+            binding.contactFriendInvitationFullName.text =
+                when (friendInvitationAdapterItem.friendInvitation.invitationType) {
+                    FirestoreFriendInvitationContract.TYPE_STUDENT -> context.getString(
+                        R.string.friend_invitation_item_title_student,
+                        fullName
+                    )
+
+                    FirestoreFriendInvitationContract.TYPE_TUTOR -> context.getString(
+                        R.string.friend_invitation_item_title_tutor,
+                        fullName
+                    )
+
+                    FirestoreFriendInvitationContract.TYPE_FRIEND -> context.getString(
+                        R.string.friend_invitation_item_title_friend,
+                        fullName
+                    )
+
+                    else -> throw IllegalArgumentException("The argument is not valid")
+                }
+
+            binding.contactFriendInvitationLayout.setOnClickListener {
+                clickListener(
+                    friendInvitationAdapterItem
+                )
+            }
         }
     }
 
@@ -152,8 +176,8 @@ class ContactsAdapter(private val context: Context, private val clickListener: (
             }
         }
 
-        fun bind(context: Context, headerItem: ContactItem.HeaderItem) {
-            binding.headerItemTitle.text = context.getString(headerItem.titleId)
+        fun bind(context: Context, headerAdapterItem: ContactAdapterItem.HeaderAdapterItem) {
+            binding.headerItemTitle.text = context.getString(headerAdapterItem.titleId)
         }
     }
 }

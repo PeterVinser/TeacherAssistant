@@ -190,4 +190,12 @@ class MainActivity : AppCompatActivity() {
             activeFragment.onPermissionResult(permissionGranted)
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        //TODO for further inspection, does not hide immediately with the normal behavior
+        binding.bottomNav.clearAnimation()
+        binding.bottomNav.animate().translationY(0F).duration = 200
+    }
 }

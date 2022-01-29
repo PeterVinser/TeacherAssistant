@@ -37,17 +37,6 @@
 
     </FrameLayout>
 
-    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--            android:id="@+id/fab"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="bottom|end"-->
-    <!--            android:layout_marginEnd="16dp"-->
-    <!--            android:layout_marginBottom="16dp"-->
-    <!--            android:src="@android:drawable/ic_input_add"-->
-    <!--            app:fabSize="normal"-->
-    <!--            android:contentDescription="@string/main_fab_description" />-->
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"

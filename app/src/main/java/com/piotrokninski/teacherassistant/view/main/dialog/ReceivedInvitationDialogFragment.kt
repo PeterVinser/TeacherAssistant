@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.piotrokninski.teacherassistant.cloudfunctions.FirebaseCloudFunctions
+import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 
-class ReceivedInvitationDialogFragment(private val invitation: HomeFeedItem.Invitation,
-                                       private val profileCallback: (invitation: HomeFeedItem.Invitation) -> Unit,
-                                       private val detailsCallback: (invitation: HomeFeedItem.Invitation) -> Unit,
+class ReceivedInvitationDialogFragment(private val invitation: HomeAdapterItem.Invitation,
+                                       private val profileCallback: (invitation: HomeAdapterItem.Invitation) -> Unit,
+                                       private val detailsCallback: (invitation: HomeAdapterItem.Invitation) -> Unit,
                                        private val refreshCallback: () -> Unit): DialogFragment() {
 
     private lateinit var binding: ReceivedInvitationDialogBinding
@@ -40,13 +40,13 @@ class ReceivedInvitationDialogFragment(private val invitation: HomeFeedItem.Invi
         }
 
         binding.receivedInvitationDialogRejectButton.setOnClickListener {
-            FirebaseCloudFunctions.rejectFriendInvitation(invitation.friendInvitation)
+            InvitationCloudFunctions.rejectFriendInvitation(invitation.friendInvitation)
             refreshCallback
             dismiss()
         }
 
         binding.receivedInvitationDialogConfirmButton.setOnClickListener {
-            FirebaseCloudFunctions.approveFriendInvitation(invitation.friendInvitation)
+            InvitationCloudFunctions.approveFriendInvitation(invitation.friendInvitation)
             refreshCallback
             dismiss()
         }

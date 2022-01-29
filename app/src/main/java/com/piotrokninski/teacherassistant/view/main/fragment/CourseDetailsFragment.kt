@@ -66,7 +66,7 @@ class CourseDetailsFragment : Fragment() {
 
         val course = courseDetailsViewModel.course.value!!
 
-        val newNote = Note(course.courseId, course.studentId, course.tutorId, course.studentFullName, course.tutorFullName, name, course.subject!!, date, note)
+        val newNote = Note(course.courseId!!, course.studentId!!, course.tutorId, course.studentFullName!!, course.tutorFullName!!, name, course.subject!!, date, note)
 
         courseDetailsViewModel.addNote(newNote)
     }

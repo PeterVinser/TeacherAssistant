@@ -27,7 +27,7 @@ class CourseDetailsFragmentViewModel(course: Course): ViewModel() {
 
         viewModelScope.launch {
 
-            _notes.value = FirestoreNoteRepository.getCourseNotes(course.courseId)
+            _notes.value = FirestoreNoteRepository.getCourseNotes(course.courseId!!)
         }
 
         _course.value = course

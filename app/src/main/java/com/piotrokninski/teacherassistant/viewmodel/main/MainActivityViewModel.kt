@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.ui.AppBarConfiguration
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.model.user.UserHint
@@ -14,6 +15,7 @@ import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepo
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
+import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
@@ -50,22 +52,24 @@ class MainActivityViewModel : ViewModel() {
         }
     }
 
-    fun setNotifications(userId: String, deviceAvailable: Boolean) {
-        viewModelScope.launch {
-            UserNotificationSettings.setDeviceNotificationToken(userId, deviceAvailable)
-        }
-    }
-
     private suspend fun saveCurrentUserData() {
         val currentUser = FirestoreUserRepository.getUserDataOnce(FirebaseAuth.getInstance().currentUser!!.uid)
 
         if (currentUser != null) {
             userRepository.insertUser(currentUser)
+
+            if (!(currentUser.student && currentUser.tutor)) {
+                if (currentUser.student) {
+                    updateViewType(AppConstants.VIEW_TYPE_STUDENT)
+                } else if (currentUser.tutor) {
+                    updateViewType(AppConstants.VIEW_TYPE_TUTOR)
+                }
+            }
         }
     }
 
 
-    fun updateViewType(viewType: String) {
+    private fun updateViewType(viewType: String) {
         MainPreferences.updateViewType(viewType)
 
         _viewType.value = viewType

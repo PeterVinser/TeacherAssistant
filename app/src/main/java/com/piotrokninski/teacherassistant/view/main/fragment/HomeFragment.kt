@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
@@ -63,14 +63,14 @@ class HomeFragment : Fragment() {
 
     private fun initRecycleView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = HomeAdapter { homeFeedItem: HomeFeedItem -> clickListener(homeFeedItem) }
+        adapter = HomeAdapter { homeAdapterItem: HomeAdapterItem -> clickListener(homeAdapterItem) }
         recyclerView.adapter = adapter
     }
 
-    private fun clickListener(homeFeedItem: HomeFeedItem) {
-        if (homeFeedItem is HomeFeedItem.Invitation) {
+    private fun clickListener(homeAdapterItem: HomeAdapterItem) {
+        if (homeAdapterItem is HomeAdapterItem.Invitation) {
 
-            val dialog = ReceivedInvitationDialogFragment(homeFeedItem,
+            val dialog = ReceivedInvitationDialogFragment(homeAdapterItem,
                 { onProfileClicked(it) },
                 { onDetailsClicked(it) },
                 { refresh() })
@@ -85,11 +85,11 @@ class HomeFragment : Fragment() {
             .navigate(action)
     }
 
-    private fun onProfileClicked(invitation: HomeFeedItem.Invitation) {
+    private fun onProfileClicked(invitation: HomeAdapterItem.Invitation) {
         navigateToProfile(invitation.friendInvitation.invitingUserId)
     }
 
-    private fun onDetailsClicked(invitation: HomeFeedItem.Invitation) {
+    private fun onDetailsClicked(invitation: HomeAdapterItem.Invitation) {
         Toast.makeText(activity, "On details clicked", Toast.LENGTH_SHORT).show()
     }
 
@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
         val factory = HomeFragmentViewModelFactory()
         homeViewModel = ViewModelProvider(this, factory).get(HomeFragmentViewModel::class.java)
 
-        homeViewModel.homeFeedItems.observe(viewLifecycleOwner, {
+        homeViewModel.mHomeAdapterItems.observe(viewLifecycleOwner, {
             adapter.setItems(it)
         })
     }

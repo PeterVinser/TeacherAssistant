@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentContactsBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.ContactItem
+import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.ContactsAdapter
@@ -61,29 +61,29 @@ class ContactsFragment : Fragment() {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = ContactsAdapter (requireContext()) { contactItem: ContactItem ->
+        adapter = ContactsAdapter (requireContext()) { contactAdapterItem: ContactAdapterItem ->
             contactItemClicked(
-                contactItem
+                contactAdapterItem
             )
         }
         recyclerView.adapter = adapter
     }
 
-    private fun contactItemClicked(contactItem: ContactItem) {
-        when (contactItem) {
-            is ContactItem.FriendItem -> {
-                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactItem.userId)
+    private fun contactItemClicked(contactAdapterItem: ContactAdapterItem) {
+        when (contactAdapterItem) {
+            is ContactAdapterItem.FriendAdapterItem -> {
+                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactAdapterItem.userId)
                 findNavController(this).navigate(action)
             }
 
-            is ContactItem.FriendInvitationItem -> {
-                val userId = when (contactItem.sentReceived) {
+            is ContactAdapterItem.FriendInvitationAdapterItem -> {
+                val userId = when (contactAdapterItem.sentReceived) {
                     AppConstants.SENT_INVITATIONS -> {
-                        contactItem.friendInvitation.invitedUserId
+                        contactAdapterItem.friendInvitation.invitedUserId
                     }
 
                     AppConstants.RECEIVED_INVITATIONS -> {
-                        contactItem.friendInvitation.invitingUserId
+                        contactAdapterItem.friendInvitation.invitingUserId
                     }
 
                     else -> throw IllegalArgumentException("Not a valid argument")
@@ -93,7 +93,7 @@ class ContactsFragment : Fragment() {
                 findNavController(this).navigate(action)
             }
 
-            is ContactItem.HeaderItem -> {}
+            is ContactAdapterItem.HeaderAdapterItem -> {}
         }
     }
 
@@ -106,7 +106,7 @@ class ContactsFragment : Fragment() {
     }
 
     private fun observeContactItems() {
-        contactsViewModel.contactItems.observe(viewLifecycleOwner, {
+        contactsViewModel.mContactAdapterItems.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.contactsNotFound.visibility = View.GONE
@@ -115,7 +115,7 @@ class ContactsFragment : Fragment() {
                 binding.contactsNotFound.visibility = View.VISIBLE
             }
             (adapter as ContactsAdapter).setContactItems(it)
-        })
+        }
 
     }
 

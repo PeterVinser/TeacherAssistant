@@ -87,7 +87,7 @@
     <string name="lesson_item_my_subjects_text">Tylko moje przedmioty</string>
     <string name="lesson_item_previous_button_description">Previous lesson</string>
     <string name="lesson_item_next_button_description">Next lesson</string>
-    <string name="lesson_item_subjects_temporal_text">Przedmiot</string>
+    <string name="lesson_item_subject_hint_text">Przedmiot</string>
     <string name="lesson_item_time_title">Wybierz dni i czas spotkań</string>
     <string name="lesson_item_add_meeting_text">Dodaj</string>
     <string name="meeting_dialog_confirm_text">Zatwierdź</string>
@@ -122,13 +122,15 @@
     <string name="note_dialog_note_hint">Notatka</string>
     <string name="course_details_no_notes">Brak notatek dla tych zajęć</string>
     <string name="courses_add_button_text">Dodaj zajęcia</string>
-    <string name="new_course_person_menu_hint">Wybierz osobę</string>
+    <string name="new_course_student_menu_hint">Wybierz ucznia</string>
     <string name="new_course_title">Nowe zajęcia</string>
 
     <string-array name="lesson_types">
         <item>Stacjonarne</item>
         <item>Zdalne</item>
     </string-array>
+
+    <string name="lesson_type_hint">Wybierz tryb zajęć</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="default_notification_channel_name">Topic</string>
@@ -154,7 +156,15 @@
     <string name="header_item_sent_invitations">Wysłane</string>
     <string name="header_item_received_invitations">Odebrane</string>
 
-    <string name="friend_invitaiton_item_title_student">%1$s - Uczeń</string>
-    <string name="friend_invitaiton_item_title_tutor">%1$s - Korepetytor</string>
-    <string name="friend_invitaiton_item_title_friend">%14s - Znajomy</string>
+    <string name="friend_invitation_item_title_student">%1$s - Uczeń</string>
+    <string name="friend_invitation_item_title_tutor">%1$s - Korepetytor</string>
+    <string name="friend_invitation_item_title_friend">%14s - Znajomy</string>
+
+    <string name="pending_courses_header_title">Oczekujące na potwierdzenie</string>
+
+    <string name="course_item_reject_button_text">Usuń</string>
+    <string name="course_item_cancel_button_text">Anuluj</string>
+
+    <string name="course_item_edit_button_text">Edytuj</string>
+    <string name="course_item_confirm_button_text">Potwierdź</string>
 </resources>

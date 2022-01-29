@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentSearchUsersBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem
+import com.piotrokninski.teacherassistant.model.adapteritem.SearchUserAdapterItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.SearchUsersAdapter
@@ -55,13 +55,13 @@ class SearchUsersFragment : Fragment() {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = SearchUsersAdapter{ searchedUserItem: SearchedUserItem -> searchedUserClicked(searchedUserItem) }
+        adapter = SearchUsersAdapter{ searchUserAdapterItem: SearchUserAdapterItem -> searchedUserClicked(searchUserAdapterItem) }
         recyclerView.adapter = adapter
     }
 
-    private fun searchedUserClicked(searchedUserItem: SearchedUserItem) {
+    private fun searchedUserClicked(searchUserAdapterItem: SearchUserAdapterItem) {
         (activity as MainActivity).hideKeyboard()
-        val action = SearchUsersFragmentDirections.actionSearchedUsersToUserProfile(searchedUserItem.id)
+        val action = SearchUsersFragmentDirections.actionSearchedUsersToUserProfile(searchUserAdapterItem.id)
         findNavController(this).navigate(action)
     }
 
@@ -70,7 +70,7 @@ class SearchUsersFragment : Fragment() {
         searchUsersFragmentViewModel = ViewModelProvider(this, factory).get(
             SearchUsersFragmentViewModel::class.java)
 
-        searchUsersFragmentViewModel.searchedUsersItems.observe(viewLifecycleOwner, {
+        searchUsersFragmentViewModel.mSearchUsersItemsAdapter.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.searchUsersNotFound.visibility = View.GONE

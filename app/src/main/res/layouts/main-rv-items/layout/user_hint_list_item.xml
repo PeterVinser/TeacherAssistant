@@ -6,7 +6,7 @@
 
         <variable
             name="userHint"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem.UserHint" />
+            type="com.piotrokninski.teacherassistant.model.adapteritem.SearchUserAdapterItem.UserAdapterHint" />
     </data>
 
     <LinearLayout

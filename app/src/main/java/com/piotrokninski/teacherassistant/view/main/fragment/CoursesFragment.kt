@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCoursesBinding
 import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CoursesAdapter
 import com.piotrokninski.teacherassistant.viewmodel.main.CoursesFragmentViewModel
@@ -44,18 +45,19 @@ class CoursesFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).isBottomNavVisible(true)
 
-        binding.coursesAddButton.setOnClickListener { onAddCourseClicked() }
+        binding.coursesAddButton.setOnClickListener { onAddCourseClicked(null) }
 
         setupViewModel()
     }
 
-    private fun onAddCourseClicked() {
-        findNavController(this).navigate(R.id.action_courses_to_newCourse)
+    private fun onAddCourseClicked(course: Course?) {
+        val action = CoursesFragmentDirections.actionCoursesToNewCourse(course)
+        findNavController(this).navigate(action)
     }
 
     private fun initRecyclerView(viewType: String) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = CoursesAdapter( { course: Course -> courseClicked(course) }, viewType, requireActivity())
+        adapter = CoursesAdapter( { course: Course -> courseClicked(course) }, { id: Int, course: Course -> courseButtonClicked(id, course) }, viewType, requireActivity())
         recyclerView.adapter = adapter
     }
 
@@ -64,13 +66,37 @@ class CoursesFragment : Fragment() {
         findNavController(this).navigate(action)
     }
 
+    private fun courseButtonClicked(id: Int, course: Course) {
+        when (id) {
+            CoursesAdapter.CANCEL_BUTTON_ID -> {
+                coursesViewModel.deleteCourse(course.courseId!!)
+            }
+
+            CoursesAdapter.REJECT_BUTTON_ID -> {
+                coursesViewModel.deleteCourse(course.courseId!!)
+            }
+
+            CoursesAdapter.EDIT_BUTTON_ID -> {
+                onAddCourseClicked(course)
+            }
+
+            CoursesAdapter.CONFIRM_BUTTON_ID -> {
+                coursesViewModel.confirmCourse(course)
+            }
+        }
+    }
+
     private fun setupViewModel() {
         val factory = CoursesFragmentViewModelFactory()
         coursesViewModel = ViewModelProvider(this, factory).get(CoursesFragmentViewModel::class.java)
 
         initRecyclerView(coursesViewModel.viewType)
 
-        coursesViewModel.courses.observe(viewLifecycleOwner, { courses ->
+        if (coursesViewModel.viewType == AppConstants.VIEW_TYPE_STUDENT) {
+            binding.coursesAddButton.visibility = View.GONE
+        }
+
+        coursesViewModel.courses.observe(viewLifecycleOwner) { courses ->
             if (courses.isNullOrEmpty()) {
                 recyclerView.visibility = View.GONE
                 binding.coursesNotFound.visibility = View.VISIBLE
@@ -80,6 +106,6 @@ class CoursesFragment : Fragment() {
 
                 adapter.setCourses(courses)
             }
-        })
+        }
     }
 }

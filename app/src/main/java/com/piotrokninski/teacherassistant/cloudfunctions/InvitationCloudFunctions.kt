@@ -6,7 +6,7 @@ import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.util.Util.serializeToMap
 
-object FirebaseCloudFunctions {
+object InvitationCloudFunctions {
     private const val TAG = "FirebaseCloudFunctions"
 
     private val functions = FirebaseFunctions.getInstance("europe-west1")

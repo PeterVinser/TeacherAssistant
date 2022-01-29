@@ -8,15 +8,15 @@ import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFrie
 import java.io.Serializable
 
 data class Course(
-    var courseId: String,
-    val studentId: String,
-    val tutorId: String,
-    val studentFullName: String,
-    val tutorFullName: String,
-    val status: String,
-    var type: String?,
-    var subject: String?,
-    var meetingsDates: ArrayList<String>?
+    var courseId: String? = null,
+    var studentId: String? = null,
+    var tutorId: String,
+    var studentFullName: String? = null,
+    var tutorFullName: String? = null,
+    val status: String = FirestoreCourseContract.STATUS_PENDING,
+    var type: String? = null,
+    var subject: String? = null,
+    var meetingsDates: ArrayList<String>? = null
 ) : Serializable {
 
     companion object {
@@ -55,29 +55,21 @@ data class Course(
             return when (friendInvitation.invitationType) {
                 FirestoreFriendInvitationContract.TYPE_STUDENT -> {
                     Course(
-                        "",
                         friendInvitation.invitedUserId,
                         friendInvitation.invitingUserId,
                         friendInvitation.invitedUserFullName,
                         friendInvitation.invitingUserFullName,
-                        FirestoreCourseContract.STATUS_PENDING,
-                        null,
-                        null,
-                        null
+                        FirestoreCourseContract.STATUS_PENDING
                     )
                 }
 
                 FirestoreFriendInvitationContract.TYPE_TUTOR -> {
                     Course(
-                        "",
                         friendInvitation.invitingUserId,
                         friendInvitation.invitedUserId,
                         friendInvitation.invitingUserFullName,
                         friendInvitation.invitedUserFullName,
                         FirestoreCourseContract.STATUS_PENDING,
-                        null,
-                        null,
-                        null
                     )
                 }
 

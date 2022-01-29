@@ -6,7 +6,7 @@
     <data>
         <variable
             name="friendInvitation"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem.Invitation" />
+            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.Invitation" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

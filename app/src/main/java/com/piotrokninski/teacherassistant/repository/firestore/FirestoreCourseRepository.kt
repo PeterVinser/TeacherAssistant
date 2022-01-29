@@ -77,4 +77,15 @@ object FirestoreCourseRepository {
             null
         }
     }
+
+    fun deleteCourse(courseId: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        try {
+            db.collection(FirestoreCourseContract.COLLECTION_NAME).document(courseId)
+                .delete()
+        } catch (e: Exception) {
+            Log.e(TAG, "deleteCourse: ", e)
+        }
+    }
 }

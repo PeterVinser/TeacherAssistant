@@ -6,14 +6,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.HomeFriendInvitationListItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.HomeFeedItem
+import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import java.lang.ClassCastException
 
-class HomeAdapter(private val clickListener:(HomeFeedItem) -> Unit) :
+class HomeAdapter(private val clickListener:(HomeAdapterItem) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = ArrayList<HomeFeedItem>()
+    private val items = ArrayList<HomeAdapterItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -27,7 +27,7 @@ class HomeAdapter(private val clickListener:(HomeFeedItem) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == AppConstants.HOME_FRIEND_INVITATION) {
             (holder as FriendInvitationViewHolder).bind(
-                items[position] as HomeFeedItem.Invitation,
+                items[position] as HomeAdapterItem.Invitation,
                 clickListener
             )
         }
@@ -39,11 +39,11 @@ class HomeAdapter(private val clickListener:(HomeFeedItem) -> Unit) :
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is HomeFeedItem.Invitation -> AppConstants.HOME_FRIEND_INVITATION
+            is HomeAdapterItem.Invitation -> AppConstants.HOME_FRIEND_INVITATION
         }
     }
 
-    fun setItems(items: List<HomeFeedItem>) {
+    fun setItems(items: List<HomeAdapterItem>) {
         this.items.clear()
         this.items.addAll(items)
         notifyDataSetChanged()
@@ -65,8 +65,8 @@ class HomeAdapter(private val clickListener:(HomeFeedItem) -> Unit) :
         }
 
         fun bind(
-            friendInvitation: HomeFeedItem.Invitation,
-            clickListener: (HomeFeedItem) -> Unit
+            friendInvitation: HomeAdapterItem.Invitation,
+            clickListener: (HomeAdapterItem) -> Unit
         ) {
             binding.friendInvitation = friendInvitation
             binding.homeFriendInvitation.text = friendInvitation.getInvitationType()

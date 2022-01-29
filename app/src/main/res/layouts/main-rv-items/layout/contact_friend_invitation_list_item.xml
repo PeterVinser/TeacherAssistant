@@ -5,7 +5,7 @@
     <data>
         <variable
             name="friendInvitationItem"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.ContactItem.FriendInvitationItem" />
+            type="com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem.FriendInvitationAdapterItem" />
     </data>
 
     <LinearLayout

@@ -36,7 +36,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:autofillHints="no"
-                        android:hint="@string/lesson_item_subjects_temporal_text"
+                        android:hint="@string/lesson_item_subject_hint_text"
                         android:inputType="text"
                         android:minHeight="48dp"
                         android:text="@={invitationViewModel.course.subject}"

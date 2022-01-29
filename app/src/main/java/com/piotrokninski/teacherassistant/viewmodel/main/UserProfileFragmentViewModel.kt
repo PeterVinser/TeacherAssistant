@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.cloudfunctions.FirebaseCloudFunctions
+import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
@@ -24,7 +24,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
 
     private val TAG = "UserProfileFragmentView"
     
-    private var userRepository: RoomUserRepository
+    private val userRepository: RoomUserRepository
 
     //Needed when user is invited but did not respond yet
     private var friendInvitation: FriendInvitation? = null
@@ -92,7 +92,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
     fun rejectInvitation() {
         if (friendStatus.value == FirestoreFriendContract.STATUS_INVITING) {
 
-            FirebaseCloudFunctions.rejectFriendInvitation(friendInvitation!!)
+            InvitationCloudFunctions.rejectFriendInvitation(friendInvitation!!)
 
             updateFriendStatus()
         }
@@ -103,7 +103,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
         val invitation = FriendInvitation(currentUserId, currentUser.fullName,
             searchedUserId, user.value!!.fullName, invitationType, invitationMessage, null)
 
-        FirebaseCloudFunctions.sendFriendInvitation(invitation, null)
+        InvitationCloudFunctions.sendFriendInvitation(invitation, null)
 
         friendInvitation = invitation
 
@@ -121,7 +121,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
 
         Log.d(TAG, "approveInvitation: called")
 
-        FirebaseCloudFunctions.approveFriendInvitation(friendInvitation!!)
+        InvitationCloudFunctions.approveFriendInvitation(friendInvitation!!)
 
         friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
 
@@ -129,14 +129,14 @@ class UserProfileFragmentViewModel(private val searchedUserId: String): ViewMode
     }
 
     private fun cancelInvitation() {
-        FirebaseCloudFunctions.cancelFriendInvitation(currentUserId, searchedUserId)
+        InvitationCloudFunctions.cancelFriendInvitation(currentUserId, searchedUserId)
     }
 
     private fun deleteFriend() {
 
         Log.d(TAG, "deleteFriend: called")
 
-        FirebaseCloudFunctions.deleteFriend(currentUserId, searchedUserId)
+        InvitationCloudFunctions.deleteFriend(currentUserId, searchedUserId)
 
         friend = null
 

@@ -5,7 +5,7 @@ import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.piotrokninski.teacherassistant.cloudfunctions.FirebaseCloudFunctions
+import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 
@@ -34,7 +34,7 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
             }
         }
 
-        FirebaseCloudFunctions.sendFriendInvitation(friendInvitation.value!!, course.value)
+        InvitationCloudFunctions.sendFriendInvitation(friendInvitation.value!!, course.value)
     }
 
     fun addCourse(type: String) {

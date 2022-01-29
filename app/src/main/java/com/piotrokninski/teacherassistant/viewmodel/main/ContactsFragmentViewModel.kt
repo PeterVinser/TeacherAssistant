@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
-import com.piotrokninski.teacherassistant.model.adapteritem.ContactItem
+import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
@@ -19,8 +19,8 @@ class ContactsFragmentViewModel : ViewModel() {
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
-    private val _contactItems = MutableLiveData<List<ContactItem>>()
-    val contactItems: LiveData<List<ContactItem>> = _contactItems
+    private val _contactItems = MutableLiveData<List<ContactAdapterItem>>()
+    val mContactAdapterItems: LiveData<List<ContactAdapterItem>> = _contactItems
 
     init {
         getFriends()
@@ -28,23 +28,30 @@ class ContactsFragmentViewModel : ViewModel() {
 
     fun getFriends() {
         viewModelScope.launch {
-            val auxList = ArrayList<ContactItem>()
+            val auxList = ArrayList<ContactAdapterItem>()
 
-            val studentsHeader = ContactItem.HeaderItem(R.string.header_item_students)
+            val studentsHeader = ContactAdapterItem.HeaderAdapterItem(R.string.header_item_students)
 
-            val students = ArrayList<ContactItem>()
+            val students = ArrayList<ContactAdapterItem>()
 
-            FirestoreFriendRepository.getApprovedFriends(currentUserId, FirestoreFriendContract.TYPE_STUDENT).forEach { friend ->
-                val studentItem = ContactItem.FriendItem(friend.userId, friend.fullName)
+            FirestoreFriendRepository.getApprovedFriends(
+                currentUserId,
+                FirestoreFriendContract.TYPE_STUDENT
+            ).forEach { friend ->
+                val studentItem =
+                    ContactAdapterItem.FriendAdapterItem(friend.userId, friend.fullName)
                 students.add(studentItem)
             }
 
-            val tutorsHeader = ContactItem.HeaderItem(R.string.header_item_tutors)
+            val tutorsHeader = ContactAdapterItem.HeaderAdapterItem(R.string.header_item_tutors)
 
-            val tutors = ArrayList<ContactItem>()
+            val tutors = ArrayList<ContactAdapterItem>()
 
-            FirestoreFriendRepository.getApprovedFriends(currentUserId, FirestoreFriendContract.TYPE_TUTOR).forEach { friend ->
-                val tutorItem = ContactItem.FriendItem(friend.userId, friend.fullName)
+            FirestoreFriendRepository.getApprovedFriends(
+                currentUserId,
+                FirestoreFriendContract.TYPE_TUTOR
+            ).forEach { friend ->
+                val tutorItem = ContactAdapterItem.FriendAdapterItem(friend.userId, friend.fullName)
                 tutors.add(tutorItem)
             }
 
@@ -75,12 +82,16 @@ class ContactsFragmentViewModel : ViewModel() {
                 }
             }
 
-            val friendsHeader = ContactItem.HeaderItem(R.string.header_item_friends)
+            val friendsHeader = ContactAdapterItem.HeaderAdapterItem(R.string.header_item_friends)
 
-            val friends = ArrayList<ContactItem>()
+            val friends = ArrayList<ContactAdapterItem>()
 
-            FirestoreFriendRepository.getApprovedFriends(currentUserId, FirestoreFriendContract.TYPE_FRIEND).forEach { friend ->
-                val friendItem = ContactItem.FriendItem(friend.userId, friend.fullName)
+            FirestoreFriendRepository.getApprovedFriends(
+                currentUserId,
+                FirestoreFriendContract.TYPE_FRIEND
+            ).forEach { friend ->
+                val friendItem =
+                    ContactAdapterItem.FriendAdapterItem(friend.userId, friend.fullName)
                 friends.add(friendItem)
             }
 
@@ -95,25 +106,35 @@ class ContactsFragmentViewModel : ViewModel() {
 
     fun getInvitations() {
         viewModelScope.launch {
-            val auxList = ArrayList<ContactItem>()
+            val auxList = ArrayList<ContactAdapterItem>()
 
-            val receivedInvitationsHeader = ContactItem.HeaderItem(R.string.header_item_received_invitations)
+            val receivedInvitationsHeader =
+                ContactAdapterItem.HeaderAdapterItem(R.string.header_item_received_invitations)
 
-            val receivedInvitations = ArrayList<ContactItem>()
+            val receivedInvitations = ArrayList<ContactAdapterItem>()
 
-            FirestoreFriendInvitationRepository.getReceivedFriendsInvitations(currentUserId).forEach { invitation ->
-                val receivedInvitationItem = ContactItem.FriendInvitationItem(AppConstants.RECEIVED_INVITATIONS, invitation)
-                receivedInvitations.add(receivedInvitationItem)
-            }
+            FirestoreFriendInvitationRepository.getReceivedFriendsInvitations(currentUserId)
+                .forEach { invitation ->
+                    val receivedInvitationItem = ContactAdapterItem.FriendInvitationAdapterItem(
+                        AppConstants.RECEIVED_INVITATIONS,
+                        invitation
+                    )
+                    receivedInvitations.add(receivedInvitationItem)
+                }
 
-            val sentInvitationsHeader = ContactItem.HeaderItem(R.string.header_item_sent_invitations)
+            val sentInvitationsHeader =
+                ContactAdapterItem.HeaderAdapterItem(R.string.header_item_sent_invitations)
 
-            val sentInvitations = ArrayList<ContactItem>()
+            val sentInvitations = ArrayList<ContactAdapterItem>()
 
-            FirestoreFriendInvitationRepository.getSentFriendInvitations(currentUserId).forEach { invitation ->
-                val sentInvitationItem = ContactItem.FriendInvitationItem(AppConstants.SENT_INVITATIONS, invitation)
-                sentInvitations.add(sentInvitationItem)
-            }
+            FirestoreFriendInvitationRepository.getSentFriendInvitations(currentUserId)
+                .forEach { invitation ->
+                    val sentInvitationItem = ContactAdapterItem.FriendInvitationAdapterItem(
+                        AppConstants.SENT_INVITATIONS,
+                        invitation
+                    )
+                    sentInvitations.add(sentInvitationItem)
+                }
 
             if (receivedInvitations.isNotEmpty()) {
                 auxList.add(receivedInvitationsHeader)

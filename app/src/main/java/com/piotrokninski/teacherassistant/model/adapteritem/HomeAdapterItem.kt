@@ -3,10 +3,10 @@ package com.piotrokninski.teacherassistant.model.adapteritem
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 
-sealed class HomeFeedItem {
+sealed class HomeAdapterItem {
     abstract val id: String
 
-    data class Invitation(val friendInvitation: FriendInvitation): HomeFeedItem() {
+    data class Invitation(val friendInvitation: FriendInvitation): HomeAdapterItem() {
         override val id = friendInvitation.invitingUserId
 
         fun getInvitationType(): String? {

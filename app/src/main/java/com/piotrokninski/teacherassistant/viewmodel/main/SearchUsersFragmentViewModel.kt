@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem
+import com.piotrokninski.teacherassistant.model.adapteritem.SearchUserAdapterItem
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
@@ -19,8 +19,8 @@ class SearchUsersFragmentViewModel: ViewModel() {
         this.searchMode = searchMode
     }
 
-    private val _searchedUsersItems = MutableLiveData<List<SearchedUserItem>>()
-    val searchedUsersItems: LiveData<List<SearchedUserItem>> = _searchedUsersItems
+    private val _searchedUsersItems = MutableLiveData<List<SearchUserAdapterItem>>()
+    val mSearchUsersItemsAdapter: LiveData<List<SearchUserAdapterItem>> = _searchedUsersItems
 
     init {
         _searchedUsersItems.value = ArrayList()
@@ -30,12 +30,12 @@ class SearchUsersFragmentViewModel: ViewModel() {
         viewModelScope.launch {
             val hints = FirestoreUserHintRepository.getUsersHints(keyword)
 
-            val auxList = ArrayList<SearchedUserItem>()
+            val auxList = ArrayList<SearchUserAdapterItem>()
 
             if (searchMode == AppConstants.HINTS_SEARCH_MODE) {
 
                 hints.forEach { user ->
-                    auxList.add(SearchedUserItem.UserHint(user.userId, user.fullName))
+                    auxList.add(SearchUserAdapterItem.UserAdapterHint(user.userId, user.fullName))
 
                     Log.d(TAG, "searchUsers: ${user.fullName}")
                 }
@@ -45,7 +45,7 @@ class SearchUsersFragmentViewModel: ViewModel() {
                 val users = FirestoreUserRepository.getUsers(hints)
 
                 users.forEach { user ->
-                    auxList.add(SearchedUserItem.UserProfile(user))
+                    auxList.add(SearchUserAdapterItem.UserAdapterProfile(user))
 
                     Log.d(TAG, "searchUsers: ${user.fullName}")
                 }

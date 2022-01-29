@@ -1,19 +1,18 @@
 package com.piotrokninski.teacherassistant.view.main.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.UserHintListItemBinding
 import com.piotrokninski.teacherassistant.databinding.UserProfileListItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.SearchedUserItem
+import com.piotrokninski.teacherassistant.model.adapteritem.SearchUserAdapterItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 
-class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) :
+class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TAG = "SearchUsersAdapter"
 
-    private val searchedUsers = ArrayList<SearchedUserItem>()
+    private val searchedUsers = ArrayList<SearchUserAdapterItem>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,14 +34,14 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
         when (holder.itemViewType) {
             AppConstants.HINTS_SEARCH_MODE -> {
                 (holder as UserHintViewHolder).bind(
-                    searchedUsers[position] as SearchedUserItem.UserHint,
+                    searchedUsers[position] as SearchUserAdapterItem.UserAdapterHint,
                     clickListener
                 )
             }
 
             AppConstants.PROFILES_SEARCH_MODE -> {
                 (holder as UserProfileViewHolder).bind(
-                    searchedUsers[position] as SearchedUserItem.UserProfile,
+                    searchedUsers[position] as SearchUserAdapterItem.UserAdapterProfile,
                     clickListener
                 )
             }
@@ -53,16 +52,16 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
         return searchedUsers.size
     }
 
-    fun setSearchedUsers(searchedUsers: List<SearchedUserItem>) {
+    fun setSearchedUsers(searchUserAdapters: List<SearchUserAdapterItem>) {
         this.searchedUsers.clear()
-        this.searchedUsers.addAll(searchedUsers)
+        this.searchedUsers.addAll(searchUserAdapters)
         notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (searchedUsers[position]) {
-            is SearchedUserItem.UserHint -> AppConstants.HINTS_SEARCH_MODE
-            is SearchedUserItem.UserProfile -> AppConstants.PROFILES_SEARCH_MODE
+            is SearchUserAdapterItem.UserAdapterHint -> AppConstants.HINTS_SEARCH_MODE
+            is SearchUserAdapterItem.UserAdapterProfile -> AppConstants.PROFILES_SEARCH_MODE
         }
     }
 
@@ -81,11 +80,11 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
         }
 
         fun bind(
-            userHint: SearchedUserItem.UserHint,
-            clickListener: (SearchedUserItem) -> Unit
+            userAdapterHint: SearchUserAdapterItem.UserAdapterHint,
+            clickListener: (SearchUserAdapterItem) -> Unit
         ) {
-            binding.userHint = userHint
-            binding.userHintItemCardView.setOnClickListener { clickListener(userHint) }
+            binding.userHint = userAdapterHint
+            binding.userHintItemCardView.setOnClickListener { clickListener(userAdapterHint) }
         }
     }
 
@@ -103,11 +102,11 @@ class SearchUsersAdapter(private val clickListener: (SearchedUserItem) -> Unit) 
         }
 
         fun bind(
-            userProfile: SearchedUserItem.UserProfile,
-            clickListener: (SearchedUserItem) -> Unit
+            userAdapterProfile: SearchUserAdapterItem.UserAdapterProfile,
+            clickListener: (SearchUserAdapterItem) -> Unit
         ) {
-            binding.userProfile = userProfile
-            binding.userProfileItemCardView.setOnClickListener { clickListener(userProfile) }
+            binding.userProfile = userAdapterProfile
+            binding.userProfileItemCardView.setOnClickListener { clickListener(userAdapterProfile) }
         }
     }
 }
