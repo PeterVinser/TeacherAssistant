@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
@@ -72,8 +72,8 @@ class ContactsFragment : Fragment() {
     private fun contactItemClicked(contactAdapterItem: ContactAdapterItem) {
         when (contactAdapterItem) {
             is ContactAdapterItem.FriendAdapterItem -> {
-                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactAdapterItem.userId)
-                findNavController(this).navigate(action)
+//                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactAdapterItem.userId)
+//                this.findNavController().navigate(action)
             }
 
             is ContactAdapterItem.FriendInvitationAdapterItem -> {
@@ -89,8 +89,8 @@ class ContactsFragment : Fragment() {
                     else -> throw IllegalArgumentException("Not a valid argument")
                 }
 
-                val action = ContactsFragmentDirections.actionContactsToUserProfile(userId)
-                findNavController(this).navigate(action)
+//                val action = ContactsFragmentDirections.actionContactsToUserProfile(userId)
+//                this.findNavController().navigate(action)
             }
 
             is ContactAdapterItem.HeaderAdapterItem -> {}

@@ -76,7 +76,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/new_course_type_menu"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="216dp"
+                android:layout_width="192dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:hint="@string/lesson_type_hint">
@@ -89,15 +89,6 @@
                     tools:ignore="LabelFor" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Spinner
-                android:id="@+id/new_course_type_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/lesson_types"
-                android:layout_margin="8dp"
-                android:minHeight="48dp"
-                android:visibility="gone"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

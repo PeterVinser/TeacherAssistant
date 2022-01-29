@@ -16,7 +16,7 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
     val friendInvitation = MutableLiveData<FriendInvitation>()
 
     @Bindable
-    val course = MutableLiveData<Course>()
+    val course = MutableLiveData<Course?>()
 
     private var _courses = MutableLiveData<ArrayList<Course>>()
     val courses: LiveData<ArrayList<Course>> = _courses

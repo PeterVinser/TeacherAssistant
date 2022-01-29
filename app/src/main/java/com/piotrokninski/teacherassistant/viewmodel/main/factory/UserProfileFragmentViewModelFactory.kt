@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
 
 class UserProfileFragmentViewModelFactory(private val userId: String): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserProfileFragmentViewModel::class.java)) {
             return UserProfileFragmentViewModel(userId) as T
         }

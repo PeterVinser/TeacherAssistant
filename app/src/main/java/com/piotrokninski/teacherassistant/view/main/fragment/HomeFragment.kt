@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun navigateToProfile(userId: String) {
+    private fun navigateToProfile(userId: String) {
         val action = HomeFragmentDirections.actionHomeToUserProfile(userId)
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             .navigate(action)
@@ -102,9 +102,9 @@ class HomeFragment : Fragment() {
         val factory = HomeFragmentViewModelFactory()
         homeViewModel = ViewModelProvider(this, factory).get(HomeFragmentViewModel::class.java)
 
-        homeViewModel.mHomeAdapterItems.observe(viewLifecycleOwner, {
+        homeViewModel.mHomeAdapterItems.observe(viewLifecycleOwner) {
             adapter.setItems(it)
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

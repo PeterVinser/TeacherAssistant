@@ -9,7 +9,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentInvitationDetailsBinding
@@ -95,7 +95,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     }
 
     private fun observeCourse() {
-        invitationDetailsFragmentViewModel.course.observe(viewLifecycleOwner, { course ->
+        invitationDetailsFragmentViewModel.course.observe(viewLifecycleOwner) { course ->
             if (course == null) {
                 binding.invitationDetailsCourseHeader.visibility = View.GONE
                 binding.invitationDetailsCourseItem.root.visibility = View.GONE
@@ -109,7 +109,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
 
                 binding.invitationDetailsAddCourseButton.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun initTypeRadio() {
@@ -141,7 +141,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
             )
         } else {
             invitationDetailsFragmentViewModel.sendInvitation()
-            findNavController(this).navigate(R.id.action_invitationDetails_to_home)
+            this.findNavController().navigate(R.id.action_invitationDetails_to_home)
         }
     }
 

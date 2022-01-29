@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         val sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
-        val factory = MainActivityViewModelFactory(sharedPreferences)
+        val factory = MainActivityViewModelFactory()
         mainActivityViewModel =
             ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
 

@@ -122,7 +122,7 @@
     <string name="note_dialog_note_hint">Notatka</string>
     <string name="course_details_no_notes">Brak notatek dla tych zajęć</string>
     <string name="courses_add_button_text">Dodaj zajęcia</string>
-    <string name="new_course_student_menu_hint">Wybierz ucznia</string>
+    <string name="new_course_student_menu_hint">Uczeń</string>
     <string name="new_course_title">Nowe zajęcia</string>
 
     <string-array name="lesson_types">
@@ -130,7 +130,7 @@
         <item>Zdalne</item>
     </string-array>
 
-    <string name="lesson_type_hint">Wybierz tryb zajęć</string>
+    <string name="lesson_type_hint">Tryb zajęć</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="default_notification_channel_name">Topic</string>

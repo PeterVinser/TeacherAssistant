@@ -112,7 +112,7 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun observeEditing() {
-        userAccountViewModel.editing.observe(viewLifecycleOwner, { editing ->
+        userAccountViewModel.editing.observe(viewLifecycleOwner) { editing ->
             binding.userAccountFullName.isFocusableInTouchMode = editing
             binding.userAccountFullName.isEnabled = editing
 
@@ -124,17 +124,17 @@ class UserAccountFragment : Fragment() {
 
             binding.userAccountSubjects.isFocusableInTouchMode = editing
             binding.userAccountSubjects.isEnabled = editing
-        })
+        }
     }
 
     private fun observeUser() {
-        userAccountViewModel.user.observe(viewLifecycleOwner, { user ->
+        userAccountViewModel.user.observe(viewLifecycleOwner) { user ->
             if (user.student && user.tutor) {
                 binding.userAccountToggleButton.visibility = View.VISIBLE
             } else {
                 binding.userAccountToggleButton.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun initViewType() {

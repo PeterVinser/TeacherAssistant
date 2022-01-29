@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCoursesBinding
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.util.AppConstants
@@ -52,7 +51,7 @@ class CoursesFragment : Fragment() {
 
     private fun onAddCourseClicked(course: Course?) {
         val action = CoursesFragmentDirections.actionCoursesToNewCourse(course)
-        findNavController(this).navigate(action)
+        this.findNavController().navigate(action)
     }
 
     private fun initRecyclerView(viewType: String) {
@@ -63,7 +62,7 @@ class CoursesFragment : Fragment() {
 
     private fun courseClicked(course: Course) {
         val action = CoursesFragmentDirections.actionCoursesToCourseDetails(course)
-        findNavController(this).navigate(action)
+        this.findNavController().navigate(action)
     }
 
     private fun courseButtonClicked(id: Int, course: Course) {

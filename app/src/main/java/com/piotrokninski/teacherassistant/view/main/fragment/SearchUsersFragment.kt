@@ -6,7 +6,7 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
@@ -62,7 +62,7 @@ class SearchUsersFragment : Fragment() {
     private fun searchedUserClicked(searchUserAdapterItem: SearchUserAdapterItem) {
         (activity as MainActivity).hideKeyboard()
         val action = SearchUsersFragmentDirections.actionSearchedUsersToUserProfile(searchUserAdapterItem.id)
-        findNavController(this).navigate(action)
+        this.findNavController().navigate(action)
     }
 
     private fun setupViewModel() {
@@ -70,7 +70,7 @@ class SearchUsersFragment : Fragment() {
         searchUsersFragmentViewModel = ViewModelProvider(this, factory).get(
             SearchUsersFragmentViewModel::class.java)
 
-        searchUsersFragmentViewModel.mSearchUsersItemsAdapter.observe(viewLifecycleOwner, {
+        searchUsersFragmentViewModel.mSearchUsersItemsAdapter.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.searchUsersNotFound.visibility = View.GONE
@@ -81,7 +81,7 @@ class SearchUsersFragment : Fragment() {
                 Log.d(TAG, "setupViewModel: list is empty")
             }
             adapter.setSearchedUsers(it)
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

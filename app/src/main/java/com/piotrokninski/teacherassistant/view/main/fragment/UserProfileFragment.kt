@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
@@ -68,7 +68,7 @@ class UserProfileFragment : Fragment() {
             userProfileViewModel.sendInvitation(invitationType, invitationMessage)
         } else {
             val action = UserProfileFragmentDirections.actionUserProfileToInvitationDetails(userProfileViewModel.prepareInvitation(invitationType, invitationMessage))
-            findNavController(this).navigate(action)
+            this.findNavController().navigate(action)
         }
     }
 
@@ -84,19 +84,23 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun observeFriendStatus() {
-        userProfileViewModel.friendStatus.observe(viewLifecycleOwner, { status ->
+        userProfileViewModel.friendStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
                 FirestoreFriendContract.STATUS_BLANK ->
-                    binding.userProfileInviteButton.text = getString(R.string.user_profile_invite_button_text)
+                    binding.userProfileInviteButton.text =
+                        getString(R.string.user_profile_invite_button_text)
 
                 FirestoreFriendContract.STATUS_INVITED ->
-                    binding.userProfileInviteButton.text = getString(R.string.user_profile_cancel_button_text)
+                    binding.userProfileInviteButton.text =
+                        getString(R.string.user_profile_cancel_button_text)
 
                 FirestoreFriendContract.STATUS_INVITING ->
-                    binding.userProfileInviteButton.text = getString(R.string.user_profile_approve_button_text)
+                    binding.userProfileInviteButton.text =
+                        getString(R.string.user_profile_approve_button_text)
 
                 FirestoreFriendContract.STATUS_APPROVED ->
-                    binding.userProfileInviteButton.text = getString(R.string.user_profile_delete_button_text)
+                    binding.userProfileInviteButton.text =
+                        getString(R.string.user_profile_delete_button_text)
 
                 FirestoreFriendContract.STATUS_BLOCKED ->
                     binding.userProfileInviteButton.visibility = View.GONE
@@ -108,6 +112,6 @@ class UserProfileFragment : Fragment() {
                 binding.userProfileRejectButton.visibility = View.GONE
             }
             Log.d(TAG, "observeFriendStatus: $status")
-        })
+        }
     }
 }

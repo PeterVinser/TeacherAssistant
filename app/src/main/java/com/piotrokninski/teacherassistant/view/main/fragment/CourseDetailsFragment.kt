@@ -97,7 +97,7 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun observeCourse() {
-        courseDetailsViewModel.course.observe(viewLifecycleOwner, { course ->
+        courseDetailsViewModel.course.observe(viewLifecycleOwner) { course ->
 
             binding.course = course
 
@@ -105,14 +105,18 @@ class CourseDetailsFragment : Fragment() {
                 AppConstants.VIEW_TYPE_STUDENT -> {
                     binding.courseDetailsProfession.text = getString(
                         R.string.course_item_profession_text, getString(
-                            R.string.tutor_title_text))
+                            R.string.tutor_title_text
+                        )
+                    )
                     binding.courseDetailsFullName.text = course.tutorFullName
                 }
 
                 AppConstants.VIEW_TYPE_TUTOR -> {
                     binding.courseDetailsProfession.text = getString(
                         R.string.course_item_profession_text, getString(
-                            R.string.student_title_text))
+                            R.string.student_title_text
+                        )
+                    )
                     binding.courseDetailsFullName.text = course.studentFullName
                 }
             }
@@ -123,11 +127,11 @@ class CourseDetailsFragment : Fragment() {
 
                 binding.courseDetailsChipGroup.addView(chip)
             }
-        })
+        }
     }
 
     private fun observeNotes() {
-        courseDetailsViewModel.notes.observe(viewLifecycleOwner, { notes ->
+        courseDetailsViewModel.notes.observe(viewLifecycleOwner) { notes ->
             if (notes.isNullOrEmpty()) {
                 recyclerView.visibility = View.GONE
                 binding.courseDetailsNotesNotFound.visibility = View.VISIBLE
@@ -138,6 +142,6 @@ class CourseDetailsFragment : Fragment() {
                 adapter.setNotes(notes)
             }
 
-        })
+        }
     }
 }

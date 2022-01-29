@@ -41,7 +41,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
         userRepository = RoomUserRepository(userDao)
 
         if (initCourse != null) {
-            course.value = initCourse
+            course.value = initCourse!!
 
             editing = true
 
