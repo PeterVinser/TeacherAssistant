@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piotrokninski.teacherassistant.model.course.Course
-import com.piotrokninski.teacherassistant.model.course.Note
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreNoteRepository
+import com.piotrokninski.teacherassistant.model.course.Lesson
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreLessonRepository
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
@@ -14,35 +14,37 @@ import java.lang.IllegalStateException
 class CourseDetailsFragmentViewModel(course: Course): ViewModel() {
     private val TAG = "CourseDetailsFragmentVi"
 
-    private val _notes = MutableLiveData<List<Note>>()
-    val notes: LiveData<List<Note>> = _notes
+    private val _lessons = MutableLiveData<List<Lesson>>()
+    val lessons: LiveData<List<Lesson>> = _lessons
 
-    lateinit var viewType: String
+    var viewType: String = MainPreferences.getViewType()
+        ?: throw IllegalStateException("The view type has not been initialized")
 
     private val _course = MutableLiveData<Course>()
     val course: LiveData<Course> = _course
 
     init {
-        viewType = MainPreferences.getViewType() ?: throw IllegalStateException("The view type has not been initialized")
 
         viewModelScope.launch {
 
-            _notes.value = FirestoreNoteRepository.getCourseNotes(course.courseId!!)
+            _lessons.value = FirestoreLessonRepository.getCourseLessons(course.courseId!!)
         }
 
         _course.value = course
     }
 
-    fun addNote(note: Note) {
-        FirestoreNoteRepository.setNote(note)
-
-        val auxList = ArrayList<Note>()
-
-        if (notes.value != null) {
-            auxList.addAll(notes.value!!)
+    fun addLesson(lesson: Lesson) {
+        viewModelScope.launch {
+            FirestoreLessonRepository.addLesson(lesson)
         }
 
-        auxList.add(note)
-        _notes.value = auxList
+        val auxList = ArrayList<Lesson>()
+
+        if (lessons.value != null) {
+            auxList.addAll(lessons.value!!)
+        }
+
+        auxList.add(lesson)
+        _lessons.value = auxList
     }
 }

@@ -7,11 +7,25 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <Button
+        android:id="@+id/homework_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/homework_add_button_text"
+        android:textSize="16sp"/>
+
     <TextView
+        android:id="@+id/homework_empty_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/empty_homework_text"
         android:textAlignment="center"
         android:textSize="20sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/homework_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/homework_list_item" />
 
 </LinearLayout>

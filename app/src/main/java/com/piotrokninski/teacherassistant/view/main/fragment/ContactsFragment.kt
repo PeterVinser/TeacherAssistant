@@ -72,8 +72,8 @@ class ContactsFragment : Fragment() {
     private fun contactItemClicked(contactAdapterItem: ContactAdapterItem) {
         when (contactAdapterItem) {
             is ContactAdapterItem.FriendAdapterItem -> {
-//                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactAdapterItem.userId)
-//                this.findNavController().navigate(action)
+                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactAdapterItem.userId)
+                this.findNavController().navigate(action)
             }
 
             is ContactAdapterItem.FriendInvitationAdapterItem -> {
@@ -89,8 +89,8 @@ class ContactsFragment : Fragment() {
                     else -> throw IllegalArgumentException("Not a valid argument")
                 }
 
-//                val action = ContactsFragmentDirections.actionContactsToUserProfile(userId)
-//                this.findNavController().navigate(action)
+                val action = ContactsFragmentDirections.actionContactsToUserProfile(userId)
+                this.findNavController().navigate(action)
             }
 
             is ContactAdapterItem.HeaderAdapterItem -> {}
@@ -100,7 +100,7 @@ class ContactsFragment : Fragment() {
     private fun setupViewModel() {
         val factory = ContactsFragmentViewModelFactory()
         contactsViewModel =
-            ViewModelProvider(this, factory).get(ContactsFragmentViewModel::class.java)
+            ViewModelProvider(this, factory)[ContactsFragmentViewModel::class.java]
 
         observeContactItems()
     }

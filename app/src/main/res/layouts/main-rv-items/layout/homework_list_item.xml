@@ -5,12 +5,12 @@
     <data>
 
         <variable
-            name="note"
-            type="com.piotrokninski.teacherassistant.model.course.Lesson" />
+            name="homework"
+            type="com.piotrokninski.teacherassistant.model.course.Homework" />
     </data>
 
     <FrameLayout
-        android:id="@+id/note_item_layout"
+        android:id="@+id/homework_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
@@ -25,26 +25,26 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/note_item_title"
+                    android:id="@+id/homework_item_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="2dp"
-                    android:text="@{note.topic}"
+                    android:text="@{homework.topic}"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     tools:text="Temat" />
 
                 <TextView
-                    android:id="@+id/note_item_date"
+                    android:id="@+id/homework_item_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="@{note.date}"
+                    android:text="@{homework.dueDate.toString()}"
                     android:textAlignment="center"
                     tools:text="01/01/2022" />
 
@@ -56,7 +56,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/note_item_user_profession"
+                        android:id="@+id/homework_item_user_profession"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
@@ -64,7 +64,7 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/note_item_user_full_name"
+                        android:id="@+id/homework_item_user_full_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
@@ -74,27 +74,27 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/note_item_subject"
+                    android:id="@+id/homework_item_subject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="4dp"
-                    android:text="@{note.subject}"
+                    android:text="@{homework.subject}"
                     android:textSize="16sp"
                     tools:text="Przedmiot" />
 
                 <TextView
-                    android:id="@+id/note_item_note"
+                    android:id="@+id/homework_item_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="@{note.note}"
-                    tools:text="Notatka" />
+                    android:text="@{homework.description}"
+                    tools:text="Praca domowa" />
 
             </LinearLayout>
 

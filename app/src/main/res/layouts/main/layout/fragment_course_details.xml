@@ -109,16 +109,16 @@
                     android:layout_marginBottom="4dp" />
 
                 <TextView
-                    android:id="@+id/course_details_notes_title"
+                    android:id="@+id/course_details_lessons_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/course_details_notes_title"
+                    android:text="@string/course_details_lessons_title"
                     android:textAlignment="center"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/course_details_notes_not_found"
+                    android:id="@+id/course_details_lessons_not_found"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
@@ -128,7 +128,7 @@
                     android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/course_details_notes_recycler_view"
+                    android:id="@+id/course_details_lessons_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:nestedScrollingEnabled="false"
@@ -138,7 +138,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/course_details_add_note_button"
+            android:id="@+id/course_details_add_lesson_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

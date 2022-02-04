@@ -43,7 +43,11 @@
         android:id="@+id/destination_homework"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.HomeworkFragment"
         android:label="@string/menu_main_exercises_text"
-        tools:layout="@layout/fragment_homework" />
+        tools:layout="@layout/fragment_homework">
+        <action
+            android:id="@+id/action_homework_to_newHomework"
+            app:destination="@id/destination_new_homework"/>
+    </fragment>
     <fragment
         android:id="@+id/destination_settings"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.SettingsFragment"
@@ -120,5 +124,10 @@
             android:name="course"
             app:argType="com.piotrokninski.teacherassistant.model.course.Course"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_new_homework"
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewHomeworkFragment"
+        tools:layout="@layout/fragment_new_homework">
     </fragment>
 </navigation>

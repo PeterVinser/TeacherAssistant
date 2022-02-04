@@ -21,6 +21,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/new_course_confirm_layout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
@@ -59,19 +60,19 @@
                 android:layout_margin="8dp"
                 android:autofillHints="no"
                 android:hint="@string/lesson_item_subject_hint_text"
-                android:text="@={courseViewModel.course.subject}"
                 android:inputType="text"
                 android:minHeight="48dp"
+                android:text="@={courseViewModel.course.subject}"
                 tools:ignore="TextContrastCheck" />
 
             <CheckBox
                 android:id="@+id/new_course_my_subjects"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:enabled="false"
                 android:text="@string/lesson_item_my_subjects_text"
-                android:textSize="16sp"
-                android:layout_margin="8dp"/>
+                android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/new_course_type_menu"
@@ -93,8 +94,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp">
 
                 <TextView

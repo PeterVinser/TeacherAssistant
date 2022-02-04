@@ -141,7 +141,7 @@
     <string name="msg_subscribed_failed">Subscription has failed</string>
 
     <string name="fcm_message">FCM Message</string>
-    <string name="empty_homework_text">Przepraszamy, brak dostępnych zadań</string>
+    <string name="empty_homework_text">Brak prac domowych</string>
     <string name="contact_item_message_placeholder_text">Hej…</string>
     <string name="contact_item_profile_button_description">Profile button</string>
     <string name="contact_friends_toggle_button_text">Kontakty</string>
@@ -167,4 +167,23 @@
 
     <string name="course_item_edit_button_text">Edytuj</string>
     <string name="course_item_confirm_button_text">Potwierdź</string>
+    <string name="homework_add_button_text">Dodaj pracę domową</string>
+
+    <string name="homework_assigned_student_title">Do zrobienia</string>
+    <string name="homework_assigned_tutor_title">Zadane</string>
+    <string name="homework_undelivered_title">Nieukończone</string>
+    <string name="homework_completed_title">Ukończone</string>
+    <string name="new_homework_title">Nowa praca domowa</string>
+    <string name="homework_course_menu_hint">Zajęcia</string>
+    <string name="course_details_lessons_title">Lekcje</string>
+    <string name="new_homework_lesson_menu_hint">Lekcja</string>
+    <string name="new_homework_lesson_button_description">Podepnij pod lekcję</string>
+    <string name="homework_date_dialog_title">Termin pracy domowej</string>
+    <string name="homework_date_dialog_lessons_button_text">Lekcje</string>
+    <string name="homework_date_dialog_dates_button_text">Daty</string>
+
+    <string name="dialog_next_button">Dalej</string>
+    <string name="dialog_previous_button">Cofnij</string>
+    <string name="new_homework_date_button_text">Termin</string>
+    <string name="new_homework_description_hint">Opis</string>
 </resources>

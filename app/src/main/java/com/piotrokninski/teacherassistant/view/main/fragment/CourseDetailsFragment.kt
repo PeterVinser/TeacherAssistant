@@ -10,11 +10,11 @@ import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCourseDetailsBinding
 import com.piotrokninski.teacherassistant.model.course.Course
-import com.piotrokninski.teacherassistant.model.course.Note
+import com.piotrokninski.teacherassistant.model.course.Lesson
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.NotesAdapter
-import com.piotrokninski.teacherassistant.view.main.dialog.NewNoteDialogFragment
+import com.piotrokninski.teacherassistant.view.main.dialog.NewLessonDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.CourseDetailsFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.CourseDetailsFragmentViewModelFactory
 
@@ -39,7 +39,7 @@ class CourseDetailsFragment : Fragment() {
 
         binding = FragmentCourseDetailsBinding.inflate(inflater, container, false)
 
-        recyclerView = binding.courseDetailsNotesRecyclerView
+        recyclerView = binding.courseDetailsLessonsRecyclerView
 
         return binding.root
     }
@@ -48,7 +48,7 @@ class CourseDetailsFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(false)
 
-        binding.courseDetailsAddNoteButton.setOnClickListener { onAddNoteClicked() }
+        binding.courseDetailsAddLessonButton.setOnClickListener { onAddNoteClicked() }
 
         arguments?.let {
             val safeArgs = CourseDetailsFragmentArgs.fromBundle(it)
@@ -58,7 +58,13 @@ class CourseDetailsFragment : Fragment() {
 
     private fun onAddNoteClicked() {
         val subject = courseDetailsViewModel.course.value!!.subject!!
-        val dialog = NewNoteDialogFragment({name: String, date: String, note: String -> addNote(name, date, note)}, subject)
+        val dialog = NewLessonDialogFragment({ name: String, date: String, note: String ->
+            addNote(
+                name,
+                date,
+                note
+            )
+        }, subject)
         dialog.show(childFragmentManager, "newNote")
     }
 
@@ -66,9 +72,19 @@ class CourseDetailsFragment : Fragment() {
 
         val course = courseDetailsViewModel.course.value!!
 
-        val newNote = Note(course.courseId!!, course.studentId!!, course.tutorId, course.studentFullName!!, course.tutorFullName!!, name, course.subject!!, date, note)
+        val newNote = Lesson(
+            course.courseId!!,
+            course.studentId!!,
+            course.tutorId,
+            course.studentFullName!!,
+            course.tutorFullName!!,
+            name,
+            course.subject!!,
+            date,
+            note
+        )
 
-        courseDetailsViewModel.addNote(newNote)
+        courseDetailsViewModel.addLesson(newNote)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -77,17 +93,19 @@ class CourseDetailsFragment : Fragment() {
 
     private fun initRecyclerView(viewType: String) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = NotesAdapter( { note: Note -> noteClicked(note) }, viewType, requireActivity())
+        adapter =
+            NotesAdapter({ lesson: Lesson -> noteClicked(lesson) }, viewType, requireActivity())
         recyclerView.adapter = adapter
     }
 
-    private fun noteClicked(note: Note) {
+    private fun noteClicked(lesson: Lesson) {
 
     }
 
     private fun setupViewModel(course: Course) {
         val factory = CourseDetailsFragmentViewModelFactory(course)
-        courseDetailsViewModel = ViewModelProvider(this, factory).get(CourseDetailsFragmentViewModel::class.java)
+        courseDetailsViewModel =
+            ViewModelProvider(this, factory).get(CourseDetailsFragmentViewModel::class.java)
 
         initRecyclerView(courseDetailsViewModel.viewType)
 
@@ -131,17 +149,16 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun observeNotes() {
-        courseDetailsViewModel.notes.observe(viewLifecycleOwner) { notes ->
+        courseDetailsViewModel.lessons.observe(viewLifecycleOwner) { notes ->
             if (notes.isNullOrEmpty()) {
                 recyclerView.visibility = View.GONE
-                binding.courseDetailsNotesNotFound.visibility = View.VISIBLE
+                binding.courseDetailsLessonsNotFound.visibility = View.VISIBLE
             } else {
                 recyclerView.visibility = View.VISIBLE
-                binding.courseDetailsNotesNotFound.visibility = View.GONE
+                binding.courseDetailsLessonsNotFound.visibility = View.GONE
 
                 adapter.setNotes(notes)
             }
-
         }
     }
 }

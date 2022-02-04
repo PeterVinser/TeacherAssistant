@@ -9,7 +9,7 @@ import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
 object FirestoreCourseRepository {
-    private val TAG = "FirestoreCourseReposito"
+    private const val TAG = "FirestoreCourseReposito"
 
     fun setCourse(course: Course): Course {
         val db = FirebaseFirestore.getInstance()

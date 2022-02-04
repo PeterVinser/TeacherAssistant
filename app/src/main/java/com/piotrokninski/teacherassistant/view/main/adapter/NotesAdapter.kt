@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.NoteListItemBinding
-import com.piotrokninski.teacherassistant.model.course.Note
+import com.piotrokninski.teacherassistant.model.course.Lesson
 import com.piotrokninski.teacherassistant.util.AppConstants
 
 class NotesAdapter(
-    private val clickListener: (Note) -> Unit,
+    private val clickListener: (Lesson) -> Unit,
     private val viewType: String,
     private val context: Context
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
-    private val notes = ArrayList<Note>()
+    private val notes = ArrayList<Lesson>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -33,9 +33,9 @@ class NotesAdapter(
         return notes.size
     }
 
-    fun setNotes(notes: List<Note>) {
+    fun setNotes(lessons: List<Lesson>) {
         this.notes.clear()
-        this.notes.addAll(notes)
+        this.notes.addAll(lessons)
         notifyDataSetChanged()
     }
 
@@ -46,12 +46,12 @@ class NotesAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            note: Note,
-            clickListener: (Note) -> Unit,
+            lesson: Lesson,
+            clickListener: (Lesson) -> Unit,
             viewType: String
         ) {
-            binding.note = note
-            binding.noteItemLayout.setOnClickListener { clickListener(note) }
+            binding.note = lesson
+            binding.noteItemLayout.setOnClickListener { clickListener(lesson) }
 
             when (viewType) {
                 AppConstants.VIEW_TYPE_STUDENT -> {
@@ -59,7 +59,7 @@ class NotesAdapter(
                         R.string.course_item_profession_text,
                         context.getString(R.string.tutor_title_text)
                     )
-                    binding.noteItemUserFullName.text = note.tutorFullName
+                    binding.noteItemUserFullName.text = lesson.tutorFullName
                 }
 
                 AppConstants.VIEW_TYPE_TUTOR -> {
@@ -67,7 +67,7 @@ class NotesAdapter(
                         R.string.course_item_profession_text,
                         context.getString(R.string.student_title_text)
                     )
-                    binding.noteItemUserFullName.text = note.studentFullName
+                    binding.noteItemUserFullName.text = lesson.studentFullName
                 }
             }
         }

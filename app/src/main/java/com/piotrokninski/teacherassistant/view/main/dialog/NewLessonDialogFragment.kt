@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.piotrokninski.teacherassistant.databinding.NewNoteDialogBinding
+import com.piotrokninski.teacherassistant.databinding.NewLessonDialogBinding
 
-class NewNoteDialogFragment(private val callback: (name: String, date: String, note: String) -> Unit,
-                            private val subject: String): DialogFragment() {
+class NewLessonDialogFragment(private val callback: (name: String, date: String, note: String) -> Unit,
+                              private val subject: String): DialogFragment() {
 
-    private lateinit var binding: NewNoteDialogBinding
+    private lateinit var binding: NewLessonDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,7 +19,7 @@ class NewNoteDialogFragment(private val callback: (name: String, date: String, n
         savedInstanceState: Bundle?
     ): View {
 
-        binding = NewNoteDialogBinding.inflate(inflater, container, false)
+        binding = NewLessonDialogBinding.inflate(inflater, container, false)
 
         return binding.root
     }

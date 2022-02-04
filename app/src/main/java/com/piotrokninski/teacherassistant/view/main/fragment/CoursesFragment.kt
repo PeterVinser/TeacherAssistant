@@ -56,7 +56,12 @@ class CoursesFragment : Fragment() {
 
     private fun initRecyclerView(viewType: String) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = CoursesAdapter( { course: Course -> courseClicked(course) }, { id: Int, course: Course -> courseButtonClicked(id, course) }, viewType, requireActivity())
+        adapter = CoursesAdapter(
+            { course: Course -> courseClicked(course) },
+            { id: Int, course: Course -> courseButtonClicked(id, course) },
+            viewType,
+            requireActivity()
+        )
         recyclerView.adapter = adapter
     }
 
@@ -87,7 +92,8 @@ class CoursesFragment : Fragment() {
 
     private fun setupViewModel() {
         val factory = CoursesFragmentViewModelFactory()
-        coursesViewModel = ViewModelProvider(this, factory).get(CoursesFragmentViewModel::class.java)
+        coursesViewModel =
+            ViewModelProvider(this, factory)[CoursesFragmentViewModel::class.java]
 
         initRecyclerView(coursesViewModel.viewType)
 
@@ -106,5 +112,11 @@ class CoursesFragment : Fragment() {
                 adapter.setCourses(courses)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        coursesViewModel.updateViewType()
     }
 }
