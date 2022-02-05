@@ -11,6 +11,7 @@ import com.piotrokninski.teacherassistant.databinding.HomeworkListItemBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeworkAdapterItem
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.util.AppConstants
+import java.text.SimpleDateFormat
 
 class HomeworkAdapter(
     private val clickListener: (Homework) -> Unit,
@@ -95,6 +96,10 @@ class HomeworkAdapter(
         ) {
             binding.homework = homework
             binding.homeworkItemLayout.setOnClickListener { clickListener(homework) }
+
+            val simpleFormat = SimpleDateFormat.getInstance()
+
+            binding.homeworkItemDate.text = simpleFormat.format(homework.dueDate!!)
 
             when (viewType) {
                 AppConstants.VIEW_TYPE_STUDENT -> {

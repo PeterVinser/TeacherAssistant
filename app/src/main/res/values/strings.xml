@@ -107,7 +107,7 @@
     <string name="received_invitation_profile_button_text">Profil</string>
     <string name="received_invitation_dialog_details_text">Szczegóły</string>
     <string name="courses_title">Twoje zajęcia</string>
-    <string name="course_item_dates_text">Terminy spotkań:</string>
+    <string name="course_item_dates_text">Terminy:</string>
     <string name="courses_not_found_text">Nie jesteś zapisany na żadne zajęcia</string>
     <string name="course_item_profession_hint">Uczeń/Korepetytor</string>
     <string name="course_item_profession_text">%1$s:</string>
@@ -186,4 +186,16 @@
     <string name="dialog_previous_button">Cofnij</string>
     <string name="new_homework_date_button_text">Termin</string>
     <string name="new_homework_description_hint">Opis</string>
+    <string name="topic_hint">Temat</string>
+
+    <string name="invitation_header_text">Zaproszenia</string>
+    <string name="pending_course_header_text">Nowe kursy</string>
+    <string name="homework_student_header_text">Prace do zrobienia</string>
+    <string name="homework_tutor_header_text">Zadane prace</string>
+
+    <string name="home_course_tutor_full_name_text">Korepetytor: %1$s</string>
+    <string name="home_course_student_full_name_text">Uczeń: %1$s</string>
+    <string name="home_course_type_text">Tryb: %1$s</string>
+
+    <string name="home_homework_due_date_text">Termin: %1$s</string>
 </resources>

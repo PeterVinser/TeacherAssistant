@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="course"
+            type="com.piotrokninski.teacherassistant.model.course.Course" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/home_course_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:text="@{course.subject}"
+            tools:text="Tytuł" />
+
+        <TextView
+            android:id="@+id/home_course_item_student_tutor_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Korepetytor/Uczeń"
+            android:layout_margin="8dp"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/home_course_item_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@{@string/home_course_type_text(course.type)}"
+            android:textSize="16sp"
+            tools:text="Tryb"/>
+
+        <TextView
+            android:id="@+id/home_course_item_meeting_dates_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/course_item_dates_text"
+            android:layout_margin="8dp"
+            android:textSize="16sp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/home_course_item_meeting_dates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/home_course_item_cancel_reject_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@string/course_item_reject_button_text" />
+
+            <Button
+                android:id="@+id/home_course_item_edit_confirm_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@string/course_item_confirm_button_text"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>

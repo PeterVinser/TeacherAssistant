@@ -46,7 +46,10 @@ object FirestoreHomeworkRepository {
             val homeworkList = ArrayList<Homework>()
 
             query.get().await().forEach { homework ->
-                homework?.toHomework()?.let { homeworkList.add(it) }
+                homework?.toHomework()?.let {
+                    Log.d(TAG, "getHomework: ${it.subject}")
+                    homeworkList.add(it)
+                }
             }
 
             if (homeworkList.isEmpty()) {

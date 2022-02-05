@@ -7,6 +7,7 @@ import com.piotrokninski.teacherassistant.model.course.Lesson.Companion.toLesson
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreLessonContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreLessonSnapshotContract
 import com.piotrokninski.teacherassistant.model.course.LessonSnapshot
+import com.piotrokninski.teacherassistant.model.course.LessonSnapshot.Companion.toLessonSnapshot
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
@@ -33,26 +34,53 @@ object FirestoreLessonRepository {
     suspend fun getCourseLessons(courseId: String): ArrayList<Lesson>? {
         val db = FirebaseFirestore.getInstance()
 
-        val notesRef = db.collection(FirestoreLessonContract.COLLECTION_NAME)
+        val lessonsRef = db.collection(FirestoreLessonContract.COLLECTION_NAME)
 
-        val query = notesRef.whereEqualTo(FirestoreLessonContract.COURSE_ID,courseId)
+        val query = lessonsRef.whereEqualTo(FirestoreLessonContract.COURSE_ID, courseId)
 
         return try {
 
-            val notes = ArrayList<Lesson>()
+            val lessons = ArrayList<Lesson>()
 
-            query.get().await().forEach { note ->
-                note?.toLesson()?.let { notes.add(it) }
+            query.get().await().forEach { lesson ->
+                lesson?.toLesson()?.let { lessons.add(it) }
             }
 
-            if (notes.isEmpty()) {
+            if (lessons.isEmpty()) {
                 null
             } else {
-                notes
+                lessons
             }
 
         } catch (e: Exception) {
             Log.e(TAG, "getCourseNotes: ", e)
+            null
+        }
+    }
+
+    suspend fun getCourseLessonSnapshots(courseId: String): ArrayList<LessonSnapshot>? {
+        val db = FirebaseFirestore.getInstance()
+
+        val lessonSnapshotsRef = db.collection(FirestoreLessonSnapshotContract.COLLECTION_NAME)
+
+        val query = lessonSnapshotsRef.whereEqualTo(FirestoreLessonSnapshotContract.COURSE_ID, courseId)
+
+        return try {
+
+            val lessonSnapshots = ArrayList<LessonSnapshot>()
+
+            query.get().await().forEach { snapshot ->
+                snapshot?.toLessonSnapshot()?.let { lessonSnapshots.add(it) }
+            }
+
+            if (lessonSnapshots.isEmpty()) {
+                null
+            } else {
+                lessonSnapshots
+            }
+
+        } catch (e: Exception) {
+            Log.e(TAG, "getCourseLessonSnapshots: ", e)
             null
         }
     }

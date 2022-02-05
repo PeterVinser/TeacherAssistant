@@ -9,9 +9,9 @@ import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunction
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 
-class ReceivedInvitationDialogFragment(private val invitation: HomeAdapterItem.Invitation,
-                                       private val profileCallback: (invitation: HomeAdapterItem.Invitation) -> Unit,
-                                       private val detailsCallback: (invitation: HomeAdapterItem.Invitation) -> Unit,
+class ReceivedInvitationDialogFragment(private val invitationItem: HomeAdapterItem.InvitationItem,
+                                       private val profileCallback: (invitationItem: HomeAdapterItem.InvitationItem) -> Unit,
+                                       private val detailsCallback: (invitationItem: HomeAdapterItem.InvitationItem) -> Unit,
                                        private val refreshCallback: () -> Unit): DialogFragment() {
 
     private lateinit var binding: ReceivedInvitationDialogBinding
@@ -28,37 +28,37 @@ class ReceivedInvitationDialogFragment(private val invitation: HomeAdapterItem.I
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.friendInvitation = invitation.friendInvitation
-        binding.receivedInvitationDialogType.text = invitation.getInvitationType()
+        binding.friendInvitation = invitationItem.friendInvitation
+        binding.receivedInvitationDialogType.text = invitationItem.getInvitationType()
 
-        if (invitation.friendInvitation.invitationMessage.isNullOrEmpty()) {
+        if (invitationItem.friendInvitation.invitationMessage.isNullOrEmpty()) {
             binding.receivedInvitationDialogMessage.visibility = View.GONE
         }
 
-        if (invitation.friendInvitation.courseIds == null) {
+        if (invitationItem.friendInvitation.courseIds == null) {
             binding.receivedInvitationDialogDetailsButton.visibility = View.GONE
         }
 
         binding.receivedInvitationDialogRejectButton.setOnClickListener {
-            InvitationCloudFunctions.rejectFriendInvitation(invitation.friendInvitation)
+            InvitationCloudFunctions.rejectFriendInvitation(invitationItem.friendInvitation)
             refreshCallback
             dismiss()
         }
 
         binding.receivedInvitationDialogConfirmButton.setOnClickListener {
-            InvitationCloudFunctions.approveFriendInvitation(invitation.friendInvitation)
+            InvitationCloudFunctions.approveFriendInvitation(invitationItem.friendInvitation)
             refreshCallback
             dismiss()
         }
 
         binding.receivedInvitationDialogProfileButton.setOnClickListener {
-            profileCallback(invitation)
+            profileCallback(invitationItem)
             refreshCallback
             dismiss()
         }
 
         binding.receivedInvitationDialogDetailsButton.setOnClickListener {
-            detailsCallback(invitation)
+            detailsCallback(invitationItem)
             refreshCallback
             dismiss()
         }

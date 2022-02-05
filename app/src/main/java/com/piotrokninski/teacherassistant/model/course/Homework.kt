@@ -7,12 +7,12 @@ import java.util.*
 
 data class Homework(
     var courseId: String,
-    val lessonId: String? = null,
+    var lessonId: String? = null,
     var studentId: String,
     var studentFullName: String,
     val tutorId: String,
     val tutorFullName: String,
-    val topic: String? = null,
+    var topic: String? = null,
     var subject: String,
     val creationDate: Date? = null,
     var dueDate: Date? = null,
@@ -30,9 +30,9 @@ data class Homework(
                 val studentFullName = getString(FirestoreHomeworkContract.STUDENT_FULL_NAME)!!
                 val tutorId = getString(FirestoreHomeworkContract.TUTOR_ID)!!
                 val tutorFullName = getString(FirestoreHomeworkContract.TUTOR_FULL_NAME)!!
-                val topic = getString(FirestoreHomeworkContract.TOPIC)!!
+                val topic = getString(FirestoreHomeworkContract.TOPIC)
                 val subject = getString(FirestoreHomeworkContract.SUBJECT)!!
-                val creationDate = getDate(FirestoreHomeworkContract.CREATION_DATE)!!
+                val creationDate = getDate(FirestoreHomeworkContract.CREATION_DATE)
                 val dueDate = getDate(FirestoreHomeworkContract.DUE_DATE)!!
                 val status = getString(FirestoreHomeworkContract.STATUS)!!
                 val description = getString(FirestoreHomeworkContract.DESCRIPTION)!!

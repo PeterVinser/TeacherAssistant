@@ -45,6 +45,7 @@ class NewHomeworkFragment : Fragment() {
         binding.newHomeworkLessonButton.isEnabled = false
         binding.newHomeworkDateButton.isEnabled = false
         binding.newHomeworkDescription.isEnabled = false
+        binding.newHomeworkTopic.isEnabled = false
 
         binding.newHomeworkLessonToggleButton.addOnButtonCheckedListener { _, _, isChecked ->
             onLessonButtonToggled(
@@ -63,11 +64,22 @@ class NewHomeworkFragment : Fragment() {
 
                 (activity as MainActivity).onBackPressed()
             } else {
-                Toast.makeText(activity, "Uzupełnij szczegóły pracy domowej", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Uzupełnij szczegóły pracy domowej", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
-        binding.newHomeworkCourseTextView.setOnItemClickListener { _, _, position, _ -> onCourseSelected(position) }
+        binding.newHomeworkCourseTextView.setOnItemClickListener { _, _, position, _ ->
+            onCourseSelected(
+                position
+            )
+        }
+
+        binding.newHomeworkLessonTextView.setOnItemClickListener { _, _, position, _ ->
+            onLessonSelected(
+                position
+            )
+        }
 
         binding.newHomeworkDateButton.setOnClickListener {
             val dialog = HomeworkDateDialogFragment { date -> onDatePicked(date) }
@@ -84,17 +96,36 @@ class NewHomeworkFragment : Fragment() {
 
         observeCourseSnapshots()
 
+        observeLessonTopic()
+
         observeHomework()
+
+        observeLesson()
     }
 
     private fun onCourseSelected(position: Int) {
         newHomeworkViewModel.onCourseSelected(position)
     }
 
+    private fun onLessonSelected(position: Int) {
+        newHomeworkViewModel.onLessonSelected(position)
+    }
+
     private fun observeCourseSnapshots() {
         newHomeworkViewModel.courseSnapshots.observe(viewLifecycleOwner) { snapshots ->
             val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, snapshots)
             binding.newHomeworkCourseTextView.setAdapter(arrayAdapter)
+        }
+    }
+
+    private fun observeLessonTopic() {
+        newHomeworkViewModel.lessonTopics.observe(viewLifecycleOwner) { topics ->
+            binding.newHomeworkLessonButton.isEnabled = !topics.isNullOrEmpty()
+
+            if (!topics.isNullOrEmpty()) {
+                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, topics)
+                binding.newHomeworkLessonTextView.setAdapter(arrayAdapter)
+            }
         }
     }
 
@@ -106,8 +137,17 @@ class NewHomeworkFragment : Fragment() {
             binding.newHomeworkLessonButton.isEnabled = enabled
             binding.newHomeworkDateButton.isEnabled = enabled
             binding.newHomeworkDescription.isEnabled = enabled
+            binding.newHomeworkTopic.isEnabled = enabled
+        }
+    }
 
-            Log.d(TAG, "observeHomework: ${homework.description}")
+    private fun observeLesson() {
+        newHomeworkViewModel.selectedLesson.observe(viewLifecycleOwner) { lesson ->
+            if (lesson != null) {
+                binding.newHomeworkTopic.setText(lesson.topic)
+
+                binding.newHomeworkTopic.isEnabled = false
+            }
         }
     }
 
@@ -126,5 +166,12 @@ class NewHomeworkFragment : Fragment() {
         binding.newHomeworkLessonMenu.visibility = if (isChecked) View.VISIBLE else View.GONE
         binding.newHomeworkLessonButton.text =
             if (isChecked) "" else getString(R.string.new_homework_lesson_button_description)
+        binding.newHomeworkLessonTextView.text = null
+
+        if (newHomeworkViewModel.selectedLesson.value != null) {
+            binding.newHomeworkTopic.isEnabled = true
+
+            newHomeworkViewModel.deleteSelectedLesson()
+        }
     }
 }

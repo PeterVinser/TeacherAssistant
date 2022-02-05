@@ -6,12 +6,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
+import com.piotrokninski.teacherassistant.cloudfunctions.CourseCloudFunctions
+import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
+import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.ReceivedInvitationDialogFragment
@@ -19,6 +25,7 @@ import com.piotrokninski.teacherassistant.viewmodel.main.HomeFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.HomeFragmentViewModelFactory
 
 class HomeFragment : Fragment() {
+    private val TAG = "HomeFragment"
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -30,13 +37,6 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        this.arguments.let {
-            val userId = it?.getString(FirestoreFriendInvitationContract.INVITING_USER_ID)
-            if (userId != null) {
-                navigateToProfile(userId)
-            }
-        }
     }
 
     override fun onCreateView(
@@ -56,53 +56,98 @@ class HomeFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(true)
 
-        initRecycleView()
+        arguments?.let {
+            val userId = it.getString(FirestoreFriendInvitationContract.INVITING_USER_ID)
+            if (userId != null) {
+                navigateToProfile(userId)
+            }
+        }
 
         setupViewModel()
     }
 
-    private fun initRecycleView() {
+    private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = HomeAdapter { homeAdapterItem: HomeAdapterItem -> clickListener(homeAdapterItem) }
+        adapter = HomeAdapter(
+            { homeAdapterItem: HomeAdapterItem -> itemClickListener(homeAdapterItem) },
+            { homeAdapterItem: HomeAdapterItem ->
+                positiveButtonClickListener(
+                    homeAdapterItem
+                )
+            },
+            { homeAdapterItem: HomeAdapterItem ->
+                negativeButtonClickListener(
+                    homeAdapterItem
+                )
+            },
+            homeViewModel.viewType,
+            requireContext()
+        )
         recyclerView.adapter = adapter
     }
 
-    private fun clickListener(homeAdapterItem: HomeAdapterItem) {
-        if (homeAdapterItem is HomeAdapterItem.Invitation) {
+    private fun itemClickListener(homeAdapterItem: HomeAdapterItem) {
+        when (homeAdapterItem) {
+            is HomeAdapterItem.InvitationItem -> navigateToProfile(homeAdapterItem.friendInvitation.invitingUserId)
 
-            val dialog = ReceivedInvitationDialogFragment(homeAdapterItem,
-                { onProfileClicked(it) },
-                { onDetailsClicked(it) },
-                { refresh() })
+            is HomeAdapterItem.HomeworkItem -> {}
 
-            dialog.show(childFragmentManager, "receivedInvitation")
+            else -> {}
+        }
+    }
+
+    private fun positiveButtonClickListener(homeAdapterItem: HomeAdapterItem) {
+        when (homeAdapterItem) {
+            is HomeAdapterItem.InvitationItem -> InvitationCloudFunctions.approveFriendInvitation(
+                homeAdapterItem.friendInvitation
+            )
+
+            is HomeAdapterItem.CourseItem -> {
+                when (homeViewModel.viewType) {
+                    AppConstants.VIEW_TYPE_STUDENT -> CourseCloudFunctions.confirmCourse(
+                        homeAdapterItem.course
+                    )
+
+                    AppConstants.VIEW_TYPE_TUTOR -> {
+                        val action =
+                            HomeFragmentDirections.actionHomeToNewCourse(homeAdapterItem.course)
+                        this.findNavController().navigate(action)
+                    }
+                }
+            }
+
+            is HomeAdapterItem.HomeworkItem -> {}
+
+            else -> {}
+        }
+    }
+
+    private fun negativeButtonClickListener(homeAdapterItem: HomeAdapterItem) {
+        when (homeAdapterItem) {
+            is HomeAdapterItem.InvitationItem -> InvitationCloudFunctions.rejectFriendInvitation(
+                homeAdapterItem.friendInvitation
+            )
+
+            is HomeAdapterItem.CourseItem -> homeViewModel.deleteCourse(homeAdapterItem.course.courseId!!)
+
+            is HomeAdapterItem.HomeworkItem -> {}
+
+            else -> {}
         }
     }
 
     private fun navigateToProfile(userId: String) {
         val action = HomeFragmentDirections.actionHomeToUserProfile(userId)
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            .navigate(action)
-    }
-
-    private fun onProfileClicked(invitation: HomeAdapterItem.Invitation) {
-        navigateToProfile(invitation.friendInvitation.invitingUserId)
-    }
-
-    private fun onDetailsClicked(invitation: HomeAdapterItem.Invitation) {
-        Toast.makeText(activity, "On details clicked", Toast.LENGTH_SHORT).show()
-    }
-
-    //TODO make it fucking work
-    private fun refresh() {
-        homeViewModel.getItems()
+        this.findNavController().navigate(action)
     }
 
     private fun setupViewModel() {
         val factory = HomeFragmentViewModelFactory()
         homeViewModel = ViewModelProvider(this, factory).get(HomeFragmentViewModel::class.java)
 
-        homeViewModel.mHomeAdapterItems.observe(viewLifecycleOwner) {
+        initRecyclerView()
+
+        homeViewModel.homeFeedItems.observe(viewLifecycleOwner) {
             adapter.setItems(it)
         }
     }
@@ -137,6 +182,6 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        homeViewModel.getItems()
+//        homeViewModel.getItems()
     }
 }

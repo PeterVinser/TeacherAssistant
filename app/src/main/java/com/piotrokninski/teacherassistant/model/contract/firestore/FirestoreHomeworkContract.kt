@@ -2,7 +2,7 @@ package com.piotrokninski.teacherassistant.model.contract.firestore
 
 object FirestoreHomeworkContract {
 
-    const val COLLECTION_NAME = "homeworks"
+    const val COLLECTION_NAME = "homework"
 
     const val COURSE_ID = "courseId"
     const val LESSON_ID = "lessonId"

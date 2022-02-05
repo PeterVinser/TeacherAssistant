@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,7 @@ class HomeworkFragment : Fragment() {
             viewType,
             requireActivity()
         )
+        recyclerView.adapter = adapter
     }
 
     private fun homeworkClicked(homework: Homework) {
@@ -84,9 +86,13 @@ class HomeworkFragment : Fragment() {
             if (homework.isNullOrEmpty()) {
                 binding.homeworkEmptyText.visibility = View.VISIBLE
                 binding.homeworkRecyclerView.visibility = View.GONE
+
+                binding.homeworkLayout.gravity = Gravity.CENTER
             } else {
                 binding.homeworkEmptyText.visibility = View.GONE
                 binding.homeworkRecyclerView.visibility = View.VISIBLE
+
+                binding.homeworkLayout.gravity = Gravity.TOP
 
                 adapter.setHomework(homework)
             }

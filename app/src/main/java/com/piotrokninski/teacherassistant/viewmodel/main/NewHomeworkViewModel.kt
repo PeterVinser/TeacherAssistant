@@ -11,10 +11,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
+import com.piotrokninski.teacherassistant.model.course.Lesson
+import com.piotrokninski.teacherassistant.model.course.LessonSnapshot
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreHomeworkRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreLessonRepository
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 class NewHomeworkViewModel : ViewModel(), Observable {
     private val TAG = "NewHomeworkViewModel"
@@ -25,6 +29,14 @@ class NewHomeworkViewModel : ViewModel(), Observable {
 
     private val _courseSnapshots = MutableLiveData<ArrayList<String>>()
     val courseSnapshots: LiveData<ArrayList<String>> = _courseSnapshots
+
+    private var lessonSnapshots: ArrayList<LessonSnapshot>? = null
+
+    private val _lessonTopics = MutableLiveData<ArrayList<String>?>()
+    val lessonTopics: LiveData<ArrayList<String>?> = _lessonTopics
+
+    private val _selectedLesson = MutableLiveData<LessonSnapshot?>()
+    val selectedLesson: LiveData<LessonSnapshot?> = _selectedLesson
 
     @Bindable
     val homework = MutableLiveData<Homework>()
@@ -56,6 +68,10 @@ class NewHomeworkViewModel : ViewModel(), Observable {
     fun onCourseSelected(position: Int) {
         val selectedCourse = courses[position]
 
+        viewModelScope.launch {
+            getLessons(courses[position].courseId!!)
+        }
+
         if (homework.value == null) {
 
             homework.value = Homework.initHomework(selectedCourse)
@@ -67,12 +83,46 @@ class NewHomeworkViewModel : ViewModel(), Observable {
         }
     }
 
+    private suspend fun getLessons(courseId: String) {
+        lessonSnapshots = FirestoreLessonRepository.getCourseLessonSnapshots(courseId)
+
+        val topics = ArrayList<String>()
+
+        lessonSnapshots?.forEach { lessonSnapshot ->
+            val topic = lessonSnapshot.topic
+
+            topics.add(topic)
+        }
+
+        _lessonTopics.value = topics
+    }
+
+    fun onLessonSelected(position: Int) {
+        val lesson = lessonSnapshots?.get(position)
+
+        if (lesson != null) {
+            _selectedLesson.value = lesson
+
+            homework.value!!.lessonId = lesson.lessonId
+            homework.value!!.topic = lesson.topic
+        }
+    }
+
     fun dueDateSelected(date: Date) {
         homework.value!!.dueDate = date
     }
 
     fun checkHomework(): Boolean {
-        return !(homework.value == null || homework.value!!.dueDate == null || homework.value!!.description == null)
+        return !(homework.value == null ||
+                homework.value!!.dueDate == null ||
+                homework.value!!.description == null ||
+                homework.value!!.topic == null)
+    }
+
+    fun deleteSelectedLesson() {
+        _selectedLesson.value = null
+
+        homework.value!!.lessonId = null
     }
 
     fun addHomework() {

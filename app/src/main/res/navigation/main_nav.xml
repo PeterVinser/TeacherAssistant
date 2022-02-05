@@ -22,8 +22,8 @@
             android:id="@+id/action_home_to_calendar"
             app:destination="@id/menu_toolbar_destination_calendar"/>
         <action
-            android:id="@+id/action_home_to_receivedInvitationDetails"
-            app:destination="@id/destination_received_invitation_details"/>
+            android:id="@+id/action_home_to_newCourse"
+            app:destination="@id/destination_new_course"/>
     </fragment>
     <fragment
         android:id="@+id/menu_toolbar_destination_calendar"
@@ -104,10 +104,6 @@
             android:id="@+id/action_invitationDetails_to_home"
             app:destination="@id/destination_home" />
     </fragment>
-    <fragment
-        android:id="@+id/destination_received_invitation_details"
-        android:name="com.piotrokninski.teacherassistant.view.main.fragment.ReceivedInvitationDetailsFragment"
-        tools:layout="@layout/fragment_received_invitation_details"/>
     <fragment
         android:id="@+id/destination_course_details"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.CourseDetailsFragment"

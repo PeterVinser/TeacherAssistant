@@ -96,6 +96,18 @@
 
             </LinearLayout>
 
+            <EditText
+                android:id="@+id/new_homework_topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:autofillHints="no"
+                android:hint="@string/topic_hint"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:text="@={homeworkViewModel.homework.topic}"
+                android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,11 +140,12 @@
                 android:id="@+id/new_homework_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/new_homework_description_hint"
-                android:text="@={homeworkViewModel.homework.description}"
                 android:layout_margin="8dp"
                 android:autofillHints="no"
-                android:inputType="textMultiLine" />
+                android:hint="@string/new_homework_description_hint"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:text="@={homeworkViewModel.homework.description}" />
 
         </LinearLayout>
 
