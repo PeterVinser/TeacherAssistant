@@ -64,6 +64,8 @@ class MainActivityViewModel : ViewModel() {
                 } else if (currentUser.tutor) {
                     updateViewType(AppConstants.VIEW_TYPE_TUTOR)
                 }
+            } else {
+                updateViewType(AppConstants.VIEW_TYPE_TUTOR)
             }
         }
     }

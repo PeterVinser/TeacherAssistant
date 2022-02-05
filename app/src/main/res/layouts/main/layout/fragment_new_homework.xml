@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="homework"
-            type="com.piotrokninski.teacherassistant.model.course.Homework" />
+            name="homeworkViewModel"
+            type="com.piotrokninski.teacherassistant.viewmodel.main.NewHomeworkViewModel" />
     </data>
 
 
@@ -57,8 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
-                android:visibility="gone">
+                android:gravity="center">
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/new_homework_lesson_toggle_button"
@@ -130,6 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/new_homework_description_hint"
+                android:text="@={homeworkViewModel.homework.description}"
                 android:layout_margin="8dp"
                 android:autofillHints="no"
                 android:inputType="textMultiLine" />

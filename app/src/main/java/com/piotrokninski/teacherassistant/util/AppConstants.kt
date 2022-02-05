@@ -15,7 +15,7 @@ object AppConstants {
 
     const val VIEW_TYPE = "viewType"
 
-    const val VIEW_TYPE_DEFAULT = "viewTypeDefault"
+    const val VIEW_TYPE_BLANK = "viewTypeDefault"
     const val VIEW_TYPE_STUDENT = "viewTypeStudent"
     const val VIEW_TYPE_TUTOR = "viewTypeTutor"
 

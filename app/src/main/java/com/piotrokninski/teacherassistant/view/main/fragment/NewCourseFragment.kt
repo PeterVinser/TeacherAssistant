@@ -19,7 +19,7 @@ import com.piotrokninski.teacherassistant.view.main.dialog.MeetingPickerDialogFr
 import com.piotrokninski.teacherassistant.viewmodel.main.NewCourseFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.NewCourseFragmentViewModelFactory
 
-class NewCourseFragment : Fragment(){
+class NewCourseFragment : Fragment() {
 
     private lateinit var binding: FragmentNewCourseBinding
 
@@ -60,9 +60,18 @@ class NewCourseFragment : Fragment(){
     }
 
     private fun setupListeners() {
-        binding.newCourseStudentTextView.setOnItemClickListener { _, _, position, _ -> onStudentSelected(position) }
+        binding.newCourseStudentTextView.setOnItemClickListener { _, _, position, _ ->
+            onStudentSelected(
+                position
+            )
+        }
 
-        binding.newCourseTypeTextView.setOnItemClickListener { adapterView, _, position, _ -> onTypeSelected(adapterView, position) }
+        binding.newCourseTypeTextView.setOnItemClickListener { adapterView, _, position, _ ->
+            onTypeSelected(
+                adapterView,
+                position
+            )
+        }
 
         binding.newCourseAddMeetingButton.setOnClickListener { onAddMeetingButtonClicked() }
 
@@ -114,7 +123,8 @@ class NewCourseFragment : Fragment(){
 
     private fun setupViewModel(course: Course?) {
         val factory = NewCourseFragmentViewModelFactory(course)
-        newCourseViewModel = ViewModelProvider(this, factory).get(NewCourseFragmentViewModel::class.java)
+        newCourseViewModel =
+            ViewModelProvider(this, factory).get(NewCourseFragmentViewModel::class.java)
 
         binding.courseViewModel = newCourseViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -131,7 +141,10 @@ class NewCourseFragment : Fragment(){
                 binding.newCourseStudentTextView.setAdapter(arrayAdapter)
 
                 if (newCourseViewModel.editing) {
-                    binding.newCourseStudentTextView.setText(arrayAdapter.getItem(0).toString(), false)
+                    binding.newCourseStudentTextView.setText(
+                        arrayAdapter.getItem(0).toString(),
+                        false
+                    )
                     binding.newCourseStudentMenu.isEnabled = false
                 }
             }

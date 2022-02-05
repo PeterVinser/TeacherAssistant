@@ -1,0 +1,94 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "1bc5a235bb200ab7e574c7d2bfd00b65",
+    "entities": [
+      {
+        "tableName": "user_table_name",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` TEXT NOT NULL, `fullName` TEXT NOT NULL, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `student` INTEGER NOT NULL, `tutor` INTEGER NOT NULL, `subjects` TEXT, `localization` TEXT, `localizationRange` REAL, `preferredPrice` TEXT, `summary` TEXT NOT NULL, PRIMARY KEY(`user_id`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "student",
+            "columnName": "student",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tutor",
+            "columnName": "tutor",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subjects",
+            "columnName": "subjects",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "localization",
+            "columnName": "localization",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "localizationRange",
+            "columnName": "localizationRange",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "preferredPrice",
+            "columnName": "preferredPrice",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "summary",
+            "columnName": "summary",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "user_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1bc5a235bb200ab7e574c7d2bfd00b65')"
+    ]
+  }
+}

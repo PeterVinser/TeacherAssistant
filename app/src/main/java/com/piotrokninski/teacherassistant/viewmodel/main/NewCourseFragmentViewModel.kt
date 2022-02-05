@@ -100,7 +100,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
     }
 
     fun checkCourse(): Boolean {
-         return (!(course.value!!.studentId == null || course.value!!.meetingsDates == null || course.value!!.subject == null || course.value!!.type == null))
+         return !(course.value!!.studentId == null || course.value!!.meetingsDates == null || course.value!!.subject == null || course.value!!.type == null)
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

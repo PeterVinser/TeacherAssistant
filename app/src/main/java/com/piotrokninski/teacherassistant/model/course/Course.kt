@@ -55,21 +55,19 @@ data class Course(
             return when (friendInvitation.invitationType) {
                 FirestoreFriendInvitationContract.TYPE_STUDENT -> {
                     Course(
-                        friendInvitation.invitedUserId,
-                        friendInvitation.invitingUserId,
-                        friendInvitation.invitedUserFullName,
-                        friendInvitation.invitingUserFullName,
-                        FirestoreCourseContract.STATUS_PENDING
+                        studentId = friendInvitation.invitedUserId,
+                        studentFullName = friendInvitation.invitingUserId,
+                        tutorId = friendInvitation.invitedUserFullName,
+                        tutorFullName = friendInvitation.invitingUserFullName
                     )
                 }
 
                 FirestoreFriendInvitationContract.TYPE_TUTOR -> {
                     Course(
-                        friendInvitation.invitingUserId,
-                        friendInvitation.invitedUserId,
-                        friendInvitation.invitingUserFullName,
-                        friendInvitation.invitedUserFullName,
-                        FirestoreCourseContract.STATUS_PENDING,
+                        studentId = friendInvitation.invitingUserId,
+                        studentFullName = friendInvitation.invitedUserId,
+                        tutorId = friendInvitation.invitingUserFullName,
+                        tutorFullName = friendInvitation.invitedUserFullName
                     )
                 }
 

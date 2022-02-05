@@ -6,18 +6,18 @@ import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreHome
 import java.util.*
 
 data class Homework(
-    val courseId: String,
-    val lessonId: String?,
-    val studentId: String,
-    val studentFullName: String,
+    var courseId: String,
+    val lessonId: String? = null,
+    var studentId: String,
+    var studentFullName: String,
     val tutorId: String,
     val tutorFullName: String,
-    val topic: String,
-    val subject: String,
-    val creationDate: Date,
-    val dueDate: Date,
-    val status: String,
-    val description: String
+    val topic: String? = null,
+    var subject: String,
+    val creationDate: Date? = null,
+    var dueDate: Date? = null,
+    val status: String = FirestoreHomeworkContract.STATUS_ASSIGNED,
+    var description: String? = null
 ) {
     companion object {
 
@@ -56,6 +56,17 @@ data class Homework(
                 Log.e(TAG, "toHomework: ", e)
                 null
             }
+        }
+
+        fun initHomework(course: Course): Homework {
+            return Homework(
+                courseId = course.courseId!!,
+                studentId = course.studentId!!,
+                studentFullName = course.studentFullName!!,
+                tutorId = course.tutorId,
+                tutorFullName = course.tutorFullName!!,
+                subject = course.subject!!
+            )
         }
 
         private const val TAG = "Homework"

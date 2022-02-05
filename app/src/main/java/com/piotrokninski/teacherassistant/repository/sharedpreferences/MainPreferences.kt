@@ -27,7 +27,7 @@ object MainPreferences {
     }
 
     fun getViewType(): String? {
-        return PREFS?.getString(AppConstants.VIEW_TYPE, AppConstants.VIEW_TYPE_DEFAULT)
+        return PREFS?.getString(AppConstants.VIEW_TYPE, AppConstants.VIEW_TYPE_BLANK)
     }
 
     fun updateViewType(viewType: String) {
