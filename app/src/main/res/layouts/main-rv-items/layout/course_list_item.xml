@@ -87,14 +87,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/course_item_dates"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/course_item_dates_text"
-                    android:textSize="16sp" />
-
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/course_item_chip_group"
                     android:layout_width="match_parent"

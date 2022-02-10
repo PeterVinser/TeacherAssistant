@@ -66,11 +66,16 @@ class HomeFragmentViewModel : ViewModel() {
                 auxList.add(invitationHeader)
 
                 invitations.forEach { friendInvitation ->
-                    auxList.add(HomeAdapterItem.InvitationItem(friendInvitation))
+                    val attachedCourse = pendingCourses?.filter { it.courseId == friendInvitation.courseId }
+                    if (attachedCourse != null) {
+                        pendingCourses.removeAll(attachedCourse)
+                    }
+
+                    auxList.add(HomeAdapterItem.InvitationItem(friendInvitation, attachedCourse?.get(0)))
                 }
             }
 
-            if (pendingCourses != null) {
+            if (!pendingCourses.isNullOrEmpty()) {
                 val courseHeader = HomeAdapterItem.HeaderItem(R.string.pending_course_header_text)
 
                 auxList.add(courseHeader)
@@ -80,7 +85,7 @@ class HomeFragmentViewModel : ViewModel() {
                 }
             }
 
-            if (assignedHomework != null) {
+            if (!assignedHomework.isNullOrEmpty()) {
                 val titleId = when (viewType) {
                     AppConstants.VIEW_TYPE_STUDENT -> R.string.homework_student_header_text
 

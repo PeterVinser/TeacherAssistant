@@ -8,9 +8,12 @@ import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.InvitationDialogBinding
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.user.User
 
 class InvitationDialogFragment(
-    private val callback: (invitationType: String, invitationMessage: String?) -> Unit): DialogFragment() {
+    private val callback: (invitationType: String, invitationMessage: String?) -> Unit,
+    private val currentUser: User,
+    private val searchedUser: User): DialogFragment() {
 
     private lateinit var binding: InvitationDialogBinding
 
@@ -27,12 +30,23 @@ class InvitationDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        binding.invitationDialogTypeRadio.setOnCheckedChangeListener { radioGroup, type ->
+        if (!searchedUser.student || !currentUser.tutor) {
+            binding.invitationDialogTypeRadio.removeView(binding.invitationDialogRadioStudent)
+        }
+
+        if (!searchedUser.tutor || !currentUser.student) {
+            binding.invitationDialogTypeRadio.removeView(binding.invitationDialogRadioTutor)
+        }
+
+        binding.invitationDialogNextButton.isEnabled = false
+
+        binding.invitationDialogTypeRadio.setOnCheckedChangeListener { _, type ->
             if (type == R.id.invitation_dialog_radio_friend) {
                 binding.invitationDialogNextButton.text = getString(R.string.invitation_send_text)
             } else {
                 binding.invitationDialogNextButton.text = getString(R.string.invitation_dialog_details_text)
             }
+            binding.invitationDialogNextButton.isEnabled = true
         }
 
         binding.invitationDialogCancelButton.setOnClickListener {

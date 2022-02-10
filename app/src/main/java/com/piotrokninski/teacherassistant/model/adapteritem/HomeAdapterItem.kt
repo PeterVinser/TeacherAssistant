@@ -12,7 +12,7 @@ sealed class HomeAdapterItem {
         override val id = titleId.toString()
     }
 
-    data class InvitationItem(val friendInvitation: FriendInvitation): HomeAdapterItem() {
+    data class InvitationItem(val friendInvitation: FriendInvitation, val course: Course?): HomeAdapterItem() {
         override val id = friendInvitation.invitingUserId
 
         fun getInvitationType(): String? {

@@ -42,14 +42,6 @@
             android:textSize="16sp"
             tools:text="Tryb"/>
 
-        <TextView
-            android:id="@+id/home_course_item_meeting_dates_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/course_item_dates_text"
-            android:layout_margin="8dp"
-            android:textSize="16sp"/>
-
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/home_course_item_meeting_dates"
             android:layout_width="wrap_content"

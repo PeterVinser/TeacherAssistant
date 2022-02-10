@@ -28,12 +28,6 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
     }
 
     fun sendInvitation() {
-        if (course.value != null) {
-            if (friendInvitation.value!!.courseIds == null) {
-                friendInvitation.value!!.courseIds = ArrayList()
-            }
-        }
-
         InvitationCloudFunctions.sendFriendInvitation(friendInvitation.value!!, course.value)
     }
 

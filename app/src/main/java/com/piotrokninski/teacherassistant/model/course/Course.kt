@@ -56,8 +56,8 @@ data class Course(
                 FirestoreFriendInvitationContract.TYPE_STUDENT -> {
                     Course(
                         studentId = friendInvitation.invitedUserId,
-                        studentFullName = friendInvitation.invitingUserId,
-                        tutorId = friendInvitation.invitedUserFullName,
+                        studentFullName = friendInvitation.invitedUserFullName,
+                        tutorId = friendInvitation.invitingUserId,
                         tutorFullName = friendInvitation.invitingUserFullName
                     )
                 }
@@ -65,8 +65,8 @@ data class Course(
                 FirestoreFriendInvitationContract.TYPE_TUTOR -> {
                     Course(
                         studentId = friendInvitation.invitingUserId,
-                        studentFullName = friendInvitation.invitedUserId,
-                        tutorId = friendInvitation.invitingUserFullName,
+                        studentFullName = friendInvitation.invitingUserFullName,
+                        tutorId = friendInvitation.invitedUserId,
                         tutorFullName = friendInvitation.invitedUserFullName
                     )
                 }

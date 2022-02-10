@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
@@ -16,6 +17,8 @@ import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserProfileFragmentViewModelFactory
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 class UserProfileFragment : Fragment() {
     private val TAG = "UserProfileFragment"
@@ -50,9 +53,11 @@ class UserProfileFragment : Fragment() {
 
     private fun onInviteClicked() {
         if (userProfileViewModel.friendStatus.value == FirestoreFriendContract.STATUS_BLANK) {
-            val dialog = InvitationDialogFragment {
-                    invitationType: String, invitationMessage: String? -> sendInvitation(invitationType, invitationMessage)
-            }
+            val dialog = InvitationDialogFragment (
+                { invitationType: String, invitationMessage: String? -> sendInvitation(invitationType, invitationMessage) },
+                userProfileViewModel.currentUser,
+                userProfileViewModel.user.value!!
+            )
             dialog.show(childFragmentManager, "invitationDialog")
         } else {
             userProfileViewModel.onInviteButtonClicked()
@@ -81,6 +86,12 @@ class UserProfileFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         observeFriendStatus()
+
+        observeSearchedUser()
+
+        observeFriendInvitation()
+
+        observeInvitationCourse()
     }
 
     private fun observeFriendStatus() {
@@ -111,7 +122,55 @@ class UserProfileFragment : Fragment() {
             } else {
                 binding.userProfileRejectButton.visibility = View.GONE
             }
-            Log.d(TAG, "observeFriendStatus: $status")
+        }
+    }
+
+    private fun observeSearchedUser() {
+        userProfileViewModel.user.observe(viewLifecycleOwner) { user ->
+            if (user.student && user.tutor) {
+                binding.userProfileProfession.text = getString(R.string.student_and_tutor_title_text)
+            } else if (user.student) {
+                binding.userProfileProfession.text = getString(R.string.student_title_text)
+            } else if (user.tutor) {
+                binding.userProfileProfession.text = getString(R.string.tutor_title_text)
+            }
+        }
+    }
+
+    private fun observeFriendInvitation() {
+        userProfileViewModel.friendInvitation.observe(viewLifecycleOwner) { invitation ->
+            binding.userProfileInvitation.visibility = View.VISIBLE
+
+            binding.userProfileInvitationDescription.text = when (invitation.invitationType) {
+                FirestoreFriendInvitationContract.TYPE_STUDENT -> getString(R.string.invitation_student_type)
+
+                FirestoreFriendInvitationContract.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
+
+                FirestoreFriendInvitationContract.TYPE_FRIEND -> getString(R.string.invitation_friend_type)
+
+                else -> throw IllegalArgumentException("Unknown invitation type")
+            }
+            if (invitation != null) {
+
+            }
+        }
+    }
+
+    private fun observeInvitationCourse() {
+        userProfileViewModel.invitationCourse.observe(viewLifecycleOwner) { course ->
+            if (course != null) {
+
+                binding.userProfileInvitationCourse.root.visibility = View.VISIBLE
+
+                binding.userProfileInvitationCourse.course = course
+
+                course.meetingsDates!!.forEach { date ->
+                    val chip = Chip(context)
+                    chip.text = date
+
+                    binding.userProfileInvitationCourse.homeInvitationItemCourseDates.addView(chip)
+                }
+            }
         }
     }
 }

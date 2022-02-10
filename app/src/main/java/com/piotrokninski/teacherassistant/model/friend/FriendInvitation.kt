@@ -12,7 +12,7 @@ data class FriendInvitation(
     val invitedUserFullName: String,
     val invitationType: String,
     var invitationMessage: String?,
-    var courseIds: ArrayList<String>?
+    var courseId: String?
 ) : Serializable {
 
     companion object {
@@ -29,7 +29,7 @@ data class FriendInvitation(
                     getString(FirestoreFriendInvitationContract.INVITATION_MESSAGE)
 
                 val courseIds =
-                    get(FirestoreFriendInvitationContract.COURSE_IDS) as ArrayList<String>?
+                    getString(FirestoreFriendInvitationContract.COURSE_ID)
 
                 Log.d(TAG, "toFriendInvitation: called")
 

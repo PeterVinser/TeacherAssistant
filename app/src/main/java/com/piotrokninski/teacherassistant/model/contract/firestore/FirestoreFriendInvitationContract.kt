@@ -16,5 +16,5 @@ object FirestoreFriendInvitationContract {
 
     const val INVITATION_MESSAGE = "invitationMessage"
 
-    const val COURSE_IDS = "courseIds"
+    const val COURSE_ID = "courseId"
 }

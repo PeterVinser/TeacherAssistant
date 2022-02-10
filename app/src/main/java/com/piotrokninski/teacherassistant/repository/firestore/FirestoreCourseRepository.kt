@@ -2,6 +2,7 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Course.Companion.toCourse
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
@@ -22,6 +23,19 @@ object FirestoreCourseRepository {
             .set(course)
 
         return course
+    }
+
+    suspend fun getCourse(courseId: String): Course? {
+        val db = FirebaseFirestore.getInstance()
+
+        val coursesRef = db.collection(FirestoreCourseContract.COLLECTION_NAME).document(courseId)
+
+        return try {
+            coursesRef.get().await().toCourse()
+        } catch (e: Exception) {
+            Log.e(TAG, "getCourse: ", e)
+            null
+        }
     }
 
     suspend fun getStudiedCourses(userId: String, status: String): ArrayList<Course>? {

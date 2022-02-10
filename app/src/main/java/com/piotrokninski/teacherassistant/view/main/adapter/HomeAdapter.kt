@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
@@ -32,7 +33,7 @@ class HomeAdapter(
 
             HOME_HEADER_ITEM -> HeaderViewHolder(HeaderViewHolder.initBinding(parent), context)
 
-            HOME_INVITATION_ITEM -> InvitationViewHolder(InvitationViewHolder.initBinding(parent))
+            HOME_INVITATION_ITEM -> InvitationViewHolder(InvitationViewHolder.initBinding(parent), context)
 
             HOME_COURSE_ITEM -> CourseViewHolder(
                 CourseViewHolder.initBinding(parent),
@@ -124,7 +125,7 @@ class HomeAdapter(
         }
     }
 
-    class InvitationViewHolder(private val binding: HomeInvitationListItemBinding) :
+    class InvitationViewHolder(private val binding: HomeInvitationListItemBinding, private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
@@ -145,9 +146,13 @@ class HomeAdapter(
             negativeButtonListener: (HomeAdapterItem) -> Unit
         ) {
             binding.friendInvitation = friendInvitationItem
-            binding.homeFriendInvitation.text = friendInvitationItem.getInvitationType()
+            binding.homeInvitationDescription.text = friendInvitationItem.getInvitationType()
 
-            binding.homeFriendItemLayout.setOnClickListener { itemClickListener(friendInvitationItem) }
+            if (friendInvitationItem.course == null) {
+                binding.homeInvitationItemCourseButton.visibility = View.GONE
+            }
+
+            binding.homeInvitationItemLayout.setOnClickListener { itemClickListener(friendInvitationItem) }
             binding.homeInvitationItemRejectButton.setOnClickListener {
                 negativeButtonListener(
                     friendInvitationItem
@@ -157,6 +162,32 @@ class HomeAdapter(
                 positiveButtonListener(
                     friendInvitationItem
                 )
+            }
+
+            binding.homeInvitationItemCourseLayout.root.visibility = View.GONE
+            binding.homeInvitationItemCourseLayout.course = friendInvitationItem.course
+
+            binding.homeInvitationItemCourseLayout.homeInvitationItemCourseDates.removeAllViews()
+
+            friendInvitationItem.course?.meetingsDates!!.forEach { date ->
+                val chip = Chip(context)
+                chip.text = date
+
+                binding.homeInvitationItemCourseLayout.homeInvitationItemCourseDates.addView(chip)
+            }
+
+            var courseLayoutVisible = false
+
+            binding.homeInvitationItemCourseButton.setOnClickListener {
+                if (!courseLayoutVisible) {
+                    binding.homeInvitationItemCourseButton.icon = AppCompatResources.getDrawable(context, R.drawable.ic_dropup_arrow_icon)
+                    binding.homeInvitationItemCourseLayout.root.visibility = View.VISIBLE
+                } else {
+                    binding.homeInvitationItemCourseButton.icon = AppCompatResources.getDrawable(context, R.drawable.ic_dropdown_arrow_icon)
+                    binding.homeInvitationItemCourseLayout.root.visibility = View.GONE
+                }
+
+                courseLayoutVisible = !courseLayoutVisible
             }
         }
     }

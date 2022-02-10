@@ -35,7 +35,7 @@ class ReceivedInvitationDialogFragment(private val invitationItem: HomeAdapterIt
             binding.receivedInvitationDialogMessage.visibility = View.GONE
         }
 
-        if (invitationItem.friendInvitation.courseIds == null) {
+        if (invitationItem.friendInvitation.courseId == null) {
             binding.receivedInvitationDialogDetailsButton.visibility = View.GONE
         }
 

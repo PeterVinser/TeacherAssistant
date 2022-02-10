@@ -198,4 +198,9 @@
     <string name="home_course_type_text">Tryb: %1$s</string>
 
     <string name="home_homework_due_date_text">Termin: %1$s</string>
+    <string name="home_invitation_course_button_text">Zajęcia</string>
+
+    <string name="invitation_student_type">Zaprasza cię do grona uczniów</string>
+    <string name="invitation_tutor_type">Zaprasza cię jako swojego korepetytora</string>
+    <string name="invitation_friend_type">Zaprasza cię do grona znajomych</string>
 </resources>
