@@ -203,4 +203,5 @@
     <string name="invitation_student_type">Zaprasza cię do grona uczniów</string>
     <string name="invitation_tutor_type">Zaprasza cię jako swojego korepetytora</string>
     <string name="invitation_friend_type">Zaprasza cię do grona znajomych</string>
+    <string name="new_homework_reminder_date_button_text">Przypomnienie</string>
 </resources>

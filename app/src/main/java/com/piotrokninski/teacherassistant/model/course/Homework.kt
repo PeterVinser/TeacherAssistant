@@ -14,8 +14,10 @@ data class Homework(
     val tutorFullName: String,
     var topic: String? = null,
     var subject: String,
-    val creationDate: Date? = null,
+    var creationDate: Date? = null,
     var dueDate: Date? = null,
+    val reminderDate: Date? = null,
+    var reminded: Boolean = false,
     val status: String = FirestoreHomeworkContract.STATUS_ASSIGNED,
     var description: String? = null
 ) {
@@ -34,6 +36,8 @@ data class Homework(
                 val subject = getString(FirestoreHomeworkContract.SUBJECT)!!
                 val creationDate = getDate(FirestoreHomeworkContract.CREATION_DATE)
                 val dueDate = getDate(FirestoreHomeworkContract.DUE_DATE)!!
+                val reminderDate = getDate(FirestoreHomeworkContract.REMINDER_DATE)!!
+                val reminded = getBoolean(FirestoreHomeworkContract.REMINDED)!!
                 val status = getString(FirestoreHomeworkContract.STATUS)!!
                 val description = getString(FirestoreHomeworkContract.DESCRIPTION)!!
 
@@ -48,6 +52,8 @@ data class Homework(
                     subject,
                     creationDate,
                     dueDate,
+                    reminderDate,
+                    reminded,
                     status,
                     description
                 )

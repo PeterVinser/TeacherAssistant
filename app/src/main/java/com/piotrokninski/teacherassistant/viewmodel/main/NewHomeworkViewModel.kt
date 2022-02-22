@@ -1,6 +1,5 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.util.Log
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
@@ -11,11 +10,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
-import com.piotrokninski.teacherassistant.model.course.Lesson
 import com.piotrokninski.teacherassistant.model.course.LessonSnapshot
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreHomeworkRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreLessonRepository
+import com.piotrokninski.teacherassistant.util.Util
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -109,7 +108,9 @@ class NewHomeworkViewModel : ViewModel(), Observable {
     }
 
     fun dueDateSelected(date: Date) {
-        homework.value!!.dueDate = date
+        homework.value!!.dueDate = Util.getLocalEndOfDay(date)
+
+        homework.value = homework.value?.copy(reminderDate = Date(Util.getLocalDateWithTime(date, 19, 0, 0).time))
     }
 
     fun checkHomework(): Boolean {
@@ -126,6 +127,11 @@ class NewHomeworkViewModel : ViewModel(), Observable {
     }
 
     fun addHomework() {
+
+        val creationDate = Calendar.getInstance().time
+
+        homework.value!!.creationDate = creationDate
+
         FirestoreHomeworkRepository.addHomework(homework.value!!)
     }
 

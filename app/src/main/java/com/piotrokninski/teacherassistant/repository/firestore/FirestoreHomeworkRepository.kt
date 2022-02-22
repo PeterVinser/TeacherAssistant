@@ -7,7 +7,8 @@ import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.model.course.Homework.Companion.toHomework
 import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.tasks.await
-import java.lang.IllegalArgumentException
+import java.util.*
+import kotlin.collections.ArrayList
 
 object FirestoreHomeworkRepository {
     private const val TAG = "FirestoreHomeworkReposi"

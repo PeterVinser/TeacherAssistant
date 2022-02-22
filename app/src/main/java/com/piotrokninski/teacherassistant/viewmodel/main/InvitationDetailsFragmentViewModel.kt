@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewModel(), Observable {
     private val TAG = "InvitationDetailsViewMo"
@@ -47,13 +49,13 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
     }
 
     fun addMeetingDate(meetingDate: String) {
-        if (course.value!!.meetingsDates != null) {
-            val meetingsTime = course.value!!.meetingsDates!!
-            meetingsTime.add(meetingDate)
-            course.value!!.meetingsDates = meetingsTime
+        val meetingDates = if (course.value!!.meetingDates != null) {
+            course.value!!.meetingDates!!
         } else {
-            course.value!!.meetingsDates = arrayListOf(meetingDate)
+            ArrayList()
         }
+        meetingDates.add(meetingDate)
+        course.value!!.meetingDates = meetingDates
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

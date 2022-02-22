@@ -28,7 +28,6 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.util.PermissionsHelper
 import com.piotrokninski.teacherassistant.util.notifications.FcmManager
 import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
-import com.piotrokninski.teacherassistant.view.main.fragment.HomeFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.MainActivityViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.MainActivityViewModelFactory
@@ -79,7 +78,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
         val factory = MainActivityViewModelFactory()
         mainActivityViewModel =
             ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
@@ -88,9 +86,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewType() {
-        mainActivityViewModel.viewType.observe(this, { viewType ->
+        mainActivityViewModel.viewType.observe(this) { viewType ->
 
-        })
+        }
     }
 
     private fun onUserRegistered() {

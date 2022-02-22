@@ -134,7 +134,7 @@ class CoursesAdapter(
                 }
             }
 
-            course.meetingsDates!!.forEach { date ->
+            course.meetingDates!!.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date
 

@@ -169,7 +169,7 @@ class HomeAdapter(
 
             binding.homeInvitationItemCourseLayout.homeInvitationItemCourseDates.removeAllViews()
 
-            friendInvitationItem.course?.meetingsDates!!.forEach { date ->
+            friendInvitationItem.course?.meetingDates!!.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date
 
@@ -261,7 +261,7 @@ class HomeAdapter(
 
             binding.homeCourseItemMeetingDates.removeAllViews()
 
-            course.meetingsDates!!.forEach { date ->
+            course.meetingDates!!.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date
 

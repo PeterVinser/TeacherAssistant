@@ -16,6 +16,9 @@ import com.piotrokninski.teacherassistant.view.main.dialog.HomeworkDateDialogFra
 import com.piotrokninski.teacherassistant.viewmodel.main.NewHomeworkViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.NewHomeworkViewModelFactory
 import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
 class NewHomeworkFragment : Fragment() {
@@ -41,11 +44,6 @@ class NewHomeworkFragment : Fragment() {
         (activity as MainActivity).isBottomNavVisible(false)
 
         setupViewModel()
-
-        binding.newHomeworkLessonButton.isEnabled = false
-        binding.newHomeworkDateButton.isEnabled = false
-        binding.newHomeworkDescription.isEnabled = false
-        binding.newHomeworkTopic.isEnabled = false
 
         binding.newHomeworkLessonToggleButton.addOnButtonCheckedListener { _, _, isChecked ->
             onLessonButtonToggled(
@@ -138,6 +136,16 @@ class NewHomeworkFragment : Fragment() {
             binding.newHomeworkDateButton.isEnabled = enabled
             binding.newHomeworkDescription.isEnabled = enabled
             binding.newHomeworkTopic.isEnabled = enabled
+
+            Log.d(TAG, "observeHomework: updated")
+
+            if (homework.reminderDate != null) {
+                binding.newHomeworkReminderDateTitle.visibility = View.VISIBLE
+                binding.newHomeworkReminderDateButton.visibility = View.VISIBLE
+
+                binding.newHomeworkReminderDateButton.text = homework.reminderDate.toInstant().atZone(
+                    ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT))
+            }
         }
     }
 

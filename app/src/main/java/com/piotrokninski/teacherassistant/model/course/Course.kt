@@ -2,9 +2,9 @@ package com.piotrokninski.teacherassistant.model.course
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import java.io.Serializable
 
 data class Course(
@@ -16,7 +16,7 @@ data class Course(
     val status: String = FirestoreCourseContract.STATUS_PENDING,
     var type: String? = null,
     var subject: String? = null,
-    var meetingsDates: ArrayList<String>? = null
+    var meetingDates: ArrayList<String>? = null
 ) : Serializable {
 
     companion object {
@@ -31,7 +31,7 @@ data class Course(
                 val status = getString(FirestoreCourseContract.STATUS)!!
                 val type = getString(FirestoreCourseContract.COURSE_TYPE)
                 val subject = getString(FirestoreCourseContract.SUBJECT)
-                val meetingsDates = get(FirestoreCourseContract.MEETINGS_DATES) as ArrayList<String>
+                val meetingDates = get(FirestoreCourseContract.MEETING_DATES) as ArrayList<String>
 
                 Course(
                     courseId,
@@ -42,7 +42,7 @@ data class Course(
                     status,
                     type,
                     subject,
-                    meetingsDates
+                    meetingDates
                 )
 
             } catch (e: Exception) {

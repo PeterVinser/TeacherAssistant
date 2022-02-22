@@ -8,17 +8,15 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.MeetingPickerDialogBinding
-import com.piotrokninski.teacherassistant.util.Util
+import com.piotrokninski.teacherassistant.util.WeekDate
 import com.piotrokninski.teacherassistant.util.WeekDays
 
 class MeetingPickerDialogFragment(
-    private val callback: (weekDay: String, hour: Int, minute: Int) -> Unit): DialogFragment() {
+    private val callback: (meetingDate: WeekDate) -> Unit): DialogFragment() {
 
     private lateinit var binding: MeetingPickerDialogBinding
 
-    private var weekDay: String? = null
-    private var minute: Int? = null
-    private var hour: Int? = null
+    private val weekDate = WeekDate()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,30 +32,32 @@ class MeetingPickerDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.meetingDialogWeekDayPicker.addOnButtonCheckedListener { _, checkedId, _ ->
-            when (checkedId) {
-                R.id.meeting_dialog_monday -> weekDay = WeekDays.MONDAY.toString()
+            weekDate.weekDay = when (checkedId) {
+                R.id.meeting_dialog_monday -> WeekDays.MONDAY
 
-                R.id.meeting_dialog_tuesday -> weekDay = WeekDays.TUESDAY.toString()
+                R.id.meeting_dialog_tuesday -> WeekDays.TUESDAY
 
-                R.id.meeting_dialog_wednesday -> weekDay = WeekDays.WEDNESDAY.toString()
+                R.id.meeting_dialog_wednesday -> WeekDays.WEDNESDAY
 
-                R.id.meeting_dialog_thursday -> weekDay = WeekDays.THURSDAY.toString()
+                R.id.meeting_dialog_thursday -> WeekDays.THURSDAY
 
-                R.id.meeting_dialog_friday -> weekDay = WeekDays.FRIDAY.toString()
+                R.id.meeting_dialog_friday -> WeekDays.FRIDAY
 
-                R.id.meeting_dialog_saturday -> weekDay = WeekDays.SATURDAY.toString()
+                R.id.meeting_dialog_saturday -> WeekDays.SATURDAY
 
-                R.id.meeting_dialog_sunday -> weekDay = WeekDays.SUNDAY.toString()
+                R.id.meeting_dialog_sunday -> WeekDays.SUNDAY
+
+                else -> throw IllegalArgumentException("Id not found")
             }
 
-            binding.meetingDialogTime.text = Util.formatMeetingTime(weekDay, hour, minute)
+            binding.meetingDialogTime.text = weekDate.toString()
         }
 
-        binding.meetingDialogTimePicker.setOnTimeChangedListener { _, i, i2 ->
-            hour = i
-            minute = i2
+        binding.meetingDialogTimePicker.setOnTimeChangedListener { _, hour, minute ->
+            weekDate.hour = hour
+            weekDate.minute = minute
 
-            binding.meetingDialogTime.text = Util.formatMeetingTime(weekDay, hour, minute)
+            binding.meetingDialogTime.text = weekDate.toString()
         }
 
         binding.meetingDialogCancelButton.setOnClickListener {
@@ -65,10 +65,10 @@ class MeetingPickerDialogFragment(
         }
 
         binding.meetingDialogConfirmButton.setOnClickListener {
-            if (minute == null || hour == null || weekDay == null) {
+            if (!weekDate.isComplete()) {
                 Toast.makeText(activity, "Wybierz termin", Toast.LENGTH_SHORT).show()
             } else {
-                callback(weekDay!!, hour!!, minute!!)
+                callback(weekDate)
                 dismiss()
             }
         }

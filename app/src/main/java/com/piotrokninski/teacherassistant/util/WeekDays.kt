@@ -3,37 +3,37 @@ package com.piotrokninski.teacherassistant.util
 enum class WeekDays {
     MONDAY {
         override fun toString(): String {
-            return "Poniedziałek"
+            return "Monday"
         }
            },
     TUESDAY {
         override fun toString(): String {
-            return "Wtorek"
+            return "Tuesday"
         }
             },
     WEDNESDAY {
         override fun toString(): String {
-            return "Środa"
+            return "Wednesday"
         }
              },
     THURSDAY {
         override fun toString(): String {
-            return "Czwartek"
+            return "Thursday"
         }
              },
     FRIDAY {
         override fun toString(): String {
-            return "Piątek"
+            return "Friday"
         }
            },
     SATURDAY {
         override fun toString(): String {
-            return "Sobota"
+            return "Saturday"
         }
              },
     SUNDAY {
         override fun toString(): String {
-            return "Niedziela"
+            return "Sunday"
         }
     }
 

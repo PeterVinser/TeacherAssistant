@@ -83,13 +83,13 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
     }
 
     fun addMeetingDate(meetingDate: String) {
-        if (course.value!!.meetingsDates != null) {
-            val meetingsTime = course.value!!.meetingsDates!!
-            meetingsTime.add(meetingDate)
-            course.value!!.meetingsDates = meetingsTime
+        val meetingDates = if (course.value!!.meetingDates != null) {
+            course.value!!.meetingDates!!
         } else {
-            course.value!!.meetingsDates = arrayListOf(meetingDate)
+            ArrayList()
         }
+        meetingDates.add(meetingDate)
+        course.value!!.meetingDates = meetingDates
     }
 
     fun onStudentSelected(position: Int) {
@@ -100,7 +100,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
     }
 
     fun checkCourse(): Boolean {
-         return !(course.value!!.studentId == null || course.value!!.meetingsDates == null || course.value!!.subject == null || course.value!!.type == null)
+         return !(course.value!!.studentId == null || course.value!!.meetingDates == null || course.value!!.subject == null || course.value!!.type == null)
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

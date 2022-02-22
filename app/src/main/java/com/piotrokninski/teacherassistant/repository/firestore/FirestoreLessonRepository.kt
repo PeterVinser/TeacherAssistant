@@ -26,9 +26,9 @@ object FirestoreLessonRepository {
 
         val lessonId = db.collection(FirestoreLessonContract.COLLECTION_NAME).add(lesson).await().id
 
-        val lessonSnapshot = LessonSnapshot(lesson.courseId, lessonId, lesson.topic)
+//        val lessonSnapshot = LessonSnapshot(lesson.courseId, lessonId, lesson.topic)
 
-        db.collection(FirestoreLessonSnapshotContract.COLLECTION_NAME).add(lessonSnapshot)
+//        db.collection(FirestoreLessonSnapshotContract.COLLECTION_NAME).add(lessonSnapshot)
     }
 
     suspend fun getCourseLessons(courseId: String): ArrayList<Lesson>? {
@@ -37,6 +37,7 @@ object FirestoreLessonRepository {
         val lessonsRef = db.collection(FirestoreLessonContract.COLLECTION_NAME)
 
         val query = lessonsRef.whereEqualTo(FirestoreLessonContract.COURSE_ID, courseId)
+            .whereEqualTo(FirestoreLessonContract.COMPLETED, true)
 
         return try {
 

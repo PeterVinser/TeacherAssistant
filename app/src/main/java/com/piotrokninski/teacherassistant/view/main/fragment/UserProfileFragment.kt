@@ -1,7 +1,6 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragm
 import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserProfileFragmentViewModelFactory
 import java.lang.IllegalArgumentException
-import java.lang.IllegalStateException
 
 class UserProfileFragment : Fragment() {
     private val TAG = "UserProfileFragment"
@@ -139,19 +137,20 @@ class UserProfileFragment : Fragment() {
 
     private fun observeFriendInvitation() {
         userProfileViewModel.friendInvitation.observe(viewLifecycleOwner) { invitation ->
-            binding.userProfileInvitation.visibility = View.VISIBLE
-
-            binding.userProfileInvitationDescription.text = when (invitation.invitationType) {
-                FirestoreFriendInvitationContract.TYPE_STUDENT -> getString(R.string.invitation_student_type)
-
-                FirestoreFriendInvitationContract.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
-
-                FirestoreFriendInvitationContract.TYPE_FRIEND -> getString(R.string.invitation_friend_type)
-
-                else -> throw IllegalArgumentException("Unknown invitation type")
-            }
             if (invitation != null) {
+                binding.userProfileInvitation.visibility = View.VISIBLE
 
+                binding.userProfileInvitationDescription.text = when (invitation.invitationType) {
+                    FirestoreFriendInvitationContract.TYPE_STUDENT -> getString(R.string.invitation_student_type)
+
+                    FirestoreFriendInvitationContract.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
+
+                    FirestoreFriendInvitationContract.TYPE_FRIEND -> getString(R.string.invitation_friend_type)
+
+                    else -> throw IllegalArgumentException("Unknown invitation type")
+                }
+            } else {
+                binding.userProfileInvitation.visibility = View.GONE
             }
         }
     }
@@ -164,7 +163,7 @@ class UserProfileFragment : Fragment() {
 
                 binding.userProfileInvitationCourse.course = course
 
-                course.meetingsDates!!.forEach { date ->
+                course.meetingDates!!.forEach { date ->
                     val chip = Chip(context)
                     chip.text = date
 

@@ -16,6 +16,7 @@ import com.piotrokninski.teacherassistant.databinding.FragmentInvitationDetailsB
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.util.Util
+import com.piotrokninski.teacherassistant.util.WeekDate
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.MeetingPickerDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.InvitationDetailsFragmentViewModel
@@ -127,7 +128,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
 
     private fun onSendClicked() {
         if (invitationDetailsFragmentViewModel.course.value != null
-            && (invitationDetailsFragmentViewModel.course.value!!.subject == null || invitationDetailsFragmentViewModel.course.value!!.meetingsDates == null)
+            && (invitationDetailsFragmentViewModel.course.value!!.subject == null || invitationDetailsFragmentViewModel.course.value!!.meetingDates == null)
         ) {
             Toast.makeText(activity, "Uzupełnij szczegóły bądź usuń zajęcia", Toast.LENGTH_SHORT)
                 .show()
@@ -135,7 +136,7 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
                 TAG,
                 "onSendClicked: ${invitationDetailsFragmentViewModel.course.value!!.subject}"
             )
-            if (invitationDetailsFragmentViewModel.course.value!!.meetingsDates == null) Log.d(
+            if (invitationDetailsFragmentViewModel.course.value!!.meetingDates == null) Log.d(
                 TAG,
                 "onSendClicked: no meeting time selected"
             )
@@ -163,12 +164,8 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     }
 
     private fun onAddMeetingButtonClicked() {
-        val dialog = MeetingPickerDialogFragment { weekDay: String, hour: Int, minute: Int ->
-            saveMeetingTime(
-                weekDay,
-                hour,
-                minute
-            )
+        val dialog = MeetingPickerDialogFragment { meetingDate: WeekDate ->
+            saveMeetingTime(meetingDate)
         }
         dialog.show(childFragmentManager, "meetingPicker")
     }
@@ -177,12 +174,11 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
         invitationDetailsFragmentViewModel.removeCourse()
     }
 
-    private fun saveMeetingTime(weekDay: String, hour: Int, minute: Int) {
+    private fun saveMeetingTime(meetingDate: WeekDate) {
         val chip = Chip(activity)
-        val meetingDate = Util.formatMeetingTime(weekDay, hour, minute)
-        chip.text = meetingDate
+        chip.text = meetingDate.toString()
         binding.invitationDetailsCourseItem.invitationCourseItemChipGroup.addView(chip)
 
-        invitationDetailsFragmentViewModel.addMeetingDate(meetingDate!!)
+        invitationDetailsFragmentViewModel.addMeetingDate(meetingDate.toStringWithOffset()!!)
     }
 }

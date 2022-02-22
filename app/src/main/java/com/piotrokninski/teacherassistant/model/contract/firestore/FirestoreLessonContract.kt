@@ -19,4 +19,6 @@ object FirestoreLessonContract {
     const val DATE = "date"
 
     const val NOTE = "note"
+
+    const val COMPLETED = "completed"
 }
