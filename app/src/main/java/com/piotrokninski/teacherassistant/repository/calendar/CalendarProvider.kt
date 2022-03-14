@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
+import com.piotrokninski.teacherassistant.model.meeting.Meeting
 import java.util.*
 import java.util.Calendar.MONDAY
 
@@ -34,5 +35,10 @@ object CalendarProvider {
 
 //        context.startActivity(intent)
         val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, contentValues)
+    }
+
+    fun insertMeetingDates(context: Context, meeting: Meeting) {
+        val contentResolver = context.contentResolver
+        val contentValues = ContentValues()
     }
 }

@@ -204,4 +204,7 @@
     <string name="invitation_tutor_type">Zaprasza cię jako swojego korepetytora</string>
     <string name="invitation_friend_type">Zaprasza cię do grona znajomych</string>
     <string name="new_homework_reminder_date_button_text">Przypomnienie</string>
+    <string name="calendar_title">Spotkania</string>
+    <string name="calendar_no_meetings_text">Brak nadchodzących spotkań</string>
+    <string name="calendar_item_date_title">Data spotkania:</string>
 </resources>

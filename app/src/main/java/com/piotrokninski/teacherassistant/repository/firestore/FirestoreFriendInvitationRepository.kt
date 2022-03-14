@@ -21,12 +21,25 @@ object FirestoreFriendInvitationRepository {
         val db = FirebaseFirestore.getInstance()
 
         val friendsInvitationsCollectionRef =
-            db.collection(FirestoreUserContract.COLLECTION_NAME).document(invitedUserId)
-                .collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
-                .document(invitingUserId)
+            db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
+
+        val query = friendsInvitationsCollectionRef
+            .whereEqualTo(FirestoreFriendInvitationContract.INVITED_USER_ID, invitedUserId)
+            .whereEqualTo(FirestoreFriendInvitationContract.INVITING_USER_ID, invitingUserId)
+            .limit(1)
 
         return try {
-            friendsInvitationsCollectionRef.get().await().toFriendInvitation()
+            val invitations = ArrayList<FriendInvitation>()
+
+            query.get().await().forEach { invitation ->
+                invitation?.toFriendInvitation()?.let { invitations.add(it) }
+            }
+
+            if (invitations.isEmpty()) {
+                null
+            } else {
+                invitations[0]
+            }
         } catch (e: Exception) {
             Log.e(TAG, "getFriendInvitationDataOnce: ", e)
             null

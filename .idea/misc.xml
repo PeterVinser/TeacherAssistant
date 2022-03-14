@@ -51,9 +51,10 @@
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/drawable/ic_clear_icon.xml" value="0.1" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/homework_date_dialog.xml" value="0.22" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/invitation_dialog.xml" value="0.10562310030395136" />
-        <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/meeting_picker_dialog.xml" value="0.10562310030395136" />
+        <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/meeting_picker_dialog.xml" value="0.22" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/new_lesson_dialog.xml" value="0.10562310030395136" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/layout/received_invitation_dialog.xml" value="0.10562310030395136" />
+        <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/calendar_list_item.xml" value="0.22" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/course_list_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/header_list_item.xml" value="0.10562310030395136" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/home_course_list_item.xml" value="0.22" />
@@ -62,11 +63,12 @@
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/homework_list_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/invitation_course_item.xml" value="0.10562310030395136" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main-rv-items/layout/user_hint_list_item.xml" value="0.1" />
+        <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_calendar.xml" value="0.22" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_course_details.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_courses.xml" value="0.10562310030395136" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_homework.xml" value="0.1" />
-        <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_homework_details.xml" value="0.10562310030395136" />
+        <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_homework_details.xml" value="0.22" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_invitation_details.xml" value="0.10562310030395136" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_new_course.xml" value="0.8991935483870968" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_new_homework.xml" value="0.1" />

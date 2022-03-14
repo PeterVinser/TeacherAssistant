@@ -18,7 +18,8 @@ data class Meeting(
     val date: Date,
     val status: String,
     val description: String,
-    val meetingDates: ArrayList<String>? = null
+    val meetingDates: ArrayList<String>? = null,
+    val meetingDuration: Long?
 ) {
     companion object {
         fun DocumentSnapshot.toMeeting(): Meeting? {
@@ -34,6 +35,9 @@ data class Meeting(
                 val status = getString(FirestoreMeetingContract.STATUS)!!
                 val description = getString(FirestoreMeetingContract.DESCRIPTION)!!
                 val meetingDates = get(FirestoreMeetingContract.MEETING_DATES) as ArrayList<String>
+                val meetingDuration = getLong(FirestoreMeetingContract.MEETING_DURATION)
+
+                //TODO add duration logic
 
                 return Meeting(
                     courseId,
@@ -46,7 +50,8 @@ data class Meeting(
                     date,
                     status,
                     description,
-                    meetingDates
+                    meetingDates,
+                    meetingDuration
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toMeeting: ", e)

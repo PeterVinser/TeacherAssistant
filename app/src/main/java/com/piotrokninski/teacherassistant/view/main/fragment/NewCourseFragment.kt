@@ -92,6 +92,7 @@ class NewCourseFragment : Fragment() {
         chip.text = meetingDate.toString()
         binding.newCourseChipGroup.addView(chip)
 
+        //TODO change the way the offset is saved
         newCourseViewModel.addMeetingDate(meetingDate.toStringWithOffset()!!)
     }
 

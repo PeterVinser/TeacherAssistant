@@ -23,4 +23,6 @@ object FirestoreCourseContract {
     const val SUBJECT = "subject"
 
     const val MEETING_DATES = "meetingDates"
+
+    const val MEETING_DURATION = "meetingDuration"
 }

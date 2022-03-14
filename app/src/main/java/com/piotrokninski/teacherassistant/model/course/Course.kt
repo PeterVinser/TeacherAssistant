@@ -16,7 +16,8 @@ data class Course(
     val status: String = FirestoreCourseContract.STATUS_PENDING,
     var type: String? = null,
     var subject: String? = null,
-    var meetingDates: ArrayList<String>? = null
+    var meetingDates: ArrayList<String>? = null,
+    var meetingDuration: Long? = null
 ) : Serializable {
 
     companion object {
@@ -32,6 +33,7 @@ data class Course(
                 val type = getString(FirestoreCourseContract.COURSE_TYPE)
                 val subject = getString(FirestoreCourseContract.SUBJECT)
                 val meetingDates = get(FirestoreCourseContract.MEETING_DATES) as ArrayList<String>
+                val meetingDuration = getLong(FirestoreCourseContract.MEETING_DURATION)
 
                 Course(
                     courseId,
@@ -42,7 +44,8 @@ data class Course(
                     status,
                     type,
                     subject,
-                    meetingDates
+                    meetingDates,
+                    meetingDuration
                 )
 
             } catch (e: Exception) {
