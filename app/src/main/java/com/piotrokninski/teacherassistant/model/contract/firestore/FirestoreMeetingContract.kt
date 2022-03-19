@@ -18,15 +18,11 @@ object FirestoreMeetingContract {
 
     const val DATE = "date"
 
-    const val STATUS = "status"
-
-    const val STATUS_RECURRING = "recurring"
-    const val STATUS_UPCOMING = "upcoming"
-    const val STATUS_CANCELED = "canceled"
+    const val COMPLETED = "completed"
 
     const val DESCRIPTION = "description"
 
-    const val MEETING_DATES = "meetingDates"
+    const val DURATION_HOURS = "durationHours"
 
-    const val MEETING_DURATION = "meetingDuration"
+    const val DURATION_MINUTES = "durationMinutes"
 }

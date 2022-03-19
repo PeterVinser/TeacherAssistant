@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
+import com.piotrokninski.teacherassistant.util.WeekDate
 import java.io.Serializable
 
 data class Course(
@@ -16,8 +17,7 @@ data class Course(
     val status: String = FirestoreCourseContract.STATUS_PENDING,
     var type: String? = null,
     var subject: String? = null,
-    var meetingDates: ArrayList<String>? = null,
-    var meetingDuration: Long? = null
+    var meetingDates: ArrayList<WeekDate>? = null
 ) : Serializable {
 
     companion object {
@@ -32,8 +32,14 @@ data class Course(
                 val status = getString(FirestoreCourseContract.STATUS)!!
                 val type = getString(FirestoreCourseContract.COURSE_TYPE)
                 val subject = getString(FirestoreCourseContract.SUBJECT)
-                val meetingDates = get(FirestoreCourseContract.MEETING_DATES) as ArrayList<String>
-                val meetingDuration = getLong(FirestoreCourseContract.MEETING_DURATION)
+                val meetingDatesMap = get(FirestoreCourseContract.MEETING_DATES) as ArrayList<Map<String, Any>>
+
+                val meetingDates = ArrayList<WeekDate>()
+
+                meetingDatesMap.forEach {
+                    val weekDate = WeekDate.toWeekDate(it)
+                    if (weekDate != null) meetingDates.add(weekDate)
+                }
 
                 Course(
                     courseId,
@@ -44,8 +50,7 @@ data class Course(
                     status,
                     type,
                     subject,
-                    meetingDates,
-                    meetingDuration
+                    meetingDates
                 )
 
             } catch (e: Exception) {

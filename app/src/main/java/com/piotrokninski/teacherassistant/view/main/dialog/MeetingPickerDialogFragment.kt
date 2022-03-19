@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.MeetingPickerDialogBinding
@@ -32,7 +33,7 @@ class MeetingPickerDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.meetingDialogWeekDayPicker.addOnButtonCheckedListener { _, checkedId, _ ->
-            weekDate.weekDay = when (checkedId) {
+            var weekDay = when (checkedId) {
                 R.id.meeting_dialog_monday -> WeekDays.MONDAY
 
                 R.id.meeting_dialog_tuesday -> WeekDays.TUESDAY
@@ -50,6 +51,8 @@ class MeetingPickerDialogFragment(
                 else -> throw IllegalArgumentException("Id not found")
             }
 
+            weekDate.updateWeekDay(weekDay)
+
             binding.meetingDialogTime.text = weekDate.toString()
         }
 
@@ -59,6 +62,19 @@ class MeetingPickerDialogFragment(
 
             binding.meetingDialogTime.text = weekDate.toString()
         }
+
+        binding.meetingDialogDurationHour.doOnTextChanged { text, _, _, _ ->
+            if (!text.isNullOrEmpty()) {
+                weekDate.durationHours = text.toString().toInt()
+            }
+        }
+
+        binding.meetingDialogDurationMinute.doOnTextChanged { text, _, _, _ ->
+            if (!text.isNullOrEmpty()) {
+                weekDate.durationMinutes = text.toString().toInt()
+            }
+        }
+
 
         binding.meetingDialogCancelButton.setOnClickListener {
             dismiss()

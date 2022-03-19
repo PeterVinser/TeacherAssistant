@@ -179,6 +179,6 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
         chip.text = meetingDate.toString()
         binding.invitationDetailsCourseItem.invitationCourseItemChipGroup.addView(chip)
 
-        invitationDetailsFragmentViewModel.addMeetingDate(meetingDate.toStringWithOffset()!!)
+        invitationDetailsFragmentViewModel.addMeetingDate(meetingDate)
     }
 }

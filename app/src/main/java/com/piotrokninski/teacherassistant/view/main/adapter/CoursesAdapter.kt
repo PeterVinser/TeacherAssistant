@@ -136,7 +136,7 @@ class CoursesAdapter(
 
             course.meetingDates!!.forEach { date ->
                 val chip = Chip(context)
-                chip.text = date
+                chip.text = date.toString()
 
                 binding.courseItemChipGroup.addView(chip)
             }

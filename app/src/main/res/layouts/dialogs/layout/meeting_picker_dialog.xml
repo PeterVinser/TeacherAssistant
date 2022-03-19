@@ -116,6 +116,51 @@
         android:layout_margin="4dp"
         android:timePickerMode="spinner" />
 
+    <LinearLayout
+        android:id="@+id/meeting_dialog_duration_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/meeting_dialog_duration_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="none"
+            android:hint="@string/meeting_dialog_duration_hour_hint"
+            android:inputType="number"
+            android:minWidth="48dp"
+            android:textSize="18sp"
+            android:textAlignment="textEnd"/>
+
+        <TextView
+            android:id="@+id/meeting_dialog_duration_hour_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_dialog_duration_hour_unit"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/meeting_dialog_duration_minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/meeting_dialog_duration_minute_hint"
+            android:inputType="number"
+            android:minWidth="48dp"
+            android:textSize="18sp"
+            android:textAlignment="textEnd"/>
+
+        <TextView
+            android:id="@+id/meeting_dialog_duration_minute_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_dialog_duration_minute_unit"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/meeting_dialog_time"
         android:layout_width="match_parent"

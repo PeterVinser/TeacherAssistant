@@ -93,7 +93,7 @@ class NewCourseFragment : Fragment() {
         binding.newCourseChipGroup.addView(chip)
 
         //TODO change the way the offset is saved
-        newCourseViewModel.addMeetingDate(meetingDate.toStringWithOffset()!!)
+        newCourseViewModel.addMeetingDate(meetingDate)
     }
 
     private fun onStudentSelected(position: Int) {
@@ -154,7 +154,7 @@ class NewCourseFragment : Fragment() {
 
                 course.meetingDates?.forEach { meetingDate ->
                     val chip = Chip(activity)
-                    chip.text = meetingDate
+                    chip.text = meetingDate.toString()
                     binding.newCourseChipGroup.addView(chip)
                 }
             }

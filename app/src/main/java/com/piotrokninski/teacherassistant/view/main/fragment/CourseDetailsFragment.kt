@@ -141,7 +141,7 @@ class CourseDetailsFragment : Fragment() {
 
             course.meetingDates!!.forEach { date ->
                 val chip = Chip(context)
-                chip.text = date
+                chip.text = date.toString()
 
                 binding.courseDetailsChipGroup.addView(chip)
             }

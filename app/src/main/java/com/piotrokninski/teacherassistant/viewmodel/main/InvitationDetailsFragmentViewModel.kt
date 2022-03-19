@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
+import com.piotrokninski.teacherassistant.util.WeekDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,7 +49,7 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
         course.value!!.type = type
     }
 
-    fun addMeetingDate(meetingDate: String) {
+    fun addMeetingDate(meetingDate: WeekDate) {
         val meetingDates = if (course.value!!.meetingDates != null) {
             course.value!!.meetingDates!!
         } else {

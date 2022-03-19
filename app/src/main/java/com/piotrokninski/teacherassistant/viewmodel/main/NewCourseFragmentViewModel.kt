@@ -15,9 +15,10 @@ import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
+import com.piotrokninski.teacherassistant.util.WeekDate
 import kotlinx.coroutines.launch
 
-class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), Observable {
+class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(), Observable {
     private val TAG = "NewCourseFragmentViewMo"
 
     private val userRepository: RoomUserRepository
@@ -46,7 +47,12 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
             editing = true
 
             viewModelScope.launch {
-                students = arrayListOf(FirestoreFriendRepository.getFriendDataOnce(currentUserId, initCourse.studentId!!)!!)
+                students = arrayListOf(
+                    FirestoreFriendRepository.getFriendDataOnce(
+                        currentUserId,
+                        initCourse.studentId!!
+                    )!!
+                )
 
                 _studentFullNames.value = arrayListOf(initCourse.studentFullName!!).toTypedArray()
             }
@@ -59,7 +65,10 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
 
                 course.value!!.tutorFullName = currentUser.fullName
 
-                students = FirestoreFriendRepository.getApprovedFriends(currentUserId, FirestoreFriendContract.TYPE_STUDENT)
+                students = FirestoreFriendRepository.getApprovedFriends(
+                    currentUserId,
+                    FirestoreFriendContract.TYPE_STUDENT
+                )
 
                 if (students.isNotEmpty()) {
                     val studentFullNames = ArrayList<String>()
@@ -82,7 +91,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
         course.value!!.type = type
     }
 
-    fun addMeetingDate(meetingDate: String) {
+    fun addMeetingDate(meetingDate: WeekDate) {
         val meetingDates = if (course.value!!.meetingDates != null) {
             course.value!!.meetingDates!!
         } else {
@@ -100,7 +109,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?): ViewModel(), 
     }
 
     fun checkCourse(): Boolean {
-         return !(course.value!!.studentId == null || course.value!!.meetingDates == null || course.value!!.subject == null || course.value!!.type == null)
+        return !(course.value!!.studentId == null || course.value!!.meetingDates == null || course.value!!.subject == null || course.value!!.type == null)
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
