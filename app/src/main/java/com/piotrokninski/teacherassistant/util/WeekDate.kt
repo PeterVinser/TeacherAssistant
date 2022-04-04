@@ -95,5 +95,15 @@ data class WeekDate(
                 null
             }
         }
+
+        val WEEK_DAYS_NUMERICAL = mapOf(
+            "Monday" to 1,
+            "Tuesday" to 2,
+            "Wednesday" to 3,
+            "Thursday" to 4,
+            "Friday" to 5,
+            "Saturday" to 6,
+            "Sunday" to 7
+        )
     }
 }

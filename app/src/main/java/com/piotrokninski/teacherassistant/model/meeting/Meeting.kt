@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.model.meeting
 
+import android.provider.CalendarContract
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreMeetingContract
@@ -10,11 +11,8 @@ import kotlin.collections.ArrayList
 data class Meeting(
     val courseId: String? = null,
     val lessonId: String? = null,
-    val studentId: String,
-    val studentFullName: String,
-    val tutorId: String,
-    val tutorFullName: String,
-    val subject: String,
+    val attendeeIds: ArrayList<String>,
+    val title: String,
     val date: Date,
     val completed: Boolean,
     val description: String,
@@ -26,27 +24,19 @@ data class Meeting(
             return try {
                 val courseId = getString(FirestoreMeetingContract.COURSE_ID)
                 val lessonId = getString(FirestoreMeetingContract.LESSON_ID)
-                val studentId = getString(FirestoreMeetingContract.STUDENT_ID)!!
-                val studentFullName = getString(FirestoreMeetingContract.STUDENT_FULL_NAME)!!
-                val tutorId = getString(FirestoreMeetingContract.TUTOR_ID)!!
-                val tutorFullName = getString(FirestoreMeetingContract.TUTOR_FULL_NAME)!!
-                val subject = getString(FirestoreMeetingContract.SUBJECT)!!
+                val attendeeIds = get(FirestoreMeetingContract.ATTENDEE_IDS)!! as ArrayList<String>
+                val title = getString(FirestoreMeetingContract.TITLE)!!
                 val date = getDate(FirestoreMeetingContract.DATE)!!
                 val completed = getBoolean(FirestoreMeetingContract.COMPLETED)!!
                 val description = getString(FirestoreMeetingContract.DESCRIPTION)!!
                 val durationHours = getLong(FirestoreMeetingContract.DURATION_HOURS)!!.toInt()
                 val durationMinutes = getLong(FirestoreMeetingContract.DURATION_MINUTES)!!.toInt()
 
-                //TODO add duration logic
-
                 return Meeting(
                     courseId,
                     lessonId,
-                    studentId,
-                    studentFullName,
-                    tutorId,
-                    tutorFullName,
-                    subject,
+                    attendeeIds,
+                    title,
                     date,
                     completed,
                     description,

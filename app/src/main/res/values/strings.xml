@@ -211,4 +211,16 @@
     <string name="meeting_dialog_duration_minute_hint">0</string>
     <string name="meeting_dialog_duration_hour_unit">h</string>
     <string name="meeting_dialog_duration_minute_unit">min</string>
+    <string name="calendar_week_view_text">Tydzień</string>
+    <string name="calendar_month_view_text">Miesiąc</string>
+
+    <string name="monday_full">Poniedziałek</string>
+    <string name="tuesday_full">Wtorek</string>
+    <string name="wednesday_full">Środa</string>
+    <string name="thursday_full">Czwartek</string>
+    <string name="friday_full">Piątek</string>
+    <string name="saturday_full">Sobota</string>
+    <string name="sunday_full">Niedziela</string>
+    <string name="calendar_fab_description">Dodaj spotkanie</string>
+    <string name="date_picker_title">Wybierz datę</string>
 </resources>

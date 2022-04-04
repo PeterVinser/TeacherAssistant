@@ -8,13 +8,9 @@ object FirestoreMeetingContract {
 
     const val LESSON_ID = "lessonId"
 
-    const val STUDENT_ID = "studentId"
-    const val STUDENT_FULL_NAME = "studentFullName"
+    const val ATTENDEE_IDS = "attendeeIds"
 
-    const val TUTOR_ID = "tutorId"
-    const val TUTOR_FULL_NAME = "tutorFullName"
-
-    const val SUBJECT = "subject"
+    const val TITLE = "title"
 
     const val DATE = "date"
 

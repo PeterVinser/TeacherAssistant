@@ -37,7 +37,6 @@ object FirestoreLessonRepository {
         val lessonsRef = db.collection(FirestoreLessonContract.COLLECTION_NAME)
 
         val query = lessonsRef.whereEqualTo(FirestoreLessonContract.COURSE_ID, courseId)
-            .whereEqualTo(FirestoreLessonContract.COMPLETED, true)
 
         return try {
 

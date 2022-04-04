@@ -7,15 +7,14 @@ import java.lang.Exception
 
 data class Lesson(
     val courseId: String,
+    val meetingId: String,
+    val noteId: String?,
     val studentId: String,
     val tutorId: String,
     val studentFullName: String,
     val tutorFullName: String,
     val topic: String?,
-    val subject: String,
-    val date: String,
-    val note: String?,
-    val completed: Boolean = false
+    val subject: String
 ) {
 
     companion object {
@@ -23,27 +22,25 @@ data class Lesson(
             return try {
 
                 val courseId = getString(FirestoreLessonContract.COURSE_ID)!!
+                val meetingId = getString(FirestoreLessonContract.MEETING_ID)!!
+                val noteId = getString(FirestoreLessonContract.NOTE_ID)
                 val studentId = getString(FirestoreLessonContract.STUDENT_ID)!!
                 val tutorId = getString(FirestoreLessonContract.TUTOR_ID)!!
                 val studentFullName = getString(FirestoreLessonContract.STUDENT_FULL_NAME)!!
                 val tutorFullName = getString(FirestoreLessonContract.TUTOR_FULL_NAME)!!
                 val topic = getString(FirestoreLessonContract.TOPIC)
                 val subject = getString(FirestoreLessonContract.SUBJECT)!!
-                val date = getString(FirestoreLessonContract.DATE)!!
-                val note = getString(FirestoreLessonContract.NOTE)
-                val completed = getBoolean(FirestoreLessonContract.COMPLETED)!!
 
                 Lesson(
                     courseId,
+                    meetingId,
+                    noteId,
                     studentId,
                     tutorId,
                     studentFullName,
                     tutorFullName,
                     topic,
                     subject,
-                    date,
-                    note,
-                    completed
                 )
 
             } catch (e: Exception) {

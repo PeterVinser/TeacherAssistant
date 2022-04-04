@@ -1,7 +1,6 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,12 @@ import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
 import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CalendarAdapter
+import com.piotrokninski.teacherassistant.view.main.dialog.DatePickerDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.CalendarFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.CalendarFragmentViewModelFactory
+import java.time.ZoneId
+import java.util.*
+
 
 class CalendarFragment : Fragment() {
     private val TAG = "CalendarFragment"
@@ -28,6 +31,8 @@ class CalendarFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CalendarAdapter
 
+    private lateinit var displayedDate: Date
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +41,10 @@ class CalendarFragment : Fragment() {
         (activity as MainActivity).isBottomNavVisible(false)
 
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
+        binding.calendarMeetingDate.setOnClickListener {
+            val dialog = DatePickerDialogFragment(displayedDate) { adapter.moveToDate(it) }
+            dialog.show(childFragmentManager, "tag")
+        }
 
         return binding.root
     }
@@ -51,9 +60,20 @@ class CalendarFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = CalendarAdapter(requireContext())
+        val linearLayoutManager = LinearLayoutManager(activity)
+        recyclerView.layoutManager = linearLayoutManager
+        adapter = CalendarAdapter(requireContext(), linearLayoutManager) { date ->
+            updateButtonMeetingDate(date)
+        }
         recyclerView.adapter = adapter
+    }
+
+
+    private fun updateButtonMeetingDate(date: Date) {
+        displayedDate = date
+        val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        binding.calendarMeetingDate.text = localDate.toString()
+
     }
 
     private fun setupViewModel() {
@@ -66,18 +86,15 @@ class CalendarFragment : Fragment() {
     private fun observeMeetings() {
         calendarViewModel.meetings.observe(viewLifecycleOwner) { meetings ->
             if (meetings.isNullOrEmpty()) {
-                binding.calendarTitle.visibility = View.GONE
+                binding.calendarMeetingDate.visibility = View.GONE
                 binding.calendarMeetingsRecyclerView.visibility = View.GONE
                 binding.calendarNoMeetings.visibility = View.VISIBLE
             } else {
-                binding.calendarTitle.visibility = View.VISIBLE
+                binding.calendarMeetingDate.visibility = View.VISIBLE
                 binding.calendarMeetingsRecyclerView.visibility = View.VISIBLE
                 binding.calendarNoMeetings.visibility = View.GONE
 
-                adapter.setMeetings(meetings)
-                meetings.forEach {
-                    Log.d(TAG, "observeMeetings: ${it.subject}")
-                }
+                adapter.setCalendarItems(meetings)
             }
         }
     }

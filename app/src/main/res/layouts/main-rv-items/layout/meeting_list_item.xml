@@ -24,7 +24,7 @@
                     android:id="@+id/calendar_item_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{meeting.subject}"
+                    android:text="@{meeting.title}"
                     android:textSize="18sp"
                     android:textAlignment="center"
                     tools:text="@string/lesson_item_subject_hint_text"/>

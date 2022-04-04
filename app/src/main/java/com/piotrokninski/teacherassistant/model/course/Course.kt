@@ -32,7 +32,8 @@ data class Course(
                 val status = getString(FirestoreCourseContract.STATUS)!!
                 val type = getString(FirestoreCourseContract.COURSE_TYPE)
                 val subject = getString(FirestoreCourseContract.SUBJECT)
-                val meetingDatesMap = get(FirestoreCourseContract.MEETING_DATES) as ArrayList<Map<String, Any>>
+                val meetingDatesMap =
+                    get(FirestoreCourseContract.MEETING_DATES) as ArrayList<Map<String, Any>>
 
                 val meetingDates = ArrayList<WeekDate>()
 

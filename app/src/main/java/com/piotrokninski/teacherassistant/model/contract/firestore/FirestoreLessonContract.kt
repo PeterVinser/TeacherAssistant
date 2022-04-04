@@ -6,6 +6,10 @@ object FirestoreLessonContract {
 
     const val COURSE_ID = "courseId"
 
+    const val MEETING_ID = "meetingId"
+
+    const val NOTE_ID = "noteId"
+
     const val STUDENT_ID = "studentId"
     const val TUTOR_ID = "tutorId"
 
@@ -15,10 +19,4 @@ object FirestoreLessonContract {
     const val TOPIC = "topic"
 
     const val SUBJECT = "subject"
-
-    const val DATE = "date"
-
-    const val NOTE = "note"
-
-    const val COMPLETED = "completed"
 }
