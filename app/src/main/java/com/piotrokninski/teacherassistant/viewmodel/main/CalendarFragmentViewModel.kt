@@ -1,20 +1,15 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.text.format.DateUtils
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.adapteritem.CalendarAdapterItem
-import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.meeting.Meeting
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreRecurringMeetingsRepository
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.WeekDate
 import kotlinx.coroutines.launch
 import java.util.*
@@ -35,8 +30,6 @@ class CalendarFragmentViewModel : ViewModel() {
         viewModelScope.launch {
             val auxList = ArrayList<CalendarAdapterItem>()
 
-            val weekDayItems = CalendarAdapterItem.HeaderAdapterItem.getHeaders()
-
             //Get first half a year of meetings
             val calendar = Calendar.getInstance()
             val startDate = calendar.time
@@ -53,96 +46,77 @@ class CalendarFragmentViewModel : ViewModel() {
             val recurringMeetings =
                 FirestoreRecurringMeetingsRepository.getRecurringMeetings(currentUserId)
 
-            if (!recurringMeetings.isNullOrEmpty()) {
-                //Creating and populating the collection for storing next dates of the given recurring meetings
-                val recurringMeetingDates = ArrayList<Date>()
+            //New algorithm
+            //Creating the list of meetings based on recurring meetings until the end date
+            recurringMeetings?.forEach { recurringMeeting ->
+                val attachedCourse = FirestoreCourseRepository.getCourse(recurringMeeting.courseId)
 
-                val attachedCourses = HashMap<String, Course>()
-
-                recurringMeetings.forEach {
-                    recurringMeetingDates.add(it.date)
-                    val attachedCourse = FirestoreCourseRepository.getCourse(it.courseId)
-                    if (attachedCourse != null) attachedCourses[it.courseId] = attachedCourse
+                val meetingDates = ArrayList<WeekDate.Companion.NumericalWeekDate>()
+                recurringMeeting.meetingDates.forEach {
+                    //Representing the meeting date as week day number (1,7) and time
+                    meetingDates.add(WeekDate.Companion.NumericalWeekDate.toWeekDateSnapshot(it))
                 }
 
-                //The date to be inserted into the auxList
-                var nextDate = recurringMeetingDates.first()
+                meetingDates.sortWith(compareBy({it.numericalWeekDate}, {it.hour}, {it.minute}))
 
-                while (nextDate < endDate) {
-                    val nextRecurringMeeting =
-                        recurringMeetings[recurringMeetingDates.indexOf(nextDate)]
+                //Queue used for queuing week dates
+                val meetingDatesQueue: Queue<WeekDate.Companion.NumericalWeekDate> = LinkedList()
+                meetingDatesQueue.addAll(meetingDates)
+                
+                val title = attachedCourse?.subject ?: "Spotkanie"
+                
+                var nextDate = recurringMeeting.date
 
-                    val courseId = nextRecurringMeeting.courseId
+                calendar.time = nextDate
+                //For some reason the day of week starts with sunday (sunday->1)????
+                val nextDateWeekDateNumerical = (calendar.get(Calendar.DAY_OF_WEEK) + 6) % 7
 
-                    val title = attachedCourses[courseId]?.subject ?: "Spotkanie"
+                //Ordering the queue to begin match the week day with the week day of the next date
+                while (true) {
+                    val polledWeekDate = meetingDatesQueue.peek()
+                    if (nextDateWeekDateNumerical <= polledWeekDate!!.numericalWeekDate) {
+                        break
+                    } else {
+                        meetingDatesQueue.add(meetingDatesQueue.poll())
+                    }
+                }
+
+                var weekDate = meetingDatesQueue.poll()
+                meetingDatesQueue.add(weekDate)
+
+                while (nextDate <= endDate) {
+                    val nextWeekDate = meetingDatesQueue.poll()
 
                     val nextMeeting = Meeting(
-                        courseId,
+                        recurringMeeting.courseId,
                         null,
-                        nextRecurringMeeting.attendeeIds,
+                        recurringMeeting.attendeeIds,
                         title,
                         nextDate,
                         false,
                         title,
-                        nextRecurringMeeting.durationHours,
-                        nextRecurringMeeting.durationMinutes
+                        weekDate!!.durationHours,
+                        weekDate.durationMinutes
                     )
 
                     if (nextMeeting !in meetings) {
                         meetings.add(nextMeeting)
                     }
-                    var dateToUpdate: Date? = null
 
-                    nextRecurringMeeting.meetingDates.forEach { date ->
-                        val weekDay = date.weekDay
-                        var hour = date.hour
-                        var minute = date.minute
-                        val offset = date.offset
+                    calendar.time = nextDate
 
-                        val offsetSign = offset.substring(0, 1)
-                        val offsetHour = offset.substring(1, 3).toInt()
-                        val offsetMinute = offset.substring(4).toInt()
-
-                        //Represent the hour in UTC format
-//                        if (hour != null && minute != null) {
-//                            if (offsetSign == "+") {
-//                                hour -= offsetHour
-//                                minute -= offsetMinute
-//                            }
-//                            if (offsetSign == "-") {
-//                                hour += offsetHour
-//                                minute += offsetMinute
-//                            }
-//                        }
-
-                        val weekDayNumber = WeekDate.WEEK_DAYS_NUMERICAL[weekDay]!!
-                        calendar.time = nextDate
-                        //For some reason the day of week starts with sunday (sunday->1)????
-                        calendar.add(
-                            Calendar.DAY_OF_WEEK,
-                            (weekDayNumber + (7 - (calendar.get(Calendar.DAY_OF_WEEK) + 6) % 7)) % 7
-                        )
-                        calendar.set(Calendar.HOUR_OF_DAY, hour!!)
-                        calendar.set(Calendar.MINUTE, minute!!)
-
-                        if (dateToUpdate == null) {
-                            dateToUpdate = calendar.time
-                        }
-
-                        if (nextDate >= dateToUpdate) {
-                            calendar.add(Calendar.DAY_OF_WEEK, 7)
-                            dateToUpdate = calendar.time
-                        }
-
-                        if (calendar.time < dateToUpdate) {
-                            dateToUpdate = calendar.time
-                        }
+                    var daysToAdd = nextWeekDate!!.numericalWeekDate - weekDate.numericalWeekDate
+                    if (daysToAdd <= 0) {
+                        daysToAdd += 7
                     }
+                    calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
+                    calendar.set(Calendar.HOUR_OF_DAY,  nextWeekDate.hour)
+                    calendar.set(Calendar.MINUTE, nextWeekDate.minute)
 
-                    //In the event of an error, blank nextDate or any other problem nextDate is assigned as endDate in order to break the loop
-                    recurringMeetingDates[recurringMeetingDates.indexOf(nextDate)] =
-                        dateToUpdate ?: endDate
-                    nextDate = recurringMeetingDates.minOrNull() ?: endDate
+                    weekDate = nextWeekDate
+
+                    nextDate = calendar.time
+                    meetingDatesQueue.add(weekDate)
                 }
             }
 
@@ -150,19 +124,20 @@ class CalendarFragmentViewModel : ViewModel() {
 
             var prevDate: Date? = null
             meetings.distinctBy { listOf(it.date, it.title) }.forEach { meeting ->
-                if (prevDate != null && (prevDate!!.time - meeting.date.time) / (24 * 60 * 60 * 1000) != (0.toLong())) {
+                if (prevDate != null) {
+                    calendar.time = prevDate!!
+                    val prevDay = calendar.get(Calendar.DAY_OF_YEAR)
+                    val prevYear = calendar.get(Calendar.YEAR)
+
                     calendar.time = meeting.date
-                    calendar.set(Calendar.HOUR_OF_DAY, 0)
-                    calendar.set(Calendar.MINUTE, 0)
-                    calendar.set(Calendar.SECOND, 0)
-                    calendar.set(Calendar.MILLISECOND, 0)
-                    auxList.add(
-                        CalendarAdapterItem.HeaderAdapterItem(
-                            weekDayItems[calendar.get(
-                                Calendar.DAY_OF_WEEK
-                            )]!!, calendar.time
-                        )
-                    )
+                    val day = calendar.get(Calendar.DAY_OF_YEAR)
+                    val year = calendar.get(Calendar.YEAR)
+
+                    if (prevDay != day || prevYear != year) {
+                        addMeetingsHeader(meeting.date, auxList)
+                    }
+                } else {
+                    addMeetingsHeader(meeting.date, auxList)
                 }
                 auxList.add(CalendarAdapterItem.MeetingAdapterItem(meeting))
                 prevDate = meeting.date
@@ -170,5 +145,24 @@ class CalendarFragmentViewModel : ViewModel() {
 
             _meetingItems.value = auxList
         }
+    }
+
+    private fun addMeetingsHeader(date: Date, list: ArrayList<CalendarAdapterItem>) {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        val weekDayItems = CalendarAdapterItem.HeaderAdapterItem.getHeaders()
+
+        list.add(
+            CalendarAdapterItem.HeaderAdapterItem(
+                weekDayItems[calendar.get(
+                    Calendar.DAY_OF_WEEK
+                )]!!, calendar.time
+            )
+        )
     }
 }

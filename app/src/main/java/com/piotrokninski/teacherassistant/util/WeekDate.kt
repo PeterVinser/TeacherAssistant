@@ -1,10 +1,9 @@
 package com.piotrokninski.teacherassistant.util
 
 import android.util.Log
-import java.lang.Exception
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
+import java.util.*
 
 data class WeekDate(
     var weekDay: String? = null,
@@ -12,7 +11,7 @@ data class WeekDate(
     var minute: Int? = null,
     var durationHours: Int = 1,
     var durationMinutes: Int = 0,
-    var offset: String = ZoneId.systemDefault().rules.getOffset(LocalDateTime.now()).toString()
+    val timeZone: String = TimeZone.getDefault().id
 ) {
 
     fun isComplete(): Boolean {
@@ -36,7 +35,7 @@ data class WeekDate(
 
     fun toMap(): Map<String, Any>? {
         return if (isComplete()) {
-            mapOf (
+            mapOf(
                 "weekDay" to weekDay!!.toString(),
                 "hour" to hour!!,
                 "minute" to minute!!,
@@ -80,19 +79,33 @@ data class WeekDate(
         private const val DURATION_HOURS = "durationHours"
         private const val DURATION_MINUTES = "durationMinutes"
 
-        fun toWeekDate(map: Map<String, Any>) : WeekDate? {
+        fun toWeekDate(map: Map<String, Any>): WeekDate? {
             return try {
                 val weekDay = map[WEEK_DAY] as String
                 val hour = (map[HOUR] as Long).toInt()
                 val minute = (map[MINUTE] as Long).toInt()
                 val durationHours = (map[DURATION_HOURS] as Long).toInt()
                 val durationMinutes = (map[DURATION_MINUTES] as Long).toInt()
-                val offset = ZoneId.systemDefault().rules.getOffset(LocalDateTime.now()).toString()
 
-                WeekDate(weekDay, hour, minute, durationHours, durationMinutes, offset)
+                WeekDate(weekDay, hour, minute, durationHours, durationMinutes)
             } catch (e: Exception) {
                 Log.e(TAG, "toWeekDate: ", e)
                 null
+            }
+        }
+
+        //Representing the meeting date as week day number (1,7) and time
+        data class NumericalWeekDate(val numericalWeekDate: Int, val hour: Int, val minute: Int, val durationHours: Int, val durationMinutes: Int) {
+            companion object {
+                fun toWeekDateSnapshot(weekDate: WeekDate): NumericalWeekDate {
+                    return NumericalWeekDate(
+                        WEEK_DAYS_NUMERICAL[weekDate.weekDay]!!,
+                        weekDate.hour!!,
+                        weekDate.minute!!,
+                        weekDate.durationHours,
+                        weekDate.durationMinutes
+                    )
+                }
             }
         }
 
