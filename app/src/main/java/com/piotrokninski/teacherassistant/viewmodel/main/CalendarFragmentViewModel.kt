@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -57,24 +58,34 @@ class CalendarFragmentViewModel : ViewModel() {
                     meetingDates.add(WeekDate.Companion.NumericalWeekDate.toWeekDateSnapshot(it))
                 }
 
-                meetingDates.sortWith(compareBy({it.numericalWeekDate}, {it.hour}, {it.minute}))
+                meetingDates.sortWith(
+                    compareBy(
+                        { it.numericalWeekDate },
+                        { it.hour },
+                        { it.minute })
+                )
 
                 //Queue used for queuing week dates
                 val meetingDatesQueue: Queue<WeekDate.Companion.NumericalWeekDate> = LinkedList()
                 meetingDatesQueue.addAll(meetingDates)
-                
+
                 val title = attachedCourse?.subject ?: "Spotkanie"
-                
+
                 var nextDate = recurringMeeting.date
 
                 calendar.time = nextDate
                 //For some reason the day of week starts with sunday (sunday->1)????
-                val nextDateWeekDateNumerical = (calendar.get(Calendar.DAY_OF_WEEK) + 6) % 7
+                val nextDateWeekDateNumerical =
+                    if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
+                Log.d(TAG, "getMeetings: $title")
+                Log.d(TAG, "getMeetings: $nextDate")
+                Log.d(TAG, "getMeetings: $nextDateWeekDateNumerical")
 
                 //Ordering the queue to begin match the week day with the week day of the next date
-                while (true) {
+                for (i in 1..meetingDatesQueue.size) {
                     val polledWeekDate = meetingDatesQueue.peek()
-                    if (nextDateWeekDateNumerical <= polledWeekDate!!.numericalWeekDate) {
+                    Log.d(TAG, "getMeetings: ${polledWeekDate!!.numericalWeekDate}")
+                    if (nextDateWeekDateNumerical == polledWeekDate.numericalWeekDate) {
                         break
                     } else {
                         meetingDatesQueue.add(meetingDatesQueue.poll())
@@ -110,13 +121,14 @@ class CalendarFragmentViewModel : ViewModel() {
                         daysToAdd += 7
                     }
                     calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
-                    calendar.set(Calendar.HOUR_OF_DAY,  nextWeekDate.hour)
+                    calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour)
                     calendar.set(Calendar.MINUTE, nextWeekDate.minute)
 
                     weekDate = nextWeekDate
 
                     nextDate = calendar.time
                     meetingDatesQueue.add(weekDate)
+                    Log.d(TAG, "getMeetings: $nextDate")
                 }
             }
 
