@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/meeting_dialog_title"
+        android:id="@+id/week_date_picker_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -16,7 +16,7 @@
         android:textSize="22sp" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/meeting_dialog_week_day_picker"
+        android:id="@+id/week_date_picker_week_day_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -24,7 +24,7 @@
         app:singleSelection="true">
 
         <Button
-            android:id="@+id/meeting_dialog_monday"
+            android:id="@+id/week_date_picker_monday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/meeting_dialog_tuesday"
+            android:id="@+id/week_date_picker_tuesday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/meeting_dialog_wednesday"
+            android:id="@+id/week_date_picker_wednesday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/meeting_dialog_thursday"
+            android:id="@+id/week_date_picker_thursday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/meeting_dialog_friday"
+            android:id="@+id/week_date_picker_friday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/meeting_dialog_saturday"
+            android:id="@+id/week_date_picker_saturday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/meeting_dialog_sunday"
+            android:id="@+id/week_date_picker_sunday"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,21 +110,21 @@
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <TimePicker
-        android:id="@+id/meeting_dialog_time_picker"
+        android:id="@+id/week_date_picker_time_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:timePickerMode="spinner" />
 
     <LinearLayout
-        android:id="@+id/meeting_dialog_duration_layout"
+        android:id="@+id/week_date_picker_duration_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
 
         <EditText
-            android:id="@+id/meeting_dialog_duration_hour"
+            android:id="@+id/week_date_picker_duration_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autofillHints="none"
@@ -132,17 +132,19 @@
             android:inputType="number"
             android:minWidth="48dp"
             android:textSize="18sp"
-            android:textAlignment="textEnd"/>
+            android:textAlignment="textEnd"
+            android:minHeight="48dp"
+            tools:ignore="TextFields" />
 
         <TextView
-            android:id="@+id/meeting_dialog_duration_hour_unit"
+            android:id="@+id/week_date_picker_duration_hour_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/meeting_dialog_duration_hour_unit"
             android:textSize="18sp"/>
 
         <EditText
-            android:id="@+id/meeting_dialog_duration_minute"
+            android:id="@+id/week_date_picker_duration_minute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autofillHints="no"
@@ -150,10 +152,12 @@
             android:inputType="number"
             android:minWidth="48dp"
             android:textSize="18sp"
-            android:textAlignment="textEnd"/>
+            android:textAlignment="textEnd"
+            android:minHeight="48dp"
+            tools:ignore="TextFields" />
 
         <TextView
-            android:id="@+id/meeting_dialog_duration_minute_unit"
+            android:id="@+id/week_date_picker_duration_minute_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/meeting_dialog_duration_minute_unit"
@@ -162,7 +166,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/meeting_dialog_time"
+        android:id="@+id/week_date_picker_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -177,7 +181,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/meeting_dialog_cancel_button"
+            android:id="@+id/week_date_picker_cancel_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -186,7 +190,7 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/meeting_dialog_confirm_button"
+            android:id="@+id/week_date_picker_confirm_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

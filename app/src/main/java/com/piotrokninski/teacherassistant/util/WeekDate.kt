@@ -1,73 +1,40 @@
 package com.piotrokninski.teacherassistant.util
 
+import android.content.Context
 import android.util.Log
+import com.google.firebase.firestore.Exclude
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 data class WeekDate(
-    var weekDay: String? = null,
-    var hour: Int? = null,
-    var minute: Int? = null,
+    var weekDay: WeekDays,
+    var hour: Int,
+    var minute: Int,
     var durationHours: Int = 1,
     var durationMinutes: Int = 0,
     val timeZone: String = TimeZone.getDefault().id
 ) {
 
-    fun isComplete(): Boolean {
-        return weekDay != null && hour != null && minute != null
-    }
-
     fun updateWeekDay(weekDay: WeekDays) {
-        this.weekDay = weekDay.toString()
+        this.weekDay = weekDay
     }
 
-    private fun timeToString(): String? {
-        if (hour == null || minute == null) {
-            return null
-        }
-
-        val hourString = if (hour!! < 10) "0$hour" else hour.toString()
-        val minuteString = if (minute!! < 10) "0$minute" else minute.toString()
+    private fun timeToString(): String {
+        val hourString = if (hour < 10) "0$hour" else hour.toString()
+        val minuteString = if (minute < 10) "0$minute" else minute.toString()
 
         return "$hourString:$minuteString"
     }
 
-    fun toMap(): Map<String, Any>? {
-        return if (isComplete()) {
-            mapOf(
-                "weekDay" to weekDay!!.toString(),
-                "hour" to hour!!,
-                "minute" to minute!!,
-                "offset" to ZoneId.systemDefault().rules.getOffset(LocalDateTime.now()),
-                "durationsHours" to durationHours,
-                "durationMinutes" to durationMinutes
-            )
-        } else {
-            null
-        }
-    }
-
-    fun toStringWithOffset(): String? {
-        if (toString().isEmpty()) {
-            return null
-        }
-
-        val offset = ZoneId.systemDefault().rules.getOffset(LocalDateTime.now())
-
-        return "${toString()} $offset"
-    }
-
     override fun toString(): String {
-        if (timeToString() == null && weekDay == null) {
-            return ""
-        } else if (timeToString() == null) {
-            return weekDay!!
-        } else if (weekDay == null) {
-            return timeToString()!!
-        }
+        return "$weekDay ${timeToString()}"
+    }
 
-        return "${weekDay!!} ${timeToString()}"
+    fun toLocalString(context: Context): String {
+        val localWeekDay = weekDay.stringId.let { context.getString(it) }
+
+        return "$localWeekDay ${timeToString()}"
     }
 
     companion object {
@@ -81,7 +48,7 @@ data class WeekDate(
 
         fun toWeekDate(map: Map<String, Any>): WeekDate? {
             return try {
-                val weekDay = map[WEEK_DAY] as String
+                val weekDay = WeekDays.valueOf(map[WEEK_DAY] as String)
                 val hour = (map[HOUR] as Long).toInt()
                 val minute = (map[MINUTE] as Long).toInt()
                 val durationHours = (map[DURATION_HOURS] as Long).toInt()
@@ -94,29 +61,12 @@ data class WeekDate(
             }
         }
 
-        //Representing the meeting date as week day number (1,7) and time
-        data class NumericalWeekDate(val numericalWeekDate: Int, val hour: Int, val minute: Int, val durationHours: Int, val durationMinutes: Int) {
-            companion object {
-                fun toWeekDateSnapshot(weekDate: WeekDate): NumericalWeekDate {
-                    return NumericalWeekDate(
-                        WEEK_DAYS_NUMERICAL[weekDate.weekDay]!!,
-                        weekDate.hour!!,
-                        weekDate.minute!!,
-                        weekDate.durationHours,
-                        weekDate.durationMinutes
-                    )
-                }
-            }
-        }
+        fun createCurrentWeekDate(): WeekDate {
+            val calendar = Calendar.getInstance()
+            val weekDayNumber = if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
+            val weekDay = WeekDays.values().firstOrNull { it.id == weekDayNumber }
 
-        val WEEK_DAYS_NUMERICAL = mapOf(
-            "Monday" to 1,
-            "Tuesday" to 2,
-            "Wednesday" to 3,
-            "Thursday" to 4,
-            "Friday" to 5,
-            "Saturday" to 6,
-            "Sunday" to 7
-        )
+            return WeekDate(weekDay = weekDay!!, hour = calendar.get(Calendar.HOUR_OF_DAY), minute = calendar.get(Calendar.MINUTE))
+        }
     }
 }
