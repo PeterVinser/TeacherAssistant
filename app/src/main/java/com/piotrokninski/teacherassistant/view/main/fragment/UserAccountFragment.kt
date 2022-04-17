@@ -40,8 +40,6 @@ class UserAccountFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(false)
 
-        binding.userAccountStudentToggleButton
-
         binding.userAccountToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked -> onToggleButtonClicked(checkedId, isChecked) }
 
         setupViewModel()
@@ -66,7 +64,7 @@ class UserAccountFragment : Fragment() {
 
     private fun setupViewModel() {
         val factory = UserAccountFragmentViewModelFactory()
-        userAccountViewModel = ViewModelProvider(this, factory).get(UserAccountFragmentViewModel::class.java)
+        userAccountViewModel = ViewModelProvider(this, factory)[UserAccountFragmentViewModel::class.java]
 
         binding.userViewModel = userAccountViewModel
         binding.lifecycleOwner = this

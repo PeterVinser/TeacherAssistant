@@ -8,13 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.adapteritem.CalendarAdapterItem
 import com.piotrokninski.teacherassistant.model.meeting.Meeting
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreRecurringMeetingsRepository
 import com.piotrokninski.teacherassistant.util.WeekDate
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CalendarFragmentViewModel : ViewModel() {
     private val TAG = "CalendarFragmentViewMod"
@@ -50,26 +48,21 @@ class CalendarFragmentViewModel : ViewModel() {
             //New algorithm
             //Creating the list of meetings based on recurring meetings until the end date
             recurringMeetings?.forEach { recurringMeeting ->
-                val attachedCourse = FirestoreCourseRepository.getCourse(recurringMeeting.courseId)
 
-                val meetingDates = ArrayList<WeekDate.Companion.NumericalWeekDate>()
-                recurringMeeting.meetingDates.forEach {
-                    //Representing the meeting date as week day number (1,7) and time
-                    meetingDates.add(WeekDate.Companion.NumericalWeekDate.toWeekDateSnapshot(it))
-                }
+                val meetingDates = recurringMeeting.meetingDates
 
                 meetingDates.sortWith(
                     compareBy(
-                        { it.numericalWeekDate },
+                        { it.weekDay!!.id },
                         { it.hour },
                         { it.minute })
                 )
 
                 //Queue used for queuing week dates
-                val meetingDatesQueue: Queue<WeekDate.Companion.NumericalWeekDate> = LinkedList()
+                val meetingDatesQueue: Queue<WeekDate> = LinkedList()
                 meetingDatesQueue.addAll(meetingDates)
 
-                val title = attachedCourse?.subject ?: "Spotkanie"
+                val title = recurringMeeting.title
 
                 var nextDate = recurringMeeting.date
 
@@ -84,8 +77,8 @@ class CalendarFragmentViewModel : ViewModel() {
                 //Ordering the queue to begin match the week day with the week day of the next date
                 for (i in 1..meetingDatesQueue.size) {
                     val polledWeekDate = meetingDatesQueue.peek()
-                    Log.d(TAG, "getMeetings: ${polledWeekDate!!.numericalWeekDate}")
-                    if (nextDateWeekDateNumerical == polledWeekDate.numericalWeekDate) {
+                    Log.d(TAG, "getMeetings: ${polledWeekDate!!.weekDay!!.id}")
+                    if (nextDateWeekDateNumerical == polledWeekDate.weekDay!!.id) {
                         break
                     } else {
                         meetingDatesQueue.add(meetingDatesQueue.poll())
@@ -116,13 +109,13 @@ class CalendarFragmentViewModel : ViewModel() {
 
                     calendar.time = nextDate
 
-                    var daysToAdd = nextWeekDate!!.numericalWeekDate - weekDate.numericalWeekDate
+                    var daysToAdd = nextWeekDate!!.weekDay!!.id - weekDate.weekDay!!.id
                     if (daysToAdd <= 0) {
                         daysToAdd += 7
                     }
                     calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
-                    calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour)
-                    calendar.set(Calendar.MINUTE, nextWeekDate.minute)
+                    calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour!!)
+                    calendar.set(Calendar.MINUTE, nextWeekDate.minute!!)
 
                     weekDate = nextWeekDate
 

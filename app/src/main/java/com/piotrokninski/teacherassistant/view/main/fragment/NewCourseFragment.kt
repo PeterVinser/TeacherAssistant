@@ -15,7 +15,7 @@ import com.piotrokninski.teacherassistant.databinding.FragmentNewCourseBinding
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.util.WeekDate
 import com.piotrokninski.teacherassistant.view.main.MainActivity
-import com.piotrokninski.teacherassistant.view.main.dialog.MeetingPickerDialogFragment
+import com.piotrokninski.teacherassistant.view.main.dialog.WeekDatePickerDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.NewCourseFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.NewCourseFragmentViewModelFactory
 
@@ -81,7 +81,7 @@ class NewCourseFragment : Fragment() {
     }
 
     private fun onAddMeetingButtonClicked() {
-        val dialog = MeetingPickerDialogFragment { meetingDate: WeekDate ->
+        val dialog = WeekDatePickerDialogFragment { meetingDate: WeekDate ->
             saveMeetingTime(meetingDate)
         }
         dialog.show(childFragmentManager, "meetingPicker")
@@ -92,7 +92,6 @@ class NewCourseFragment : Fragment() {
         chip.text = meetingDate.toString()
         binding.newCourseChipGroup.addView(chip)
 
-        //TODO change the way the offset is saved
         newCourseViewModel.addMeetingDate(meetingDate)
     }
 

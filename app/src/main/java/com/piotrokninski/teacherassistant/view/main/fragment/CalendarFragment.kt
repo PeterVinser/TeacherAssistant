@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
 import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
 import com.piotrokninski.teacherassistant.view.main.MainActivity
@@ -17,7 +19,6 @@ import com.piotrokninski.teacherassistant.viewmodel.main.CalendarFragmentViewMod
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.CalendarFragmentViewModelFactory
 import java.time.ZoneId
 import java.util.*
-
 
 class CalendarFragment : Fragment() {
     private val TAG = "CalendarFragment"
@@ -38,19 +39,27 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        (activity as MainActivity).isBottomNavVisible(false)
-
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
-        binding.calendarMeetingDate.setOnClickListener {
-            val dialog = DatePickerDialogFragment(displayedDate) { adapter.moveToDate(it) }
-            dialog.show(childFragmentManager, "tag")
-        }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as MainActivity).isBottomNavVisible(false)
+
+        binding.calendarMeetingDate.setOnClickListener {
+            val dialog = DatePickerDialogFragment(
+                displayedDate,
+                null,
+                null,
+                DatePickerDialogFragment.DATE_MODE
+            ) { date, _, _ -> adapter.moveToDate(date) }
+            dialog.show(childFragmentManager, "tag")
+        }
+
+        binding.calendarAddMeetingsFab.setOnClickListener {
+            this.findNavController().navigate(R.id.destination_new_meeting)
+        }
 
         recyclerView = binding.calendarMeetingsRecyclerView
 

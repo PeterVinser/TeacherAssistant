@@ -13,8 +13,8 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentNewHomeworkBinding
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.HomeworkDateDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.main.NewHomeworkViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.NewHomeworkViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.NewHomeworkFragmentViewModel
+import com.piotrokninski.teacherassistant.viewmodel.main.factory.NewHomeworkFragmentViewModelFactory
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -26,7 +26,7 @@ class NewHomeworkFragment : Fragment() {
 
     private lateinit var binding: FragmentNewHomeworkBinding
 
-    private lateinit var newHomeworkViewModel: NewHomeworkViewModel
+    private lateinit var newHomeworkFragmentViewModel: NewHomeworkFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +56,9 @@ class NewHomeworkFragment : Fragment() {
         }
 
         binding.newHomeworkConfirmButton.setOnClickListener {
-            if (newHomeworkViewModel.checkHomework()) {
+            if (newHomeworkFragmentViewModel.checkHomework()) {
 
-                newHomeworkViewModel.addHomework()
+                newHomeworkFragmentViewModel.addHomework()
 
                 (activity as MainActivity).onBackPressed()
             } else {
@@ -86,10 +86,10 @@ class NewHomeworkFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = NewHomeworkViewModelFactory()
-        newHomeworkViewModel = ViewModelProvider(this, factory)[NewHomeworkViewModel::class.java]
+        val factory = NewHomeworkFragmentViewModelFactory()
+        newHomeworkFragmentViewModel = ViewModelProvider(this, factory)[NewHomeworkFragmentViewModel::class.java]
 
-        binding.homeworkViewModel = newHomeworkViewModel
+        binding.homeworkViewModel = newHomeworkFragmentViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         observeCourseSnapshots()
@@ -102,22 +102,22 @@ class NewHomeworkFragment : Fragment() {
     }
 
     private fun onCourseSelected(position: Int) {
-        newHomeworkViewModel.onCourseSelected(position)
+        newHomeworkFragmentViewModel.onCourseSelected(position)
     }
 
     private fun onLessonSelected(position: Int) {
-        newHomeworkViewModel.onLessonSelected(position)
+        newHomeworkFragmentViewModel.onLessonSelected(position)
     }
 
     private fun observeCourseSnapshots() {
-        newHomeworkViewModel.courseSnapshots.observe(viewLifecycleOwner) { snapshots ->
+        newHomeworkFragmentViewModel.courseSnapshots.observe(viewLifecycleOwner) { snapshots ->
             val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, snapshots)
             binding.newHomeworkCourseTextView.setAdapter(arrayAdapter)
         }
     }
 
     private fun observeLessonTopic() {
-        newHomeworkViewModel.lessonTopics.observe(viewLifecycleOwner) { topics ->
+        newHomeworkFragmentViewModel.lessonTopics.observe(viewLifecycleOwner) { topics ->
             binding.newHomeworkLessonButton.isEnabled = !topics.isNullOrEmpty()
 
             if (!topics.isNullOrEmpty()) {
@@ -128,7 +128,7 @@ class NewHomeworkFragment : Fragment() {
     }
 
     private fun observeHomework() {
-        newHomeworkViewModel.homework.observe(viewLifecycleOwner) { homework ->
+        newHomeworkFragmentViewModel.homework.observe(viewLifecycleOwner) { homework ->
 
             val enabled = homework != null
 
@@ -150,7 +150,7 @@ class NewHomeworkFragment : Fragment() {
     }
 
     private fun observeLesson() {
-        newHomeworkViewModel.selectedLesson.observe(viewLifecycleOwner) { lesson ->
+        newHomeworkFragmentViewModel.selectedLesson.observe(viewLifecycleOwner) { lesson ->
             if (lesson != null) {
                 binding.newHomeworkTopic.setText(lesson.topic)
 
@@ -161,7 +161,7 @@ class NewHomeworkFragment : Fragment() {
 
     private fun onDatePicked(date: Date) {
 
-        newHomeworkViewModel.dueDateSelected(date)
+        newHomeworkFragmentViewModel.dueDateSelected(date)
 
         binding.newHomeworkDueDate.visibility = View.VISIBLE
 
@@ -176,10 +176,10 @@ class NewHomeworkFragment : Fragment() {
             if (isChecked) "" else getString(R.string.new_homework_lesson_button_description)
         binding.newHomeworkLessonTextView.text = null
 
-        if (newHomeworkViewModel.selectedLesson.value != null) {
+        if (newHomeworkFragmentViewModel.selectedLesson.value != null) {
             binding.newHomeworkTopic.isEnabled = true
 
-            newHomeworkViewModel.deleteSelectedLesson()
+            newHomeworkFragmentViewModel.deleteSelectedLesson()
         }
     }
 }

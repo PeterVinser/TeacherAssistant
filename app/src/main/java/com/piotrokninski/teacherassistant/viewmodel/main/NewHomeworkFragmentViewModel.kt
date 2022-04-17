@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewHomeworkViewModel : ViewModel(), Observable {
+class NewHomeworkFragmentViewModel : ViewModel(), Observable {
     private val TAG = "NewHomeworkViewModel"
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid

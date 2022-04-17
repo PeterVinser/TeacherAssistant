@@ -29,7 +29,11 @@
         android:id="@+id/menu_toolbar_destination_calendar"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment"
         android:label="@string/menu_toolbar_calendar_text"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendar_to_new_meeting"
+            app:destination="@id/destination_new_meeting"/>
+    </fragment>
     <fragment
         android:id="@+id/destination_contacts"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.ContactsFragment"
@@ -126,4 +130,9 @@
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewHomeworkFragment"
         tools:layout="@layout/fragment_new_homework">
     </fragment>
+    <fragment
+        android:id="@+id/destination_new_meeting"
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewMeetingFragment"
+        android:label="Nowe spotkanie"
+        tools:layout="@layout/fragment_new_meeting" />
 </navigation>
