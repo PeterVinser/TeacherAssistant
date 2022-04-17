@@ -19,6 +19,7 @@ object FirestoreFriendContract {
     const val TYPE_STUDENT = "student"
     const val TYPE_TUTOR = "tutor"
     const val TYPE_FRIEND = "friend"
+    const val TYPE_ALL = "all"
 
     const val INVITATION_ID = "invitationId"
 }

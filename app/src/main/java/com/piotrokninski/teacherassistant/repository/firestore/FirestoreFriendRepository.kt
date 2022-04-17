@@ -35,23 +35,30 @@ object FirestoreFriendRepository {
             db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
                 .collection(FirestoreFriendContract.COLLECTION_NAME)
 
-        val friendsQuery = friendsCollectionRef.whereEqualTo(
-            FirestoreFriendContract.STATUS,
-            FirestoreFriendContract.STATUS_APPROVED
-        )
-
-        try {
-            friendsQuery.get().await().forEach { friend ->
-                friend?.toFriend()?.let {
-                    if (it.friendshipType == friendshipType) {
-                        friends.add(it)
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "getAllFriends: ", e)
+        val friendsQuery = if (friendshipType != FirestoreFriendContract.TYPE_ALL) {
+            friendsCollectionRef.whereEqualTo(
+                FirestoreFriendContract.STATUS,
+                FirestoreFriendContract.STATUS_APPROVED
+            ).whereEqualTo(FirestoreFriendContract.FRIENDSHIP_TYPE, friendshipType)
+        } else {
+            friendsCollectionRef.whereEqualTo(
+                FirestoreFriendContract.STATUS,
+                FirestoreFriendContract.STATUS_APPROVED
+            )
         }
 
-        return friends
+        return try {
+            friendsQuery.get().await().forEach { friend ->
+                friend?.toFriend()?.let {
+                    friends.add(it)
+                    Log.d(TAG, "getApprovedFriends: ${it.fullName}")
+                }
+            }
+
+            friends
+        } catch (e: Exception) {
+            Log.e(TAG, "getAllFriends: ", e)
+            friends
+        }
     }
 }
