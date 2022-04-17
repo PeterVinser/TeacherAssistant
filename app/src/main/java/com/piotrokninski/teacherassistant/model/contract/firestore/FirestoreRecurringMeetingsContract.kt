@@ -5,6 +5,10 @@ object FirestoreRecurringMeetingsContract {
 
     const val COURSE_ID = "courseId"
 
+    const val TITLE = "title"
+
+    const val DESCRIPTION = "description"
+
     const val DATE = "date"
 
     const val DURATION_HOURS = "durationHours"

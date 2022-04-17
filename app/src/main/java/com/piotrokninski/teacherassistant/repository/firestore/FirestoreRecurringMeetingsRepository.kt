@@ -11,6 +11,12 @@ import java.lang.Exception
 object FirestoreRecurringMeetingsRepository {
     private const val TAG = "FirestoreRecurringMeeti"
 
+    fun addRecurringMeeting(recurringMeeting: RecurringMeeting) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(FirestoreRecurringMeetingsContract.COLLECTION_NAME).add(recurringMeeting)
+    }
+
     suspend fun getRecurringMeetings(userId: String): ArrayList<RecurringMeeting>? {
         val db = FirebaseFirestore.getInstance()
 

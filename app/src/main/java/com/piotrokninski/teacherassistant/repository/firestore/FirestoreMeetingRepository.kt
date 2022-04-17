@@ -12,6 +12,12 @@ import java.util.*
 object FirestoreMeetingRepository {
     private const val TAG = "FirestoreMeetingReposit"
 
+    fun addMeeting(meeting: Meeting) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(FirestoreMeetingContract.COLLECTION_NAME).add(meeting)
+    }
+
     suspend fun getMeetings(userId: String): ArrayList<Meeting>? {
         val db = FirebaseFirestore.getInstance()
 

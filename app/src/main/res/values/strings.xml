@@ -91,7 +91,7 @@
     <string name="lesson_item_time_title">Wybierz dni i czas spotkań</string>
     <string name="lesson_item_add_meeting_text">Dodaj</string>
     <string name="meeting_dialog_confirm_text">Zatwierdź</string>
-    <string name="meeting_dialog_title">Wybierz terminy spotkań</string>
+    <string name="meeting_dialog_title">Wybierz termin spotkań</string>
     <string name="monday_short_text">Pn</string>
     <string name="tuesday_short_text">Wt</string>
     <string name="wednesday_short_text">Śr</string>
@@ -222,5 +222,15 @@
     <string name="saturday_full">Sobota</string>
     <string name="sunday_full">Niedziela</string>
     <string name="calendar_fab_description">Dodaj spotkanie</string>
-    <string name="date_picker_title">Wybierz datę</string>
+    <string name="date_picker_date_title">Wybierz datę</string>
+
+    <string name="date_picker_meeting_title">Wybierz termin spotkania</string>
+    <string name="date_toggle_button_text">Data</string>
+    <string name="time_toggle_button_text">Godzina</string>
+    <string name="singular_meeting_text">Jednorazowe</string>
+    <string name="recurring_meeting_text">Cykliczne</string>
+    <string name="new_meeting_title">Tytuł</string>
+    <string name="new_meeting_friend_hint">Znajomy</string>
+    <string name="new_meeting_date_button_text">Termin</string>
+    <string name="new_meeting_description_hint">Opis</string>
 </resources>

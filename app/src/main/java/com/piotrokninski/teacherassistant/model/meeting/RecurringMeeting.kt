@@ -8,24 +8,29 @@ import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
-class RecurringMeeting(
-    val courseId: String,
+data class RecurringMeeting(
+    val courseId: String? = null,
+    val title: String,
+    val description: String?,
     var date: Date,
-    val durationHours: Int,
-    val durationMinutes: Int,
     val attendeeIds: ArrayList<String>,
-    val meetingDates: ArrayList<WeekDate>
+    val meetingDates: ArrayList<WeekDate>,
+    val durationHours: Int,
+    val durationMinutes: Int
 ) {
     companion object {
         fun DocumentSnapshot.toRecurringMeeting(): RecurringMeeting? {
             return try {
-                val courseId = getString(FirestoreRecurringMeetingsContract.COURSE_ID)!!
+                val courseId = getString(FirestoreRecurringMeetingsContract.COURSE_ID)
+                val title = getString(FirestoreRecurringMeetingsContract.TITLE)!!
+                val description = getString(FirestoreRecurringMeetingsContract.DESCRIPTION)
                 val date = getDate(FirestoreRecurringMeetingsContract.DATE)!!
                 val durationHours =
                     getLong(FirestoreRecurringMeetingsContract.DURATION_HOURS)!!.toInt()
                 val durationMinutes =
                     getLong(FirestoreRecurringMeetingsContract.DURATION_MINUTES)!!.toInt()
-                val attendeeIds = get(FirestoreRecurringMeetingsContract.ATTENDEE_IDS)!! as ArrayList<String>
+                val attendeeIds =
+                    get(FirestoreRecurringMeetingsContract.ATTENDEE_IDS)!! as ArrayList<String>
                 val meetingDatesMap =
                     get(FirestoreRecurringMeetingsContract.MEETING_DATES) as ArrayList<Map<String, Any>>
 
@@ -36,7 +41,16 @@ class RecurringMeeting(
                     if (weekDate != null) meetingDates.add(weekDate)
                 }
 
-                RecurringMeeting(courseId, date, durationHours, durationMinutes, attendeeIds, meetingDates)
+                RecurringMeeting(
+                    courseId,
+                    title,
+                    description,
+                    date,
+                    attendeeIds,
+                    meetingDates,
+                    durationHours,
+                    durationMinutes
+                )
 
             } catch (e: Exception) {
                 Log.e(TAG, "toRecurringMeeting: ")

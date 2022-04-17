@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,16 +11,105 @@
         android:id="@+id/date_picker_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/date_picker_title"
+        android:text="@string/date_picker_date_title"
         android:textAlignment="center"
         android:textSize="20sp"
         android:layout_margin="8dp"/>
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/date_picker_type_toggle_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:selectionRequired="true"
+        app:singleSelection="true"
+        android:gravity="center_horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/date_picker_date_toggle_button"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_toggle_button_text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/date_picker_time_toggle_button"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_toggle_button_text" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <CalendarView
         android:id="@+id/date_picker_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>
+
+    <TimePicker
+        android:id="@+id/date_picker_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"/>
+
+    <LinearLayout
+        android:id="@+id/date_picker_duration_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/date_picker_duration_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="none"
+            android:hint="@string/meeting_dialog_duration_hour_hint"
+            android:inputType="number"
+            android:minWidth="48dp"
+            android:textSize="18sp"
+            android:textAlignment="textEnd"
+            android:minHeight="48dp"
+            tools:ignore="TextFields" />
+
+        <TextView
+            android:id="@+id/date_picker_duration_hour_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_dialog_duration_hour_unit"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/date_picker_duration_minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/meeting_dialog_duration_minute_hint"
+            android:inputType="number"
+            android:minWidth="48dp"
+            android:textSize="18sp"
+            android:textAlignment="textEnd"
+            android:minHeight="48dp"
+            tools:ignore="TextFields" />
+
+        <TextView
+            android:id="@+id/date_picker_duration_minute_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/meeting_dialog_duration_minute_unit"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/date_picker_selected_date"
+        android:layout_margin="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        tools:text="01/01/1970, 12:00"/>
 
     <LinearLayout
         android:layout_width="match_parent"
