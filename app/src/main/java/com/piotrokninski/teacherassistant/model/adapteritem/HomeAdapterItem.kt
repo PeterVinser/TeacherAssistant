@@ -4,6 +4,7 @@ import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFrie
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
+import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
 
 sealed class HomeAdapterItem {
     abstract val id: String
@@ -12,8 +13,8 @@ sealed class HomeAdapterItem {
         override val id = titleId.toString()
     }
 
-    data class InvitationItem(val friendInvitation: FriendInvitation, val course: Course?): HomeAdapterItem() {
-        override val id = friendInvitation.invitingUserId
+    data class FriendInvitationItem(val friendInvitation: FriendInvitation): HomeAdapterItem() {
+        override val id = friendInvitation.invitationId ?: friendInvitation.invitedUserId
 
         fun getInvitationType(): String? {
             return when (friendInvitation.invitationType) {
@@ -34,5 +35,9 @@ sealed class HomeAdapterItem {
 
     data class HomeworkItem(val homework: Homework): HomeAdapterItem() {
         override val id = homework.toString()
+    }
+
+    data class MeetingInvitationItem(val meetingInvitation: MeetingInvitation): HomeAdapterItem() {
+        override val id = meetingInvitation.invitingUserId
     }
 }

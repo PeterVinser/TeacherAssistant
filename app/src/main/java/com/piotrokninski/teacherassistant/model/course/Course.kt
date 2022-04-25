@@ -24,16 +24,25 @@ data class Course(
 
         fun DocumentSnapshot.toCourse(): Course? {
             return try {
-                val courseId = getString(FirestoreCourseContract.COURSE_ID)!!
-                val studentId = getString(FirestoreCourseContract.STUDENT_ID)!!
-                val tutorId = getString(FirestoreCourseContract.TUTOR_ID)!!
-                val studentFullName = getString(FirestoreCourseContract.STUDENT_FULL_NAME)!!
-                val tutorFullName = getString(FirestoreCourseContract.TUTOR_FULL_NAME)!!
-                val status = getString(FirestoreCourseContract.STATUS)!!
-                val type = getString(FirestoreCourseContract.COURSE_TYPE)
-                val subject = getString(FirestoreCourseContract.SUBJECT)
+                toCourse(data!!)
+            } catch (e: Exception) {
+                Log.e(TAG, "toCourse: ", e)
+                null
+            }
+        }
+
+        fun toCourse(map: Map<String, Any>): Course? {
+            return try {
+                val courseId = map[FirestoreCourseContract.COURSE_ID] as String?
+                val studentId = map[FirestoreCourseContract.STUDENT_ID] as String
+                val tutorId = map[FirestoreCourseContract.TUTOR_ID] as String
+                val studentFullName = map[FirestoreCourseContract.STUDENT_FULL_NAME] as String
+                val tutorFullName = map[FirestoreCourseContract.TUTOR_FULL_NAME] as String
+                val status = map[FirestoreCourseContract.STATUS] as String
+                val type = map[FirestoreCourseContract.COURSE_TYPE] as String
+                val subject = map[FirestoreCourseContract.SUBJECT] as String
                 val meetingDatesMap =
-                    get(FirestoreCourseContract.MEETING_DATES) as ArrayList<Map<String, Any>>
+                    map[FirestoreCourseContract.MEETING_DATES] as ArrayList<Map<String, Any>>
 
                 val meetingDates = ArrayList<WeekDate>()
 
@@ -53,7 +62,6 @@ data class Course(
                     subject,
                     meetingDates
                 )
-
             } catch (e: Exception) {
                 Log.e(TAG, "toCourse: ", e)
                 null

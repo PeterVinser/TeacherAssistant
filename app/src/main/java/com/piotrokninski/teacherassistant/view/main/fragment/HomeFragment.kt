@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -10,17 +9,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
-import com.piotrokninski.teacherassistant.cloudfunctions.CourseCloudFunctions
-import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
-import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
-import com.piotrokninski.teacherassistant.view.main.dialog.ReceivedInvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.HomeFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.HomeFragmentViewModelFactory
 
@@ -88,7 +85,7 @@ class HomeFragment : Fragment() {
 
     private fun itemClickListener(homeAdapterItem: HomeAdapterItem) {
         when (homeAdapterItem) {
-            is HomeAdapterItem.InvitationItem -> navigateToProfile(homeAdapterItem.friendInvitation.invitingUserId)
+            is HomeAdapterItem.FriendInvitationItem -> navigateToProfile(homeAdapterItem.friendInvitation.invitingUserId)
 
             is HomeAdapterItem.HomeworkItem -> {}
 
@@ -98,15 +95,23 @@ class HomeFragment : Fragment() {
 
     private fun positiveButtonClickListener(homeAdapterItem: HomeAdapterItem) {
         when (homeAdapterItem) {
-            is HomeAdapterItem.InvitationItem -> InvitationCloudFunctions.approveFriendInvitation(
-                homeAdapterItem.friendInvitation
-            )
+            is HomeAdapterItem.FriendInvitationItem -> homeAdapterItem.friendInvitation.invitationId?.let { id ->
+                FirestoreFriendInvitationRepository.updateFriendInvitation(
+                    id,
+                    FirestoreFriendInvitationContract.STATUS,
+                    FirestoreFriendInvitationContract.STATUS_APPROVED
+                )
+            }
 
             is HomeAdapterItem.CourseItem -> {
                 when (homeViewModel.viewType) {
-                    AppConstants.VIEW_TYPE_STUDENT -> CourseCloudFunctions.confirmCourse(
-                        homeAdapterItem.course
-                    )
+                    AppConstants.VIEW_TYPE_STUDENT -> homeAdapterItem.course.courseId?.let { id ->
+                        FirestoreCourseRepository.updateCourse(
+                            id,
+                            FirestoreCourseContract.STATUS,
+                            FirestoreCourseContract.STATUS_APPROVED
+                        )
+                    }
 
                     AppConstants.VIEW_TYPE_TUTOR -> {
                         val action =
@@ -124,9 +129,13 @@ class HomeFragment : Fragment() {
 
     private fun negativeButtonClickListener(homeAdapterItem: HomeAdapterItem) {
         when (homeAdapterItem) {
-            is HomeAdapterItem.InvitationItem -> InvitationCloudFunctions.rejectFriendInvitation(
-                homeAdapterItem.friendInvitation
-            )
+            is HomeAdapterItem.FriendInvitationItem -> homeAdapterItem.friendInvitation.invitationId?.let { id ->
+                FirestoreFriendInvitationRepository.updateFriendInvitation(
+                    id,
+                    FirestoreFriendInvitationContract.STATUS,
+                    FirestoreFriendInvitationContract.STATUS_REJECTED
+                )
+            }
 
             is HomeAdapterItem.CourseItem -> homeViewModel.deleteCourse(homeAdapterItem.course.courseId!!)
 

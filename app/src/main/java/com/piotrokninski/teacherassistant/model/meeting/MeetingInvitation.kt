@@ -1,24 +1,40 @@
 package com.piotrokninski.teacherassistant.model.meeting
 
 import androidx.databinding.BaseObservable
+import com.google.firebase.firestore.Exclude
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.util.*
 
 data class MeetingInvitation(
     var title: String? = null,
     var description: String? = null,
-    var upcomingDate: Date? = null,
-    val attendeeIds: ArrayList<String>,
+    val invitingUserId: String,
+    val invitingUserFullName: String,
+    var invitedUserId: String? = null,
+    var invitedUserFullName: String? = null,
     var durationHours: Int? = null,
     var durationMinutes: Int? = null,
     var date: Date? = null,
     var weekDate: WeekDate? = null,
-    var mode: String = MEETING_TYPE_SINGULAR
+    var mode: String = MEETING_TYPE_SINGULAR,
+    val status: String = STATUS_PENDING
 ) : BaseObservable() {
 
 //    var mode by Delegates.observable(MEETING_TYPE_SINGULAR) { _, _, _ ->
 //        notifyPropertyChanged()
 //    }
+
+    @get:Exclude
+    val isComplete: Boolean
+        get() = when (mode) {
+            MEETING_TYPE_SINGULAR ->
+                !title.isNullOrEmpty() && !description.isNullOrEmpty() && invitedUserId != null && durationHours != null && durationMinutes != null && date != null
+
+            MEETING_TYPE_RECURRING ->
+                !title.isNullOrEmpty() && !description.isNullOrEmpty() && invitedUserId != null && weekDate != null
+
+            else -> false
+        }
 
     fun dateToString(): String? {
         //TODO replace the temporary implementation with multiple dates/week dates.
@@ -33,60 +49,12 @@ data class MeetingInvitation(
         }
     }
 
-    fun toSingularMeeting(): Meeting? {
-        return if (!title.isNullOrEmpty() && !description.isNullOrEmpty() && attendeeIds.isNotEmpty() && durationHours != null && durationMinutes != null && date != null) {
-            Meeting(
-                attendeeIds = attendeeIds,
-                title = title!!,
-                date = date!!,
-                completed = date!! < Date(),
-                description = description!!,
-                durationHours = durationHours,
-                durationMinutes = durationMinutes
-            )
-        } else {
-            null
-        }
-    }
-
-    fun toRecurringMeeting(): RecurringMeeting? {
-        return if (!title.isNullOrEmpty() && !description.isNullOrEmpty() && attendeeIds.isNotEmpty() && weekDate != null) {
-            RecurringMeeting(
-                title = title!!,
-                description = description!!,
-                date = getUpcomingMeetingDate(weekDate!!),
-                attendeeIds = attendeeIds,
-                meetingDates = arrayListOf(weekDate!!),
-                durationHours = weekDate!!.durationHours,
-                durationMinutes = weekDate!!.durationMinutes
-            )
-        } else {
-            null
-        }
-    }
-
-    private fun getUpcomingMeetingDate(weekDate: WeekDate): Date {
-        val calendar = Calendar.getInstance()
-
-        //For some reason the day of week starts with sunday (sunday->1)????
-        val weekDayNumber = if (weekDate.weekDay!!.id == 7) 0 else weekDate.weekDay!!.id + 1
-
-        calendar.set(Calendar.DAY_OF_WEEK, weekDayNumber)
-        calendar.set(Calendar.HOUR_OF_DAY, weekDate.hour!!)
-        calendar.set(Calendar.MINUTE, weekDate.minute!!)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-
-        if (calendar.time < Date()) {
-            calendar.add(Calendar.DAY_OF_WEEK, 7)
-        }
-
-        return calendar.time
-    }
-
     companion object {
         const val MEETING_TYPE_SINGULAR = "meetingTypeSingular"
         const val MEETING_TYPE_RECURRING = "meetingTypeRecurring"
+
+        const val STATUS_PENDING = "pending"
+        const val STATUS_APPROVED = "approved"
 
         private const val TAG = "MeetingHolder"
     }

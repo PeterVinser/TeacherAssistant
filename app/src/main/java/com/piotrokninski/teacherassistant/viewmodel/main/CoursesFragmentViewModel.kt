@@ -1,13 +1,11 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
-import com.piotrokninski.teacherassistant.cloudfunctions.CourseCloudFunctions
 import com.piotrokninski.teacherassistant.model.adapteritem.CourseAdapterItem
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.course.Course
@@ -89,7 +87,13 @@ class CoursesFragmentViewModel : ViewModel() {
     }
 
     fun confirmCourse(course: Course) {
-        CourseCloudFunctions.confirmCourse(course)
+        course.courseId?.let { id ->
+            FirestoreCourseRepository.updateCourse(
+                id,
+                FirestoreCourseContract.STATUS,
+                FirestoreCourseContract.STATUS_APPROVED
+            )
+        }
     }
 
     fun deleteCourse(courseId: String) {

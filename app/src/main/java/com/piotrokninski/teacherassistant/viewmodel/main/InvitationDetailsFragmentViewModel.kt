@@ -2,15 +2,12 @@ package com.piotrokninski.teacherassistant.viewmodel.main
 
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.piotrokninski.teacherassistant.cloudfunctions.InvitationCloudFunctions
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.util.WeekDate
-import java.util.*
-import kotlin.collections.ArrayList
 
 class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewModel(), Observable {
     private val TAG = "InvitationDetailsViewMo"
@@ -21,17 +18,17 @@ class InvitationDetailsFragmentViewModel(invitation: FriendInvitation) : ViewMod
     @Bindable
     val course = MutableLiveData<Course?>()
 
-    private var _courses = MutableLiveData<ArrayList<Course>>()
-    val courses: LiveData<ArrayList<Course>> = _courses
-
     init {
         friendInvitation.value = invitation
 
-        course.value = null
+        course.value = invitation.course
     }
 
     fun sendInvitation() {
-        InvitationCloudFunctions.sendFriendInvitation(friendInvitation.value!!, course.value)
+        val invitation = friendInvitation.value
+        invitation!!.course = course.value
+        FirestoreFriendInvitationRepository.addFriendInvitation(invitation)
+//        InvitationCloudFunctions.sendFriendInvitation(friendInvitation.value!!, course.value)
     }
 
     fun addCourse(type: String) {

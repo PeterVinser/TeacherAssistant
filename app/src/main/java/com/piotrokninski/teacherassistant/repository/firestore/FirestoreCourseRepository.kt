@@ -3,6 +3,7 @@ package com.piotrokninski.teacherassistant.repository.firestore
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.messaging.FirebaseMessaging
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Course.Companion.toCourse
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
@@ -12,30 +13,20 @@ import java.lang.Exception
 object FirestoreCourseRepository {
     private const val TAG = "FirestoreCourseReposito"
 
-    fun setCourse(course: Course): Course {
+    fun addCourse(course: Course) {
         val db = FirebaseFirestore.getInstance()
 
-        val id = db.collection(FirestoreCourseContract.COLLECTION_NAME).document().id
+        val document = db.collection(FirestoreCourseContract.COLLECTION_NAME).document()
+        course.courseId = document.id
 
-        course.courseId = id
-
-        db.collection(FirestoreCourseContract.COLLECTION_NAME).document(id)
-            .set(course)
-
-        return course
+        document.set(course)
     }
 
-    suspend fun getCourse(courseId: String): Course? {
+    fun updateCourse(courseId: String, field: String, value: Any) {
         val db = FirebaseFirestore.getInstance()
 
-        val coursesRef = db.collection(FirestoreCourseContract.COLLECTION_NAME).document(courseId)
-
-        return try {
-            coursesRef.get().await().toCourse()
-        } catch (e: Exception) {
-            Log.e(TAG, "getCourse: ", e)
-            null
-        }
+        db.collection(FirestoreCourseContract.COLLECTION_NAME).document(courseId)
+            .update(field, value)
     }
 
     suspend fun getStudiedCourses(userId: String, status: String): ArrayList<Course>? {

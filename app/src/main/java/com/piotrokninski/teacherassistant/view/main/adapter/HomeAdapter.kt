@@ -59,7 +59,7 @@ class HomeAdapter(
             )
 
             HOME_INVITATION_ITEM -> (holder as InvitationViewHolder).bind(
-                items[position] as HomeAdapterItem.InvitationItem,
+                items[position] as HomeAdapterItem.FriendInvitationItem,
                 itemClickListener,
                 positiveButtonListener,
                 negativeButtonListener
@@ -89,7 +89,7 @@ class HomeAdapter(
 
             is HomeAdapterItem.HeaderItem -> HOME_HEADER_ITEM
 
-            is HomeAdapterItem.InvitationItem -> HOME_INVITATION_ITEM
+            is HomeAdapterItem.FriendInvitationItem -> HOME_INVITATION_ITEM
 
             is HomeAdapterItem.CourseItem -> HOME_COURSE_ITEM
 
@@ -140,36 +140,38 @@ class HomeAdapter(
         }
 
         fun bind(
-            friendInvitationItem: HomeAdapterItem.InvitationItem,
+            friendFriendInvitationItem: HomeAdapterItem.FriendInvitationItem,
             itemClickListener: (HomeAdapterItem) -> Unit,
             positiveButtonListener: (HomeAdapterItem) -> Unit,
             negativeButtonListener: (HomeAdapterItem) -> Unit
         ) {
-            binding.friendInvitation = friendInvitationItem
-            binding.homeInvitationDescription.text = friendInvitationItem.getInvitationType()
+            binding.friendInvitation = friendFriendInvitationItem
+            binding.homeInvitationDescription.text = friendFriendInvitationItem.getInvitationType()
 
-            if (friendInvitationItem.course == null) {
+            val course = friendFriendInvitationItem.friendInvitation.course
+
+            if (course == null) {
                 binding.homeInvitationItemCourseButton.visibility = View.GONE
             }
 
-            binding.homeInvitationItemLayout.setOnClickListener { itemClickListener(friendInvitationItem) }
+            binding.homeInvitationItemLayout.setOnClickListener { itemClickListener(friendFriendInvitationItem) }
             binding.homeInvitationItemRejectButton.setOnClickListener {
                 negativeButtonListener(
-                    friendInvitationItem
+                    friendFriendInvitationItem
                 )
             }
             binding.homeInvitationItemConfirmButton.setOnClickListener {
                 positiveButtonListener(
-                    friendInvitationItem
+                    friendFriendInvitationItem
                 )
             }
 
             binding.homeInvitationItemCourseLayout.root.visibility = View.GONE
-            binding.homeInvitationItemCourseLayout.course = friendInvitationItem.course
+            binding.homeInvitationItemCourseLayout.course = course
 
             binding.homeInvitationItemCourseLayout.homeInvitationItemCourseDates.removeAllViews()
 
-            friendInvitationItem.course?.meetingDates!!.forEach { date ->
+            course?.meetingDates?.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date.toString()
 

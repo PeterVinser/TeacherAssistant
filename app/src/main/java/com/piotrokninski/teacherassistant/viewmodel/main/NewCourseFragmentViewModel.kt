@@ -12,6 +12,7 @@ import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFrie
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.user.User
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
@@ -84,7 +85,8 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
     }
 
     fun addCourse() {
-        CourseCloudFunctions.addCourse(course.value!!)
+        FirestoreCourseRepository.addCourse(course.value!!)
+//        CourseCloudFunctions.addCourse(course.value!!)
     }
 
     fun setCourseType(type: String) {

@@ -2,6 +2,7 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.Friend.Companion.toFriend
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
@@ -10,6 +11,14 @@ import kotlinx.coroutines.tasks.await
 
 object FirestoreFriendRepository {
     private const val TAG = "FirestoreFriendReposito"
+
+    fun deleteFriend(userId: String, friendId: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
+            .collection(FirestoreFriendContract.COLLECTION_NAME).document(friendId)
+            .delete()
+    }
 
     suspend fun getFriendDataOnce(userId: String, friendId: String): Friend? {
         val db = FirebaseFirestore.getInstance()

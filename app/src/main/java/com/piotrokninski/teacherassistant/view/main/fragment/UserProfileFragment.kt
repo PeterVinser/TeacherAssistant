@@ -88,8 +88,6 @@ class UserProfileFragment : Fragment() {
         observeSearchedUser()
 
         observeFriendInvitation()
-
-        observeInvitationCourse()
     }
 
     private fun observeFriendStatus() {
@@ -149,26 +147,21 @@ class UserProfileFragment : Fragment() {
 
                     else -> throw IllegalArgumentException("Unknown invitation type")
                 }
+
+                if (invitation.course != null) {
+                    binding.userProfileInvitationCourse.root.visibility = View.VISIBLE
+
+                    binding.userProfileInvitationCourse.course = invitation.course
+
+                    invitation.course!!.meetingDates?.forEach { date ->
+                        val chip = Chip(context)
+                        chip.text = date.toString()
+
+                        binding.userProfileInvitationCourse.homeInvitationItemCourseDates.addView(chip)
+                    }
+                }
             } else {
                 binding.userProfileInvitation.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun observeInvitationCourse() {
-        userProfileViewModel.invitationCourse.observe(viewLifecycleOwner) { course ->
-            if (course != null) {
-
-                binding.userProfileInvitationCourse.root.visibility = View.VISIBLE
-
-                binding.userProfileInvitationCourse.course = course
-
-                course.meetingDates!!.forEach { date ->
-                    val chip = Chip(context)
-                    chip.text = date.toString()
-
-                    binding.userProfileInvitationCourse.homeInvitationItemCourseDates.addView(chip)
-                }
             }
         }
     }

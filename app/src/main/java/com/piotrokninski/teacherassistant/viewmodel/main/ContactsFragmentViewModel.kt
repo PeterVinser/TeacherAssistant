@@ -114,7 +114,7 @@ class ContactsFragmentViewModel : ViewModel() {
             val receivedInvitations = ArrayList<ContactAdapterItem>()
 
             FirestoreFriendInvitationRepository.getReceivedFriendsInvitations(currentUserId)
-                .forEach { invitation ->
+                ?.forEach { invitation ->
                     val receivedInvitationItem = ContactAdapterItem.FriendInvitationAdapterItem(
                         AppConstants.RECEIVED_INVITATIONS,
                         invitation
@@ -128,7 +128,7 @@ class ContactsFragmentViewModel : ViewModel() {
             val sentInvitations = ArrayList<ContactAdapterItem>()
 
             FirestoreFriendInvitationRepository.getSentFriendInvitations(currentUserId)
-                .forEach { invitation ->
+                ?.forEach { invitation ->
                     val sentInvitationItem = ContactAdapterItem.FriendInvitationAdapterItem(
                         AppConstants.SENT_INVITATIONS,
                         invitation

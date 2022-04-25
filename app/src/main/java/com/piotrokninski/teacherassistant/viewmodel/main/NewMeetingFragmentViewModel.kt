@@ -9,33 +9,41 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreMeetingInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreRecurringMeetingsRepository
+import com.piotrokninski.teacherassistant.model.user.User
+import com.piotrokninski.teacherassistant.repository.firestore.*
+import com.piotrokninski.teacherassistant.repository.room.AppDatabase
+import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 import kotlinx.coroutines.launch
 
 class NewMeetingFragmentViewModel : ViewModel(), Observable {
     private val TAG = "NewMeetingFragmentViewM"
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var user: User
+
+    private val userRepository: RoomUserRepository
 
     private lateinit var friends: ArrayList<Friend>
 
     private val _friendFullNames = MutableLiveData<Array<String>>()
     val friendFullNames: LiveData<Array<String>> = _friendFullNames
 
-    private var selectedFriend: Friend? = null
-
     @Bindable
     val meetingInvitation = MutableLiveData<MeetingInvitation>()
 
     init {
-
-        meetingInvitation.value = MeetingInvitation(attendeeIds = arrayListOf(currentUserId))
+        val userDao = AppDatabase.getInstance().userDao
+        userRepository = RoomUserRepository(userDao)
 
         viewModelScope.launch {
+
+            user = FirestoreUserRepository.getUserDataOnce(currentUserId) ?: userRepository.getUser(currentUserId)!!
+
+            meetingInvitation.value = MeetingInvitation(invitingUserId = user.userId, invitingUserFullName = user.fullName)
+
             friends = FirestoreFriendRepository.getApprovedFriends(
                 currentUserId,
                 FirestoreFriendContract.TYPE_ALL
@@ -54,35 +62,19 @@ class NewMeetingFragmentViewModel : ViewModel(), Observable {
     }
 
     fun onFriendSelected(position: Int) {
-        selectedFriend = friends[position]
+        meetingInvitation.value!!.invitedUserId = friends[position].userId
+        meetingInvitation.value!!.invitedUserFullName = friends[position].fullName
     }
 
     fun addMeeting(): Boolean {
-        if (selectedFriend == null) {
-            return false
+
+        return if (meetingInvitation.value?.isComplete == true) {
+            FirestoreMeetingInvitationRepository.addMeetingInvitation(meetingInvitation.value!!)
+            true
+        } else {
+            false
         }
 
-        Log.d(TAG, "addMeeting: ${meetingInvitation.value}")
-
-        when (meetingInvitation.value!!.mode) {
-            MeetingInvitation.MEETING_TYPE_SINGULAR -> {
-                val meeting = meetingInvitation.value?.toSingularMeeting() ?: return false
-
-                meetingInvitation.value!!.attendeeIds.add(selectedFriend!!.userId)
-
-                FirestoreMeetingRepository.addMeeting(meeting)
-            }
-
-            MeetingInvitation.MEETING_TYPE_RECURRING -> {
-                val recurringMeeting = meetingInvitation.value?.toRecurringMeeting() ?: return false
-
-                meetingInvitation.value!!.attendeeIds.add(selectedFriend!!.userId)
-
-                FirestoreRecurringMeetingsRepository.addRecurringMeeting(recurringMeeting)
-            }
-        }
-
-        return true
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

@@ -7,7 +7,7 @@ sealed class CourseAdapterItem {
     abstract val id: String
 
     data class CourseItem(val course: Course) : CourseAdapterItem() {
-        override val id = course.courseId!!
+        override val id = course.courseId ?: course.tutorId
     }
 
     data class HeaderItem(val titleId: Int) : CourseAdapterItem() {

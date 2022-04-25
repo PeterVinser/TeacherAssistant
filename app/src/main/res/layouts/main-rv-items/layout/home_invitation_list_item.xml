@@ -6,7 +6,7 @@
     <data>
         <variable
             name="friendInvitation"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.InvitationItem" />
+            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.FriendInvitationItem" />
     </data>
 
     <LinearLayout

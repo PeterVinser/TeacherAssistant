@@ -1,6 +1,5 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,7 +28,6 @@ class HomeFragmentViewModel : ViewModel() {
     val homeFeedItems: LiveData<List<HomeAdapterItem>> = _homeFeedItems
 
     init {
-
         getItems()
     }
 
@@ -66,12 +64,7 @@ class HomeFragmentViewModel : ViewModel() {
                 auxList.add(invitationHeader)
 
                 invitations.forEach { friendInvitation ->
-                    val attachedCourse = pendingCourses?.filter { it.courseId == friendInvitation.courseId }
-                    if (attachedCourse != null) {
-                        pendingCourses.removeAll(attachedCourse)
-                    }
-
-                    auxList.add(HomeAdapterItem.InvitationItem(friendInvitation, attachedCourse?.get(0)))
+                    auxList.add(HomeAdapterItem.FriendInvitationItem(friendInvitation))
                 }
             }
 
