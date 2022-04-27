@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.model.course.LessonSnapshot
@@ -44,7 +43,7 @@ class NewHomeworkFragmentViewModel : ViewModel(), Observable {
         viewModelScope.launch {
             courses = FirestoreCourseRepository.getTaughtCourses(
                 currentUserId,
-                FirestoreCourseContract.STATUS_APPROVED
+                Course.STATUS_APPROVED
             )!!
 
             createCourseSnapshots()

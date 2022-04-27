@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.model.course
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreLessonContract
 import java.lang.Exception
 
 data class Lesson(
@@ -20,34 +19,35 @@ data class Lesson(
     companion object {
         fun DocumentSnapshot.toLesson(): Lesson? {
             return try {
-
-                val courseId = getString(FirestoreLessonContract.COURSE_ID)!!
-                val meetingId = getString(FirestoreLessonContract.MEETING_ID)!!
-                val noteId = getString(FirestoreLessonContract.NOTE_ID)
-                val studentId = getString(FirestoreLessonContract.STUDENT_ID)!!
-                val tutorId = getString(FirestoreLessonContract.TUTOR_ID)!!
-                val studentFullName = getString(FirestoreLessonContract.STUDENT_FULL_NAME)!!
-                val tutorFullName = getString(FirestoreLessonContract.TUTOR_FULL_NAME)!!
-                val topic = getString(FirestoreLessonContract.TOPIC)
-                val subject = getString(FirestoreLessonContract.SUBJECT)!!
-
                 Lesson(
-                    courseId,
-                    meetingId,
-                    noteId,
-                    studentId,
-                    tutorId,
-                    studentFullName,
-                    tutorFullName,
-                    topic,
-                    subject,
+                    getString(COURSE_ID)!!,
+                    getString(MEETING_ID)!!,
+                    getString(NOTE_ID),
+                    getString(STUDENT_ID)!!,
+                    getString(TUTOR_ID)!!,
+                    getString(STUDENT_FULL_NAME)!!,
+                    getString(TUTOR_FULL_NAME)!!,
+                    getString(TOPIC),
+                    getString(SUBJECT)!!,
                 )
-
             } catch (e: Exception) {
                 Log.e(TAG, "toNote: ", e)
                 null
             }
         }
+
+        //Contract
+        const val COLLECTION_NAME = "lessons"
+
+        const val COURSE_ID = "courseId"
+        private const val MEETING_ID = "meetingId"
+        private const val NOTE_ID = "noteId"
+        private const val STUDENT_ID = "studentId"
+        private const val TUTOR_ID = "tutorId"
+        private const val STUDENT_FULL_NAME = "studentFullName"
+        private const val TUTOR_FULL_NAME = "tutorFullName"
+        private const val TOPIC = "topic"
+        private const val SUBJECT = "subject"
 
         private const val TAG = "Note"
     }

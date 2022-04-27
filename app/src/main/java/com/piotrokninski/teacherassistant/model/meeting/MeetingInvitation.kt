@@ -1,8 +1,11 @@
 package com.piotrokninski.teacherassistant.model.meeting
 
+import android.util.Log
 import androidx.databinding.BaseObservable
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.piotrokninski.teacherassistant.util.WeekDate
+import java.lang.Exception
 import java.util.*
 
 data class MeetingInvitation(
@@ -20,10 +23,6 @@ data class MeetingInvitation(
     val status: String = STATUS_PENDING
 ) : BaseObservable() {
 
-//    var mode by Delegates.observable(MEETING_TYPE_SINGULAR) { _, _, _ ->
-//        notifyPropertyChanged()
-//    }
-
     @get:Exclude
     val isComplete: Boolean
         get() = when (mode) {
@@ -35,6 +34,9 @@ data class MeetingInvitation(
 
             else -> false
         }
+
+    @get:Exclude
+    var id: String? = null
 
     fun dateToString(): String? {
         //TODO replace the temporary implementation with multiple dates/week dates.
@@ -50,6 +52,45 @@ data class MeetingInvitation(
     }
 
     companion object {
+
+        fun DocumentSnapshot.toMeetingInvitation(): MeetingInvitation? {
+            return try {
+                MeetingInvitation(
+                    getString(TITLE)!!,
+                    getString(DESCRIPTION)!!,
+                    getString(INVITING_USER_ID)!!,
+                    getString(INVITING_USER_FULL_NAME)!!,
+                    getString(INVITED_USER_ID)!!,
+                    getString(INVITED_USER_FULL_NAME)!!,
+                    getLong(DURATION_HOURS)?.toInt(),
+                    getLong(DURATION_MINUTES)?.toInt(),
+                    getDate(DATE),
+                    get(WEEK_DATE)?.let { WeekDate.toWeekDate(it as Map<String, Any>) },
+                    getString(MODE)!!,
+                    getString(STATUS)!!
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "toMeetingInvitation: ", e)
+                null
+            }
+        }
+
+        //Database Contract
+        const val COLLECTION_NAME = "meetingInvitations"
+
+        private const val TITLE = "title"
+        private const val DESCRIPTION = "description"
+        private const val INVITING_USER_ID = "invitingUserId"
+        private const val INVITING_USER_FULL_NAME = "invitingUserFullName"
+        private const val INVITED_USER_ID = "invitedUserId"
+        private const val INVITED_USER_FULL_NAME = "invitedUserFullName"
+        private const val DURATION_HOURS = "durationHours"
+        private const val DURATION_MINUTES = "durationMinutes"
+        private const val DATE = "date"
+        private const val WEEK_DATE = "weekDate"
+        private const val MODE = "mode"
+        private const val STATUS = "status"
+
         const val MEETING_TYPE_SINGULAR = "meetingTypeSingular"
         const val MEETING_TYPE_RECURRING = "meetingTypeRecurring"
 

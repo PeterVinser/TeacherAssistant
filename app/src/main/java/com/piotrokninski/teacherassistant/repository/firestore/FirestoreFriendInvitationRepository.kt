@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation.Companion.toFriendInvitation
 import kotlinx.coroutines.tasks.await
@@ -13,7 +12,7 @@ object FirestoreFriendInvitationRepository {
     fun addFriendInvitation(friendInvitation: FriendInvitation) {
         val db = FirebaseFirestore.getInstance()
 
-        val document = db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document()
+        val document = db.collection(FriendInvitation.COLLECTION_NAME).document()
         friendInvitation.invitationId = document.id
 
         document.set(friendInvitation)
@@ -22,14 +21,14 @@ object FirestoreFriendInvitationRepository {
     fun updateFriendInvitation(invitationId: String, field: String, value: Any) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(invitationId)
+        db.collection(FriendInvitation.COLLECTION_NAME).document(invitationId)
             .update(field, value)
     }
 
     fun deleteFriendInvitation(invitationId: String) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(invitationId)
+        db.collection(FriendInvitation.COLLECTION_NAME).document(invitationId)
             .delete()
     }
 
@@ -37,7 +36,7 @@ object FirestoreFriendInvitationRepository {
         val db = FirebaseFirestore.getInstance()
 
         val ref =
-            db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME).document(invitationId)
+            db.collection(FriendInvitation.COLLECTION_NAME).document(invitationId)
 
         return try {
             ref.get().await().toFriendInvitation()
@@ -47,14 +46,15 @@ object FirestoreFriendInvitationRepository {
         }
     }
 
-    suspend fun getReceivedFriendsInvitations(userId: String): ArrayList<FriendInvitation>? {
+    suspend fun getReceivedFriendsInvitations(userId: String, status: String): ArrayList<FriendInvitation>? {
         val db = FirebaseFirestore.getInstance()
 
         val friendInvitations = ArrayList<FriendInvitation>()
 
-        val ref = db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
+        val ref = db.collection(FriendInvitation.COLLECTION_NAME)
 
-        val query = ref.whereEqualTo(FirestoreFriendInvitationContract.INVITED_USER_ID, userId)
+        val query = ref.whereEqualTo(FriendInvitation.INVITED_USER_ID, userId)
+            .whereEqualTo(FriendInvitation.STATUS, status)
 
         return try {
             query.get().await().forEach { invitation ->
@@ -67,14 +67,15 @@ object FirestoreFriendInvitationRepository {
         }
     }
 
-    suspend fun getSentFriendInvitations(userId: String): ArrayList<FriendInvitation>? {
+    suspend fun getSentFriendInvitations(userId: String, status: String): ArrayList<FriendInvitation>? {
         val db = FirebaseFirestore.getInstance()
 
         val friendInvitations = ArrayList<FriendInvitation>()
 
-        val ref = db.collection(FirestoreFriendInvitationContract.COLLECTION_NAME)
+        val ref = db.collection(FriendInvitation.COLLECTION_NAME)
 
-        val query = ref.whereEqualTo(FirestoreFriendInvitationContract.INVITING_USER_ID, userId)
+        val query = ref.whereEqualTo(FriendInvitation.INVITING_USER_ID, userId)
+            .whereEqualTo(FriendInvitation.STATUS, status)
 
         return try {
             query.get().await().forEach { invitation ->

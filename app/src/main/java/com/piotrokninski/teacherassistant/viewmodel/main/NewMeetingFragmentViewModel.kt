@@ -1,6 +1,5 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.util.Log
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
@@ -8,8 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreMeetingInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
 import com.piotrokninski.teacherassistant.model.user.User
@@ -46,7 +43,7 @@ class NewMeetingFragmentViewModel : ViewModel(), Observable {
 
             friends = FirestoreFriendRepository.getApprovedFriends(
                 currentUserId,
-                FirestoreFriendContract.TYPE_ALL
+                Friend.TYPE_ALL
             )
 
             if (friends.isNotEmpty()) {

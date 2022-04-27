@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreRecurringMeetingsContract
 import com.piotrokninski.teacherassistant.model.meeting.RecurringMeeting
 import com.piotrokninski.teacherassistant.model.meeting.RecurringMeeting.Companion.toRecurringMeeting
 import kotlinx.coroutines.tasks.await
@@ -14,18 +13,18 @@ object FirestoreRecurringMeetingsRepository {
     fun addRecurringMeeting(recurringMeeting: RecurringMeeting) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreRecurringMeetingsContract.COLLECTION_NAME).add(recurringMeeting)
+        db.collection(RecurringMeeting.COLLECTION_NAME).add(recurringMeeting)
     }
 
     suspend fun getRecurringMeetings(userId: String): ArrayList<RecurringMeeting>? {
         val db = FirebaseFirestore.getInstance()
 
-        val recurringMeetingsRef = db.collection(FirestoreRecurringMeetingsContract.COLLECTION_NAME)
+        val recurringMeetingsRef = db.collection(RecurringMeeting.COLLECTION_NAME)
 
         val query = recurringMeetingsRef.whereArrayContains(
-            FirestoreRecurringMeetingsContract.ATTENDEE_IDS,
+            RecurringMeeting.ATTENDEE_IDS,
             userId
-        ).orderBy(FirestoreRecurringMeetingsContract.DATE)
+        ).orderBy(RecurringMeeting.DATE)
 
         return try {
             val recurringMeetings = ArrayList<RecurringMeeting>()

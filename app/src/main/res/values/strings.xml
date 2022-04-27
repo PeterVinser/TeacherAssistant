@@ -233,4 +233,7 @@
     <string name="new_meeting_friend_hint">Znajomy</string>
     <string name="new_meeting_date_button_text">Termin</string>
     <string name="new_meeting_description_hint">Opis</string>
+
+    <string name="home_meeting_invitation_item_invitation">%1$s zaprasza na spotkanie</string>
+    <string name="home_meeting_invitation_header_text">Zaproszenia na spotkania</string>
 </resources>

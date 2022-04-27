@@ -10,7 +10,6 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.CourseListItemBinding
 import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.CourseAdapterItem
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.util.AppConstants
 
@@ -100,7 +99,7 @@ class CoursesAdapter(
             binding.course = course
             binding.courseItemLayout.setOnClickListener { clickListener(course) }
 
-            if (course.status == FirestoreCourseContract.STATUS_APPROVED) {
+            if (course.status == Course.STATUS_APPROVED) {
                 binding.courseItemButtonsLayout.visibility = View.GONE
             }
 

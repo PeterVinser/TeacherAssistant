@@ -7,8 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.cloudfunctions.CourseCloudFunctions
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.user.User
@@ -68,7 +66,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
 
                 students = FirestoreFriendRepository.getApprovedFriends(
                     currentUserId,
-                    FirestoreFriendContract.TYPE_STUDENT
+                    Friend.TYPE_STUDENT
                 )
 
                 if (students.isNotEmpty()) {

@@ -2,11 +2,9 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.Friend.Companion.toFriend
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
+import com.piotrokninski.teacherassistant.model.user.User
 import kotlinx.coroutines.tasks.await
 
 object FirestoreFriendRepository {
@@ -15,8 +13,8 @@ object FirestoreFriendRepository {
     fun deleteFriend(userId: String, friendId: String) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
-            .collection(FirestoreFriendContract.COLLECTION_NAME).document(friendId)
+        db.collection(User.COLLECTION_NAME).document(userId)
+            .collection(Friend.COLLECTION_NAME).document(friendId)
             .delete()
     }
 
@@ -24,8 +22,8 @@ object FirestoreFriendRepository {
         val db = FirebaseFirestore.getInstance()
 
         val friendsCollectionRef =
-            db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
-                .collection(FirestoreFriendContract.COLLECTION_NAME).document(friendId)
+            db.collection(User.COLLECTION_NAME).document(userId)
+                .collection(Friend.COLLECTION_NAME).document(friendId)
 
         return try {
             friendsCollectionRef.get().await().toFriend()
@@ -41,18 +39,18 @@ object FirestoreFriendRepository {
         val friends = ArrayList<Friend>()
 
         val friendsCollectionRef =
-            db.collection(FirestoreUserContract.COLLECTION_NAME).document(userId)
-                .collection(FirestoreFriendContract.COLLECTION_NAME)
+            db.collection(User.COLLECTION_NAME).document(userId)
+                .collection(Friend.COLLECTION_NAME)
 
-        val friendsQuery = if (friendshipType != FirestoreFriendContract.TYPE_ALL) {
+        val friendsQuery = if (friendshipType != Friend.TYPE_ALL) {
             friendsCollectionRef.whereEqualTo(
-                FirestoreFriendContract.STATUS,
-                FirestoreFriendContract.STATUS_APPROVED
-            ).whereEqualTo(FirestoreFriendContract.FRIENDSHIP_TYPE, friendshipType)
+                Friend.STATUS,
+                Friend.STATUS_APPROVED
+            ).whereEqualTo(Friend.FRIENDSHIP_TYPE, friendshipType)
         } else {
             friendsCollectionRef.whereEqualTo(
-                FirestoreFriendContract.STATUS,
-                FirestoreFriendContract.STATUS_APPROVED
+                Friend.STATUS,
+                Friend.STATUS_APPROVED
             )
         }
 

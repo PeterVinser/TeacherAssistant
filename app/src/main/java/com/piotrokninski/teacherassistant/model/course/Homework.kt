@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.model.course
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreHomeworkContract
 import java.util.*
 
 data class Homework(
@@ -18,7 +17,7 @@ data class Homework(
     var dueDate: Date? = null,
     val reminderDate: Date? = null,
     var reminded: Boolean = false,
-    val status: String = FirestoreHomeworkContract.STATUS_ASSIGNED,
+    val status: String = STATUS_ASSIGNED,
     var description: String? = null
 ) {
     companion object {
@@ -26,36 +25,21 @@ data class Homework(
         fun DocumentSnapshot.toHomework(): Homework? {
             return try {
 
-                val courseId = getString(FirestoreHomeworkContract.COURSE_ID)!!
-                val lessonId = getString(FirestoreHomeworkContract.LESSON_ID)
-                val studentId = getString(FirestoreHomeworkContract.STUDENT_ID)!!
-                val studentFullName = getString(FirestoreHomeworkContract.STUDENT_FULL_NAME)!!
-                val tutorId = getString(FirestoreHomeworkContract.TUTOR_ID)!!
-                val tutorFullName = getString(FirestoreHomeworkContract.TUTOR_FULL_NAME)!!
-                val topic = getString(FirestoreHomeworkContract.TOPIC)
-                val subject = getString(FirestoreHomeworkContract.SUBJECT)!!
-                val creationDate = getDate(FirestoreHomeworkContract.CREATION_DATE)
-                val dueDate = getDate(FirestoreHomeworkContract.DUE_DATE)!!
-                val reminderDate = getDate(FirestoreHomeworkContract.REMINDER_DATE)!!
-                val reminded = getBoolean(FirestoreHomeworkContract.REMINDED)!!
-                val status = getString(FirestoreHomeworkContract.STATUS)!!
-                val description = getString(FirestoreHomeworkContract.DESCRIPTION)!!
-
                 Homework(
-                    courseId,
-                    lessonId,
-                    studentId,
-                    studentFullName,
-                    tutorId,
-                    tutorFullName,
-                    topic,
-                    subject,
-                    creationDate,
-                    dueDate,
-                    reminderDate,
-                    reminded,
-                    status,
-                    description
+                    getString(COURSE_ID)!!,
+                    getString(LESSON_ID),
+                    getString(STUDENT_FULL_NAME)!!,
+                    getString(STUDENT_FULL_NAME)!!,
+                    getString(TUTOR_ID)!!,
+                    getString(TUTOR_FULL_NAME)!!,
+                    getString(TOPIC),
+                    getString(SUBJECT)!!,
+                    getDate(CREATION_DATE),
+                    getDate(DUE_DATE)!!,
+                    getDate(REMINDER_DATE)!!,
+                    getBoolean(REMINDED)!!,
+                    getString(STATUS)!!,
+                    getString(DESCRIPTION)!!
                 )
 
             } catch (e: Exception) {
@@ -74,6 +58,28 @@ data class Homework(
                 subject = course.subject!!
             )
         }
+
+        //Contract
+        const val COLLECTION_NAME = "homework"
+
+        const val COURSE_ID = "courseId"
+        private const val LESSON_ID = "lessonId"
+        const val STUDENT_ID = "studentId"
+        private const val STUDENT_FULL_NAME = "studentFullName"
+        const val TUTOR_ID = "tutorId"
+        private const val TUTOR_FULL_NAME = "tutorFullName"
+        private const val TOPIC = "topic"
+        private const val SUBJECT = "subject"
+        private const val CREATION_DATE = "creationDate"
+        private const val DUE_DATE = "dueDate"
+        private const val REMINDER_DATE = "reminderDate"
+        private const val REMINDED = "reminded"
+        const val STATUS = "status"
+        private const val DESCRIPTION = "description"
+
+        const val STATUS_ASSIGNED = "assigned"
+        const val STATUS_COMPLETED = "completed"
+        const val STATUS_UNDELIVERED = "undelivered"
 
         private const val TAG = "Homework"
     }

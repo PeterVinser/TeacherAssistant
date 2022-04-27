@@ -8,10 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.friend.Friend
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
@@ -70,7 +67,7 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
 
     private fun updateFriendStatus() {
         if (friend == null) {
-            _friendStatus.value = FirestoreFriendContract.STATUS_BLANK
+            _friendStatus.value = Friend.STATUS_BLANK
         } else {
             _friendStatus.value = friend!!.status
         }
@@ -80,13 +77,13 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
         viewModelScope.launch {
 
             when (friendStatus.value) {
-                FirestoreFriendContract.STATUS_INVITED -> cancelInvitation()
+                Friend.STATUS_INVITED -> cancelInvitation()
 
-                FirestoreFriendContract.STATUS_INVITING -> approveInvitation()
+                Friend.STATUS_INVITING -> approveInvitation()
 
-                FirestoreFriendContract.STATUS_APPROVED -> deleteFriend()
+                Friend.STATUS_APPROVED -> deleteFriend()
 
-                FirestoreFriendContract.STATUS_BLOCKED -> blocked()
+                Friend.STATUS_BLOCKED -> blocked()
             }
 
             updateFriendStatus()
@@ -136,8 +133,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
         friendInvitation.value?.invitationId?.let {
             FirestoreFriendInvitationRepository.updateFriendInvitation(
                 it,
-                FirestoreFriendInvitationContract.STATUS,
-                FirestoreFriendInvitationContract.STATUS_APPROVED
+                FriendInvitation.STATUS,
+                FriendInvitation.STATUS_APPROVED
             )
         }
 //        InvitationCloudFunctions.approveFriendInvitation(friendInvitation.value!!)
@@ -148,13 +145,13 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
     }
 
     fun rejectInvitation() {
-        if (friendStatus.value == FirestoreFriendContract.STATUS_INVITING) {
+        if (friendStatus.value == Friend.STATUS_INVITING) {
 
             friendInvitation.value?.invitationId?.let {
                 FirestoreFriendInvitationRepository.updateFriendInvitation(
                     it,
-                    FirestoreFriendInvitationContract.STATUS,
-                    FirestoreFriendInvitationContract.STATUS_REJECTED
+                    FriendInvitation.STATUS,
+                    FriendInvitation.STATUS_REJECTED
                 )
             }
 //            InvitationCloudFunctions.rejectFriendInvitation(friendInvitation.value!!)

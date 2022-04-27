@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.model.meeting
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreRecurringMeetingsContract
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.lang.Exception
 import java.util.*
@@ -21,35 +20,21 @@ data class RecurringMeeting(
     companion object {
         fun DocumentSnapshot.toRecurringMeeting(): RecurringMeeting? {
             return try {
-                val courseId = getString(FirestoreRecurringMeetingsContract.COURSE_ID)
-                val title = getString(FirestoreRecurringMeetingsContract.TITLE)!!
-                val description = getString(FirestoreRecurringMeetingsContract.DESCRIPTION)
-                val date = getDate(FirestoreRecurringMeetingsContract.DATE)!!
-                val durationHours =
-                    getLong(FirestoreRecurringMeetingsContract.DURATION_HOURS)!!.toInt()
-                val durationMinutes =
-                    getLong(FirestoreRecurringMeetingsContract.DURATION_MINUTES)!!.toInt()
-                val attendeeIds =
-                    get(FirestoreRecurringMeetingsContract.ATTENDEE_IDS)!! as ArrayList<String>
-                val meetingDatesMap =
-                    get(FirestoreRecurringMeetingsContract.MEETING_DATES) as ArrayList<Map<String, Any>>
-
                 val meetingDates = ArrayList<WeekDate>()
 
-                meetingDatesMap.forEach {
-                    val weekDate = WeekDate.toWeekDate(it)
-                    if (weekDate != null) meetingDates.add(weekDate)
+                (get(MEETING_DATES) as ArrayList<Map<String, Any>>).forEach {
+                    WeekDate.toWeekDate(it)?.let { weekDate -> meetingDates.add(weekDate) }
                 }
 
                 RecurringMeeting(
-                    courseId,
-                    title,
-                    description,
-                    date,
-                    attendeeIds,
+                    getString(COURSE_ID),
+                    getString(TITLE)!!,
+                    getString(DESCRIPTION),
+                    getDate(DATE)!!,
+                    get(ATTENDEE_IDS)!! as ArrayList<String>,
                     meetingDates,
-                    durationHours,
-                    durationMinutes
+                    getLong(DURATION_HOURS)!!.toInt(),
+                    getLong(DURATION_MINUTES)!!.toInt()
                 )
 
             } catch (e: Exception) {
@@ -57,6 +42,18 @@ data class RecurringMeeting(
                 null
             }
         }
+
+        //Contract
+        const val COLLECTION_NAME = "recurringMeetings"
+
+        const val COURSE_ID = "courseId"
+        private const val TITLE = "title"
+        private const val DESCRIPTION = "description"
+        const val DATE = "date"
+        private const val DURATION_HOURS = "durationHours"
+        private const val DURATION_MINUTES = "durationMinutes"
+        private const val ATTENDEE_IDS = "attendeeIds"
+        private const val MEETING_DATES = "meetingDates"
 
         private const val TAG = "RecurringMeeting"
     }

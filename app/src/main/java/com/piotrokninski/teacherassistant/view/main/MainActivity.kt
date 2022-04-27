@@ -21,7 +21,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
@@ -106,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onInvitationReceived(): String? {
 
-        return intent.extras?.getString(FirestoreFriendInvitationContract.INVITING_USER_ID)
+        return intent.extras?.getString(FriendInvitation.INVITING_USER_ID)
     }
 
     private fun setupNavigation() {
@@ -117,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         onInvitationReceived().let { userId ->
             if (userId != null) {
-                val args = bundleOf(FirestoreFriendInvitationContract.INVITING_USER_ID to userId)
+                val args = bundleOf(FriendInvitation.INVITING_USER_ID to userId)
                 navController.setGraph(navController.graph, args)
             }
         }

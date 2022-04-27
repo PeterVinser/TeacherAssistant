@@ -2,12 +2,10 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreHomeworkContract
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.model.course.Homework.Companion.toHomework
 import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.tasks.await
-import java.util.*
 import kotlin.collections.ArrayList
 
 object FirestoreHomeworkRepository {
@@ -16,7 +14,7 @@ object FirestoreHomeworkRepository {
     fun addHomework(homework: Homework) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreHomeworkContract.COLLECTION_NAME).add(homework)
+        db.collection(Homework.COLLECTION_NAME).add(homework)
     }
 
     suspend fun getHomework(
@@ -26,18 +24,18 @@ object FirestoreHomeworkRepository {
     ): ArrayList<Homework>? {
         val db = FirebaseFirestore.getInstance()
 
-        val homeworksRef = db.collection(FirestoreHomeworkContract.COLLECTION_NAME)
+        val homeworksRef = db.collection(Homework.COLLECTION_NAME)
 
         val query = when (viewType) {
             AppConstants.VIEW_TYPE_STUDENT -> homeworksRef.whereEqualTo(
-                FirestoreHomeworkContract.STUDENT_ID,
+                Homework.STUDENT_ID,
                 userId
-            ).whereEqualTo(FirestoreHomeworkContract.STATUS, status)
+            ).whereEqualTo(Homework.STATUS, status)
 
             AppConstants.VIEW_TYPE_TUTOR -> homeworksRef.whereEqualTo(
-                FirestoreHomeworkContract.TUTOR_ID,
+                Homework.TUTOR_ID,
                 userId
-            ).whereEqualTo(FirestoreHomeworkContract.STATUS, status)
+            ).whereEqualTo(Homework.STATUS, status)
 
             else -> throw IllegalArgumentException("Unknown viewType")
         }

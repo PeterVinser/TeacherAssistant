@@ -2,13 +2,9 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.messaging.FirebaseMessaging
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Course.Companion.toCourse
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 object FirestoreCourseRepository {
     private const val TAG = "FirestoreCourseReposito"
@@ -16,7 +12,7 @@ object FirestoreCourseRepository {
     fun addCourse(course: Course) {
         val db = FirebaseFirestore.getInstance()
 
-        val document = db.collection(FirestoreCourseContract.COLLECTION_NAME).document()
+        val document = db.collection(Course.COLLECTION_NAME).document()
         course.courseId = document.id
 
         document.set(course)
@@ -25,17 +21,17 @@ object FirestoreCourseRepository {
     fun updateCourse(courseId: String, field: String, value: Any) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreCourseContract.COLLECTION_NAME).document(courseId)
+        db.collection(Course.COLLECTION_NAME).document(courseId)
             .update(field, value)
     }
 
     suspend fun getStudiedCourses(userId: String, status: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 
-        val coursesRef = db.collection(FirestoreCourseContract.COLLECTION_NAME)
+        val coursesRef = db.collection(Course.COLLECTION_NAME)
 
-        val query = coursesRef.whereEqualTo(FirestoreCourseContract.STUDENT_ID, userId)
-            .whereEqualTo(FirestoreCourseContract.STATUS, status)
+        val query = coursesRef.whereEqualTo(Course.STUDENT_ID, userId)
+            .whereEqualTo(Course.STATUS, status)
 
         return try {
 
@@ -59,10 +55,10 @@ object FirestoreCourseRepository {
     suspend fun getTaughtCourses(userId: String, status: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 
-        val coursesRef = db.collection(FirestoreCourseContract.COLLECTION_NAME)
+        val coursesRef = db.collection(Course.COLLECTION_NAME)
 
-        val query = coursesRef.whereEqualTo(FirestoreCourseContract.TUTOR_ID, userId)
-            .whereEqualTo(FirestoreCourseContract.STATUS, status)
+        val query = coursesRef.whereEqualTo(Course.TUTOR_ID, userId)
+            .whereEqualTo(Course.STATUS, status)
 
         return try {
 
@@ -87,7 +83,7 @@ object FirestoreCourseRepository {
         val db = FirebaseFirestore.getInstance()
 
         try {
-            db.collection(FirestoreCourseContract.COLLECTION_NAME).document(courseId)
+            db.collection(Course.COLLECTION_NAME).document(courseId)
                 .delete()
         } catch (e: Exception) {
             Log.e(TAG, "deleteCourse: ", e)

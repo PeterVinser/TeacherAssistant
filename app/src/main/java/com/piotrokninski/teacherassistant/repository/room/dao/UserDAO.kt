@@ -3,7 +3,6 @@ package com.piotrokninski.teacherassistant.repository.room.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.piotrokninski.teacherassistant.model.user.User
-import com.piotrokninski.teacherassistant.model.contract.room.RoomUserContract
 
 @Dao
 interface UserDAO {
@@ -18,15 +17,15 @@ interface UserDAO {
     suspend fun deleteUser(user: User): Int
 
     @Query(
-        "SELECT * FROM ${RoomUserContract.TABLE_NAME} " +
-                "WHERE ${RoomUserContract.USER_ID} = :userId" +
+        "SELECT * FROM ${User.TABLE_NAME} " +
+                "WHERE ${User.ROOM_USER_ID} = :userId" +
                 " LIMIT 1"
     )
     fun getLiveUser(userId: String): LiveData<User>
 
     @Query(
-        "SELECT * FROM ${RoomUserContract.TABLE_NAME} " +
-                "WHERE ${RoomUserContract.USER_ID} = :userId" +
+        "SELECT * FROM ${User.TABLE_NAME} " +
+                "WHERE ${User.ROOM_USER_ID} = :userId" +
                 " LIMIT 1"
     )
     suspend fun getUser(userId: String): User?

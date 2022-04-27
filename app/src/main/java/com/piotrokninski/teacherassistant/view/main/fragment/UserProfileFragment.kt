@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendContract
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.contract.firestore.FriendInvitation
+import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
@@ -50,7 +50,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun onInviteClicked() {
-        if (userProfileViewModel.friendStatus.value == FirestoreFriendContract.STATUS_BLANK) {
+        if (userProfileViewModel.friendStatus.value == Friend.STATUS_BLANK) {
             val dialog = InvitationDialogFragment (
                 { invitationType: String, invitationMessage: String? -> sendInvitation(invitationType, invitationMessage) },
                 userProfileViewModel.currentUser,
@@ -67,7 +67,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun sendInvitation(invitationType: String, invitationMessage: String?) {
-        if (invitationType == FirestoreFriendInvitationContract.TYPE_FRIEND) {
+        if (invitationType == FriendInvitation.TYPE_FRIEND) {
             userProfileViewModel.sendInvitation(invitationType, invitationMessage)
         } else {
             val action = UserProfileFragmentDirections.actionUserProfileToInvitationDetails(userProfileViewModel.prepareInvitation(invitationType, invitationMessage))
@@ -93,27 +93,27 @@ class UserProfileFragment : Fragment() {
     private fun observeFriendStatus() {
         userProfileViewModel.friendStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
-                FirestoreFriendContract.STATUS_BLANK ->
+                Friend.STATUS_BLANK ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_invite_button_text)
 
-                FirestoreFriendContract.STATUS_INVITED ->
+                Friend.STATUS_INVITED ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_cancel_button_text)
 
-                FirestoreFriendContract.STATUS_INVITING ->
+                Friend.STATUS_INVITING ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_approve_button_text)
 
-                FirestoreFriendContract.STATUS_APPROVED ->
+                Friend.STATUS_APPROVED ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_delete_button_text)
 
-                FirestoreFriendContract.STATUS_BLOCKED ->
+                Friend.STATUS_BLOCKED ->
                     binding.userProfileInviteButton.visibility = View.GONE
             }
 
-            if (status == FirestoreFriendContract.STATUS_INVITING) {
+            if (status == Friend.STATUS_INVITING) {
                 binding.userProfileRejectButton.visibility = View.VISIBLE
             } else {
                 binding.userProfileRejectButton.visibility = View.GONE
@@ -139,11 +139,11 @@ class UserProfileFragment : Fragment() {
                 binding.userProfileInvitation.visibility = View.VISIBLE
 
                 binding.userProfileInvitationDescription.text = when (invitation.invitationType) {
-                    FirestoreFriendInvitationContract.TYPE_STUDENT -> getString(R.string.invitation_student_type)
+                    FriendInvitation.TYPE_STUDENT -> getString(R.string.invitation_student_type)
 
-                    FirestoreFriendInvitationContract.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
+                    FriendInvitation.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
 
-                    FirestoreFriendInvitationContract.TYPE_FRIEND -> getString(R.string.invitation_friend_type)
+                    FriendInvitation.TYPE_FRIEND -> getString(R.string.invitation_friend_type)
 
                     else -> throw IllegalArgumentException("Unknown invitation type")
                 }

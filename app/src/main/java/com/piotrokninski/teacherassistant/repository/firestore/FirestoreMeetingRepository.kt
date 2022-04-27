@@ -3,7 +3,6 @@ package com.piotrokninski.teacherassistant.repository.firestore
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreMeetingContract
 import com.piotrokninski.teacherassistant.model.meeting.Meeting
 import com.piotrokninski.teacherassistant.model.meeting.Meeting.Companion.toMeeting
 import kotlinx.coroutines.tasks.await
@@ -15,17 +14,17 @@ object FirestoreMeetingRepository {
     fun addMeeting(meeting: Meeting) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreMeetingContract.COLLECTION_NAME).add(meeting)
+        db.collection(Meeting.COLLECTION_NAME).add(meeting)
     }
 
     suspend fun getMeetings(userId: String): ArrayList<Meeting>? {
         val db = FirebaseFirestore.getInstance()
 
-        val meetingsRef = db.collection(FirestoreMeetingContract.COLLECTION_NAME)
+        val meetingsRef = db.collection(Meeting.COLLECTION_NAME)
 
         val query = meetingsRef
-            .whereArrayContains(FirestoreMeetingContract.ATTENDEE_IDS, userId)
-            .orderBy(FirestoreMeetingContract.DATE, Query.Direction.ASCENDING)
+            .whereArrayContains(Meeting.ATTENDEE_IDS, userId)
+            .orderBy(Meeting.DATE, Query.Direction.ASCENDING)
 
         return try {
             val meetings = ArrayList<Meeting>()
@@ -48,12 +47,12 @@ object FirestoreMeetingRepository {
     suspend fun getMeetingsFromRange(userId: String, startDate: Date, endDate: Date): ArrayList<Meeting>? {
         val db = FirebaseFirestore.getInstance()
 
-        val meetingsRef = db.collection(FirestoreMeetingContract.COLLECTION_NAME)
+        val meetingsRef = db.collection(Meeting.COLLECTION_NAME)
 
-        val query = meetingsRef.whereArrayContains(FirestoreMeetingContract.ATTENDEE_IDS, userId)
-            .whereGreaterThanOrEqualTo(FirestoreMeetingContract.DATE, startDate)
-            .whereLessThanOrEqualTo(FirestoreMeetingContract.DATE, endDate)
-            .orderBy(FirestoreMeetingContract.DATE, Query.Direction.ASCENDING)
+        val query = meetingsRef.whereArrayContains(Meeting.ATTENDEE_IDS, userId)
+            .whereGreaterThanOrEqualTo(Meeting.DATE, startDate)
+            .whereLessThanOrEqualTo(Meeting.DATE, endDate)
+            .orderBy(Meeting.DATE, Query.Direction.ASCENDING)
 
         return try {
             val meetings = ArrayList<Meeting>()

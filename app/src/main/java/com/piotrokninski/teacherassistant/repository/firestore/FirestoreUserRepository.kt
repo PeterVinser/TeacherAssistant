@@ -2,7 +2,6 @@ package com.piotrokninski.teacherassistant.repository.firestore
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserContract
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.model.user.User.Companion.toUser
 import com.piotrokninski.teacherassistant.model.user.UserHint
@@ -14,14 +13,14 @@ object FirestoreUserRepository {
     fun setUserData(user: User) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(FirestoreUserContract.COLLECTION_NAME).document(user.userId)
+        db.collection(User.COLLECTION_NAME).document(user.userId)
             .set(user)
     }
 
     suspend fun getUserDataOnce(userId: String): User? {
         val db = FirebaseFirestore.getInstance()
 
-        val usersCollectionRef = db.collection(FirestoreUserContract.COLLECTION_NAME)
+        val usersCollectionRef = db.collection(User.COLLECTION_NAME)
 
         return try {
             usersCollectionRef.document(userId).get().await().toUser()
@@ -37,7 +36,7 @@ object FirestoreUserRepository {
         //TODO change the return to return try and add nullable return type
         val users = ArrayList<User>()
 
-        val usersCollectionRef = db.collection(FirestoreUserContract.COLLECTION_NAME)
+        val usersCollectionRef = db.collection(User.COLLECTION_NAME)
 
         hints.forEach { hint ->
 

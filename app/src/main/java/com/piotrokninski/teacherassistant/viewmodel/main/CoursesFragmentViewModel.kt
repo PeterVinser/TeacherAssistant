@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.adapteritem.CourseAdapterItem
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
@@ -46,24 +45,24 @@ class CoursesFragmentViewModel : ViewModel() {
             AppConstants.VIEW_TYPE_STUDENT -> {
                 approvedCourses = FirestoreCourseRepository.getStudiedCourses(
                     currentUserId,
-                    FirestoreCourseContract.STATUS_APPROVED
+                    Course.STATUS_APPROVED
                 )
 
                 pendingCourses = FirestoreCourseRepository.getStudiedCourses(
                     currentUserId,
-                    FirestoreCourseContract.STATUS_PENDING
+                    Course.STATUS_PENDING
                 )
             }
 
             AppConstants.VIEW_TYPE_TUTOR -> {
                 approvedCourses = FirestoreCourseRepository.getTaughtCourses(
                     currentUserId,
-                    FirestoreCourseContract.STATUS_APPROVED
+                    Course.STATUS_APPROVED
                 )
 
                 pendingCourses = FirestoreCourseRepository.getTaughtCourses(
                     currentUserId,
-                    FirestoreCourseContract.STATUS_PENDING
+                    Course.STATUS_PENDING
                 )
             }
         }
@@ -90,8 +89,8 @@ class CoursesFragmentViewModel : ViewModel() {
         course.courseId?.let { id ->
             FirestoreCourseRepository.updateCourse(
                 id,
-                FirestoreCourseContract.STATUS,
-                FirestoreCourseContract.STATUS_APPROVED
+                Course.STATUS,
+                Course.STATUS_APPROVED
             )
         }
     }
