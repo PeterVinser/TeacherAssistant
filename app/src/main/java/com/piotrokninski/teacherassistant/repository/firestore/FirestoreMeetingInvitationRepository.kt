@@ -16,6 +16,14 @@ object FirestoreMeetingInvitationRepository {
         db.collection(MeetingInvitation.COLLECTION_NAME).add(meetingInvitation)
     }
 
+    fun updateMeetingInvitation(id: String, meetingInvitation: MeetingInvitation) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(MeetingInvitation.COLLECTION_NAME).document(id).set(
+            meetingInvitation
+        )
+    }
+
     fun updateMeetingInvitation(id: String, field: String, value: Any) {
         val db = FirebaseFirestore.getInstance()
 
@@ -24,12 +32,20 @@ object FirestoreMeetingInvitationRepository {
         )
     }
 
-    suspend fun getReceivedMeetingInvitations(userId: String): ArrayList<MeetingInvitation>? {
+    fun deleteMeetingInvitation(id: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(MeetingInvitation.COLLECTION_NAME).document(id)
+            .delete()
+    }
+
+    suspend fun getReceivedMeetingInvitations(userId: String, status: String): ArrayList<MeetingInvitation>? {
         val db = FirebaseFirestore.getInstance()
 
         val ref = db.collection(MeetingInvitation.COLLECTION_NAME)
 
         val query = ref.whereEqualTo(MeetingInvitation.INVITED_USER_ID, userId)
+            .whereEqualTo(MeetingInvitation.STATUS, status)
 
         return try {
             val meetings = ArrayList<MeetingInvitation>()
@@ -43,6 +59,29 @@ object FirestoreMeetingInvitationRepository {
             meetings.ifEmpty { null }
         } catch (e: Exception) {
             Log.e(TAG, "getReceivedMeetingInvitations: ", e)
+            null
+        }
+    }
+
+    suspend fun getSentMeetingInvitations(userId: String, status: String): ArrayList<MeetingInvitation>? {
+        val db = FirebaseFirestore.getInstance()
+
+        val ref = db.collection(MeetingInvitation.COLLECTION_NAME)
+
+        val query = ref.whereEqualTo(MeetingInvitation.INVITING_USER_ID, userId)
+            .whereEqualTo(MeetingInvitation.STATUS, status)
+
+        return try {
+            val meetings = ArrayList<MeetingInvitation>()
+            query.get().await().forEach { invitation ->
+                invitation.toMeetingInvitation()?.let {
+                    it.id = invitation.id
+                    meetings.add(it)
+                }
+            }
+            meetings.ifEmpty { null }
+        } catch (e: Exception) {
+            Log.e(TAG, "getSentMeetingInvitations: ", e)
             null
         }
     }

@@ -21,6 +21,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants

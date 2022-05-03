@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreCourseContract
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
@@ -54,7 +55,7 @@ class HomeFragment : Fragment() {
         (activity as MainActivity).isBottomNavVisible(true)
 
         arguments?.let {
-            val userId = it.getString(FirestoreFriendInvitationContract.INVITING_USER_ID)
+            val userId = it.getString(FriendInvitation.INVITING_USER_ID)
             if (userId != null) {
                 navigateToProfile(userId)
             }
@@ -68,14 +69,10 @@ class HomeFragment : Fragment() {
         adapter = HomeAdapter(
             { homeAdapterItem: HomeAdapterItem -> itemClickListener(homeAdapterItem) },
             { homeAdapterItem: HomeAdapterItem ->
-                positiveButtonClickListener(
-                    homeAdapterItem
-                )
+                homeViewModel.itemPositiveAction(homeAdapterItem)
             },
             { homeAdapterItem: HomeAdapterItem ->
-                negativeButtonClickListener(
-                    homeAdapterItem
-                )
+                homeViewModel.itemNegativeAction(homeAdapterItem)
             },
             homeViewModel.viewType,
             requireContext()
@@ -93,58 +90,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun positiveButtonClickListener(homeAdapterItem: HomeAdapterItem) {
-        when (homeAdapterItem) {
-            is HomeAdapterItem.FriendInvitationItem -> homeAdapterItem.friendInvitation.invitationId?.let { id ->
-                FirestoreFriendInvitationRepository.updateFriendInvitation(
-                    id,
-                    FirestoreFriendInvitationContract.STATUS,
-                    FirestoreFriendInvitationContract.STATUS_APPROVED
-                )
-            }
-
-            is HomeAdapterItem.CourseItem -> {
-                when (homeViewModel.viewType) {
-                    AppConstants.VIEW_TYPE_STUDENT -> homeAdapterItem.course.courseId?.let { id ->
-                        FirestoreCourseRepository.updateCourse(
-                            id,
-                            FirestoreCourseContract.STATUS,
-                            FirestoreCourseContract.STATUS_APPROVED
-                        )
-                    }
-
-                    AppConstants.VIEW_TYPE_TUTOR -> {
-                        val action =
-                            HomeFragmentDirections.actionHomeToNewCourse(homeAdapterItem.course)
-                        this.findNavController().navigate(action)
-                    }
-                }
-            }
-
-            is HomeAdapterItem.HomeworkItem -> {}
-
-            else -> {}
-        }
-    }
-
-    private fun negativeButtonClickListener(homeAdapterItem: HomeAdapterItem) {
-        when (homeAdapterItem) {
-            is HomeAdapterItem.FriendInvitationItem -> homeAdapterItem.friendInvitation.invitationId?.let { id ->
-                FirestoreFriendInvitationRepository.updateFriendInvitation(
-                    id,
-                    FirestoreFriendInvitationContract.STATUS,
-                    FirestoreFriendInvitationContract.STATUS_REJECTED
-                )
-            }
-
-            is HomeAdapterItem.CourseItem -> homeViewModel.deleteCourse(homeAdapterItem.course.courseId!!)
-
-            is HomeAdapterItem.HomeworkItem -> {}
-
-            else -> {}
-        }
-    }
-
     private fun navigateToProfile(userId: String) {
         val action = HomeFragmentDirections.actionHomeToUserProfile(userId)
         this.findNavController().navigate(action)
@@ -152,14 +97,41 @@ class HomeFragment : Fragment() {
 
     private fun setupViewModel() {
         val factory = HomeFragmentViewModelFactory()
-        homeViewModel = ViewModelProvider(this, factory).get(HomeFragmentViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, factory)[HomeFragmentViewModel::class.java]
 
         initRecyclerView()
 
         homeViewModel.homeFeedItems.observe(viewLifecycleOwner) {
             adapter.setItems(it)
         }
+
+
+        lifecycleScope.launchWhenCreated {
+            homeViewModel.eventFlow.collect { event ->
+                when (event) {
+                    is HomeFragmentViewModel.HomeEvent.EditItemEvent -> editItem(event.itemId, event.homeAdapterItem)
+                }
+            }
+        }
     }
+
+    private fun editItem(id: String, item: HomeAdapterItem) {
+        val action = when (item) {
+            is HomeAdapterItem.CourseItem -> {
+                HomeFragmentDirections.actionHomeToNewCourse(item.course)
+            }
+
+            is HomeAdapterItem.MeetingInvitationItem -> {
+                HomeFragmentDirections.actionHomeToNewMeeting(item.meetingInvitation, id)
+            }
+
+            else -> null
+        }
+        action?.let {
+            this.findNavController().navigate(action)
+        }
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_toolbar, menu)
@@ -187,10 +159,5 @@ class HomeFragment : Fragment() {
                 super.onOptionsItemSelected(item)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        homeViewModel.getItems()
     }
 }

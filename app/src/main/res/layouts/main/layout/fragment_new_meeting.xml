@@ -40,7 +40,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minWidth="160dp"
-                    android:text="@string/singular_meeting_text" />
+                    android:text="@string/singular_meeting_text"
+                    android:checked="true"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/new_meeting_recurring_toggle_button"

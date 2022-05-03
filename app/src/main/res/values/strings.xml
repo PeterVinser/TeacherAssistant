@@ -169,6 +169,11 @@
     <string name="course_item_confirm_button_text">Potwierdź</string>
     <string name="homework_add_button_text">Dodaj pracę domową</string>
 
+    <string name="edit_button_text">Edytuj</string>
+    <string name="confirm_button_text">Potwierdź</string>
+    <string name="reject_button_text">Usuń</string>
+    <string name="cancel_button_text">Anuluj</string>
+
     <string name="homework_assigned_student_title">Do zrobienia</string>
     <string name="homework_assigned_tutor_title">Zadane</string>
     <string name="homework_undelivered_title">Nieukończone</string>
@@ -234,6 +239,9 @@
     <string name="new_meeting_date_button_text">Termin</string>
     <string name="new_meeting_description_hint">Opis</string>
 
-    <string name="home_meeting_invitation_item_invitation">%1$s zaprasza na spotkanie</string>
+    <string name="home_meeting_invitation_item_invited">%1$s zaprasza na spotkanie</string>
+    <string name="home_meeting_invitation_item_inviting">%1$s otrzymał zaproszenie</string>
     <string name="home_meeting_invitation_header_text">Zaproszenia na spotkania</string>
+    <string name="home_meeting_received_invitation_header_text">Odebrane</string>
+    <string name="home_meeting_sent_invitation_header_text">Wysłane</string>
 </resources>

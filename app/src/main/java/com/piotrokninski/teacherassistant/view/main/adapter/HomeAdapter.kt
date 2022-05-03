@@ -8,10 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
-import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
-import com.piotrokninski.teacherassistant.databinding.HomeCourseListItemBinding
-import com.piotrokninski.teacherassistant.databinding.HomeHomeworkListItemBinding
-import com.piotrokninski.teacherassistant.databinding.HomeInvitationListItemBinding
+import com.piotrokninski.teacherassistant.databinding.*
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import java.text.SimpleDateFormat
@@ -33,7 +30,10 @@ class HomeAdapter(
 
             HOME_HEADER_ITEM -> HeaderViewHolder(HeaderViewHolder.initBinding(parent), context)
 
-            HOME_INVITATION_ITEM -> InvitationViewHolder(InvitationViewHolder.initBinding(parent), context)
+            HOME_INVITATION_ITEM -> InvitationViewHolder(
+                InvitationViewHolder.initBinding(parent),
+                context
+            )
 
             HOME_COURSE_ITEM -> CourseViewHolder(
                 CourseViewHolder.initBinding(parent),
@@ -45,6 +45,11 @@ class HomeAdapter(
                 HomeworkViewHolder.initBinding(parent),
                 context,
                 this.viewType
+            )
+
+            HOME_MEETING_INVITATION_ITEM -> MeetingInvitationViewHolder(
+                MeetingInvitationViewHolder.initBinding(parent),
+                context
             )
 
             else -> throw ClassCastException("Unknown viewType")
@@ -77,6 +82,12 @@ class HomeAdapter(
                 positiveButtonListener,
                 negativeButtonListener
             )
+
+            HOME_MEETING_INVITATION_ITEM -> (holder as MeetingInvitationViewHolder).bind(
+                items[position] as HomeAdapterItem.MeetingInvitationItem,
+                positiveButtonListener,
+                negativeButtonListener
+            )
         }
     }
 
@@ -94,6 +105,8 @@ class HomeAdapter(
             is HomeAdapterItem.CourseItem -> HOME_COURSE_ITEM
 
             is HomeAdapterItem.HomeworkItem -> HOME_HOMEWORK_ITEM
+
+            is HomeAdapterItem.MeetingInvitationItem -> HOME_MEETING_INVITATION_ITEM
         }
     }
 
@@ -125,7 +138,10 @@ class HomeAdapter(
         }
     }
 
-    class InvitationViewHolder(private val binding: HomeInvitationListItemBinding, private val context: Context) :
+    class InvitationViewHolder(
+        private val binding: HomeInvitationListItemBinding,
+        private val context: Context
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
@@ -154,7 +170,11 @@ class HomeAdapter(
                 binding.homeInvitationItemCourseButton.visibility = View.GONE
             }
 
-            binding.homeInvitationItemLayout.setOnClickListener { itemClickListener(friendFriendInvitationItem) }
+            binding.homeInvitationItemLayout.setOnClickListener {
+                itemClickListener(
+                    friendFriendInvitationItem
+                )
+            }
             binding.homeInvitationItemRejectButton.setOnClickListener {
                 negativeButtonListener(
                     friendFriendInvitationItem
@@ -182,10 +202,12 @@ class HomeAdapter(
 
             binding.homeInvitationItemCourseButton.setOnClickListener {
                 if (!courseLayoutVisible) {
-                    binding.homeInvitationItemCourseButton.icon = AppCompatResources.getDrawable(context, R.drawable.ic_dropup_arrow_icon)
+                    binding.homeInvitationItemCourseButton.icon =
+                        AppCompatResources.getDrawable(context, R.drawable.ic_dropup_arrow_icon)
                     binding.homeInvitationItemCourseLayout.root.visibility = View.VISIBLE
                 } else {
-                    binding.homeInvitationItemCourseButton.icon = AppCompatResources.getDrawable(context, R.drawable.ic_dropdown_arrow_icon)
+                    binding.homeInvitationItemCourseButton.icon =
+                        AppCompatResources.getDrawable(context, R.drawable.ic_dropdown_arrow_icon)
                     binding.homeInvitationItemCourseLayout.root.visibility = View.GONE
                 }
 
@@ -211,7 +233,6 @@ class HomeAdapter(
                 )
             }
 
-            private const val TAG = "HomeAdapter"
         }
 
         fun bind(
@@ -263,7 +284,7 @@ class HomeAdapter(
 
             binding.homeCourseItemMeetingDates.removeAllViews()
 
-            course.meetingDates!!.forEach { date ->
+            course.meetingDates?.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date.toString()
 
@@ -325,10 +346,52 @@ class HomeAdapter(
         }
     }
 
+    class MeetingInvitationViewHolder(
+        private val binding: HomeMeetingInvitationListItemBinding,
+        private val context: Context
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        companion object {
+            fun initBinding(parent: ViewGroup): HomeMeetingInvitationListItemBinding {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                return HomeMeetingInvitationListItemBinding.inflate(layoutInflater, parent, false)
+            }
+        }
+
+        fun bind(
+            meetingInvitationItem: HomeAdapterItem.MeetingInvitationItem,
+            positiveButtonListener: (HomeAdapterItem) -> Unit,
+            negativeButtonListener: (HomeAdapterItem) -> Unit
+        ) {
+            binding.item = meetingInvitationItem
+
+            binding.homeMeetingInvitationItemDescription.text = if (meetingInvitationItem.invited) {
+                context.getString(
+                    R.string.home_meeting_invitation_item_invited,
+                    meetingInvitationItem.meetingInvitation.invitingUserFullName
+                )
+            } else {
+                context.getString(
+                    R.string.home_meeting_invitation_item_inviting,
+                    meetingInvitationItem.meetingInvitation.invitedUserFullName
+                )
+            }
+
+            binding.homeMeetingInvitationItemNegativeButton.setOnClickListener {
+                negativeButtonListener(meetingInvitationItem)
+            }
+
+            binding.homeMeetingInvitationItemPositiveButton.setOnClickListener {
+                positiveButtonListener(meetingInvitationItem)
+            }
+        }
+    }
+
     companion object {
         const val HOME_HEADER_ITEM = 0
         const val HOME_INVITATION_ITEM = 1
         const val HOME_COURSE_ITEM = 2
         const val HOME_HOMEWORK_ITEM = 3
+        const val HOME_MEETING_INVITATION_ITEM = 4
     }
 }

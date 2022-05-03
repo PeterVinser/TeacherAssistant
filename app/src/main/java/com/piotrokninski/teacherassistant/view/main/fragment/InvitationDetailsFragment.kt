@@ -14,7 +14,6 @@ import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentInvitationDetailsBinding
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.util.WeekDate
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.WeekDatePickerDialogFragment
@@ -115,11 +114,11 @@ class InvitationDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener
     private fun initTypeRadio() {
 
         when (invitationDetailsFragmentViewModel.friendInvitation.value!!.invitationType) {
-            FirestoreFriendInvitationContract.TYPE_STUDENT -> binding.invitationDetailsTypeRadio.check(
+            FriendInvitation.TYPE_STUDENT -> binding.invitationDetailsTypeRadio.check(
                 R.id.invitation_details_type_student
             )
 
-            FirestoreFriendInvitationContract.TYPE_TUTOR -> binding.invitationDetailsTypeRadio.check(
+            FriendInvitation.TYPE_TUTOR -> binding.invitationDetailsTypeRadio.check(
                 R.id.invitation_details_type_tutor
             )
         }

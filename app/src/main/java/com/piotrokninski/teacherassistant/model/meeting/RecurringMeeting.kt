@@ -52,7 +52,7 @@ data class RecurringMeeting(
         const val DATE = "date"
         private const val DURATION_HOURS = "durationHours"
         private const val DURATION_MINUTES = "durationMinutes"
-        private const val ATTENDEE_IDS = "attendeeIds"
+        const val ATTENDEE_IDS = "attendeeIds"
         private const val MEETING_DATES = "meetingDates"
 
         private const val TAG = "RecurringMeeting"

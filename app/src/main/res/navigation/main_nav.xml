@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_home_to_newCourse"
             app:destination="@id/destination_new_course"/>
+        <action
+            android:id="@+id/action_home_to_new_meeting"
+            app:destination="@id/destination_new_meeting"/>
     </fragment>
     <fragment
         android:id="@+id/menu_toolbar_destination_calendar"
@@ -123,7 +126,8 @@
         <argument
             android:name="course"
             app:argType="com.piotrokninski.teacherassistant.model.course.Course"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/destination_new_homework"
@@ -134,5 +138,16 @@
         android:id="@+id/destination_new_meeting"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewMeetingFragment"
         android:label="Nowe spotkanie"
-        tools:layout="@layout/fragment_new_meeting" />
+        tools:layout="@layout/fragment_new_meeting">
+        <argument
+            android:name="meetingInvitation"
+            app:argType="com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

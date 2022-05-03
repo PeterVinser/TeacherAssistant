@@ -40,30 +40,18 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
         val userDao = AppDatabase.getInstance().userDao
         userRepository = RoomUserRepository(userDao)
 
-        if (initCourse != null) {
-            course.value = initCourse!!
-
+        course.value = initCourse?.let { course ->
             editing = true
+            course
+        }  ?: Course(tutorId = currentUserId)
 
-            viewModelScope.launch {
-                students = arrayListOf(
-                    FirestoreFriendRepository.getFriendDataOnce(
-                        currentUserId,
-                        initCourse.studentId!!
-                    )!!
-                )
+        viewModelScope.launch {
+            currentUser = userRepository.getUser(currentUserId)!!
 
-                _studentFullNames.value = arrayListOf(initCourse.studentFullName!!).toTypedArray()
-            }
-        } else {
-            course.value = Course(tutorId = currentUserId)
-
-            viewModelScope.launch {
-
-                currentUser = userRepository.getUser(currentUserId)!!
-
-                course.value!!.tutorFullName = currentUser.fullName
-
+            course.value!!.tutorFullName = currentUser.fullName
+            if (editing) {
+                _studentFullNames.value = arrayListOf(initCourse!!.studentFullName!!).toTypedArray()
+            } else {
                 students = FirestoreFriendRepository.getApprovedFriends(
                     currentUserId,
                     Friend.TYPE_STUDENT

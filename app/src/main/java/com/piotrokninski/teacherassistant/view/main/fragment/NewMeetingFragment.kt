@@ -39,9 +39,72 @@ class NewMeetingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupViewModel()
+        (activity as MainActivity).isBottomNavVisible(false)
 
-        binding.newMeetingSingularToggleButton.isChecked = true
+        initMeetingInvitation()
+
+        setupButtons()
+    }
+
+    private fun initMeetingInvitation() {
+        arguments?.let {
+            val safeArgs = NewMeetingFragmentArgs.fromBundle(it)
+            val meetingInvitation = safeArgs.meetingInvitation
+
+            setupViewModel(safeArgs.meetingInvitation, safeArgs.id)
+
+            when (meetingInvitation?.mode) {
+                MeetingInvitation.MEETING_TYPE_SINGULAR -> {
+                    binding.newMeetingSingularToggleButton.isChecked = true
+                }
+
+                MeetingInvitation.MEETING_TYPE_RECURRING -> {
+                    binding.newMeetingRecurringToggleButton.isChecked = true
+                }
+            }
+        }
+    }
+
+    private fun setupViewModel(meetingInvitation: MeetingInvitation?, id: String?) {
+        val factory = NewMeetingFragmentViewModelFactory(meetingInvitation, id)
+        newMeetingViewModel =
+            ViewModelProvider(this, factory)[NewMeetingFragmentViewModel::class.java]
+
+        binding.newMeetingViewModel = newMeetingViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        observeFriendNames()
+
+        observeMeetingHolder()
+    }
+
+    private fun observeFriendNames() {
+        newMeetingViewModel.friendFullNames.observe(viewLifecycleOwner) { fullNames ->
+            if (!fullNames.isNullOrEmpty()) {
+                if (newMeetingViewModel.editing) {
+                    binding.newMeetingFriendTextView.setText(
+                        fullNames[0],
+                        false
+                    )
+                    binding.newMeetingFriendMenu.isEnabled = false
+                } else {
+                    val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, fullNames)
+                    binding.newMeetingFriendTextView.setAdapter(arrayAdapter)
+                }
+            }
+        }
+    }
+
+    private fun observeMeetingHolder() {
+        newMeetingViewModel.meetingInvitation.observe(viewLifecycleOwner) { meetingHolder ->
+            if (meetingHolder != null) {
+                binding.newMeetingDate.text =
+                    newMeetingViewModel.meetingInvitation.value!!.dateToString()
+            }
+        }
+    }
+
+    private fun setupButtons() {
 
         binding.newMeetingTypeToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             onMeetingTypeToggleClicked(checkedId, isChecked)
@@ -61,37 +124,6 @@ class NewMeetingFragment : Fragment() {
 
         binding.newMeetingConfirmButton.setOnClickListener {
             onConfirmClicked()
-        }
-    }
-
-    private fun setupViewModel() {
-        val factory = NewMeetingFragmentViewModelFactory()
-        newMeetingViewModel =
-            ViewModelProvider(this, factory)[NewMeetingFragmentViewModel::class.java]
-
-        binding.newMeetingViewModel = newMeetingViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        observeFriendNames()
-
-        observeMeetingHolder()
-    }
-
-    private fun observeFriendNames() {
-        newMeetingViewModel.friendFullNames.observe(viewLifecycleOwner) { fullNames ->
-            if (!fullNames.isNullOrEmpty()) {
-                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, fullNames)
-                binding.newMeetingFriendTextView.setAdapter(arrayAdapter)
-            }
-        }
-    }
-
-    private fun observeMeetingHolder() {
-        newMeetingViewModel.meetingInvitation.observe(viewLifecycleOwner) { meetingHolder ->
-            if (meetingHolder != null) {
-                binding.newMeetingDate.text =
-                    newMeetingViewModel.meetingInvitation.value!!.dateToString()
-            }
         }
     }
 

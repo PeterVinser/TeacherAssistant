@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.MeetingInvitationItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/home_meeting_invitation_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@{item.meetingInvitation.title}"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            tools:text="Tytuł" />
+
+        <TextView
+            android:id="@+id/home_meeting_invitation_item_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_margin="8dp"
+            tools:text="Zaproszenie" />
+
+        <TextView
+            android:id="@+id/home_meeting_invitation_item_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="@{item.meetingInvitation.dateToString()}"
+            tools:text="Data"
+            android:layout_margin="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/home_meeting_invitation_item_negative_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@{item.invited ? @string/reject_button_text : @string/cancel_button_text}"
+                tools:text="@string/reject_button_text"/>
+
+            <Button
+                android:id="@+id/home_meeting_invitation_item_positive_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@{item.invited ? @string/confirm_button_text : @string/edit_button_text}"
+                tools:text="@string/confirm_button_text"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>

@@ -119,7 +119,7 @@ class NewCourseFragment : Fragment() {
     private fun setupViewModel(course: Course?) {
         val factory = NewCourseFragmentViewModelFactory(course)
         newCourseViewModel =
-            ViewModelProvider(this, factory).get(NewCourseFragmentViewModel::class.java)
+            ViewModelProvider(this, factory)[NewCourseFragmentViewModel::class.java]
 
         binding.courseViewModel = newCourseViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -131,16 +131,17 @@ class NewCourseFragment : Fragment() {
 
     private fun observeStudentFullNames() {
         newCourseViewModel.studentFullNames.observe(viewLifecycleOwner) { fullNames ->
-            if (fullNames != null) {
-                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, fullNames)
-                binding.newCourseStudentTextView.setAdapter(arrayAdapter)
-
+            if (!fullNames.isNullOrEmpty()) {
                 if (newCourseViewModel.editing) {
                     binding.newCourseStudentTextView.setText(
-                        arrayAdapter.getItem(0).toString(),
+                        fullNames[0],
                         false
                     )
                     binding.newCourseStudentMenu.isEnabled = false
+                } else {
+                    val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, fullNames)
+                    binding.newCourseStudentTextView.setAdapter(arrayAdapter)
+
                 }
             }
         }

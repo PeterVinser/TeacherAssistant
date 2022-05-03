@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
-import com.piotrokninski.teacherassistant.model.contract.firestore.FriendInvitation
 import com.piotrokninski.teacherassistant.model.friend.Friend
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel

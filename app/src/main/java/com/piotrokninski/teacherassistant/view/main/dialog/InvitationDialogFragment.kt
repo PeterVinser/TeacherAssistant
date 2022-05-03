@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.InvitationDialogBinding
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
 
 class InvitationDialogFragment(
@@ -57,11 +57,11 @@ class InvitationDialogFragment(
             val invitationMessage = binding.invitationDialogMessage.text.toString()
 
             when (binding.invitationDialogTypeRadio.checkedRadioButtonId) {
-                R.id.invitation_dialog_radio_student -> callback(FirestoreFriendInvitationContract.TYPE_STUDENT, invitationMessage)
+                R.id.invitation_dialog_radio_student -> callback(FriendInvitation.TYPE_STUDENT, invitationMessage)
 
-                R.id.invitation_dialog_radio_tutor -> callback(FirestoreFriendInvitationContract.TYPE_TUTOR, invitationMessage)
+                R.id.invitation_dialog_radio_tutor -> callback(FriendInvitation.TYPE_TUTOR, invitationMessage)
 
-                R.id.invitation_dialog_radio_friend -> callback(FirestoreFriendInvitationContract.TYPE_FRIEND, invitationMessage)
+                R.id.invitation_dialog_radio_friend -> callback(FriendInvitation.TYPE_FRIEND, invitationMessage)
             }
 
             dismiss()

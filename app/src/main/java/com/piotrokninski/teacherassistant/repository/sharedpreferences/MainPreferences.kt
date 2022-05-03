@@ -6,6 +6,7 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 import java.lang.IllegalStateException
 
 object MainPreferences {
+    //TODO fix the preferences
 
     @Volatile
     private var PREFS: SharedPreferences? = null

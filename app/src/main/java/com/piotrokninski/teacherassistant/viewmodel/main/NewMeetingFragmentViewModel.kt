@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
+import android.util.Log
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
@@ -7,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
 import com.piotrokninski.teacherassistant.model.user.User
@@ -15,7 +17,10 @@ import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 import kotlinx.coroutines.launch
 
-class NewMeetingFragmentViewModel : ViewModel(), Observable {
+class NewMeetingFragmentViewModel(
+    private val initInvitation: MeetingInvitation?,
+    private val id: String?
+) : ViewModel(), Observable {
     private val TAG = "NewMeetingFragmentViewM"
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
@@ -31,29 +36,46 @@ class NewMeetingFragmentViewModel : ViewModel(), Observable {
     @Bindable
     val meetingInvitation = MutableLiveData<MeetingInvitation>()
 
+    var editing: Boolean = false
+
     init {
+        Log.d(TAG, "id: $id")
+
         val userDao = AppDatabase.getInstance().userDao
         userRepository = RoomUserRepository(userDao)
 
+        meetingInvitation.value = initInvitation?.let { invitation ->
+            editing = true
+            invitation
+        } ?: MeetingInvitation(
+            invitingUserId = currentUserId
+        )
+
         viewModelScope.launch {
+            user = FirestoreUserRepository.getUserDataOnce(currentUserId) ?: userRepository.getUser(
+                currentUserId
+            )!!
 
-            user = FirestoreUserRepository.getUserDataOnce(currentUserId) ?: userRepository.getUser(currentUserId)!!
+            meetingInvitation.value!!.invitingUserFullName = user.fullName
+            if (editing) {
+                _friendFullNames.value =
+                    arrayListOf(initInvitation!!.invitedUserFullName!!).toTypedArray()
+            } else {
+                friends = FirestoreFriendRepository.getApprovedFriends(
+                    currentUserId,
+                    Friend.TYPE_ALL
+                )
 
-            meetingInvitation.value = MeetingInvitation(invitingUserId = user.userId, invitingUserFullName = user.fullName)
+                if (friends.isNotEmpty()) {
+                    val friendFullNames = ArrayList<String>()
 
-            friends = FirestoreFriendRepository.getApprovedFriends(
-                currentUserId,
-                Friend.TYPE_ALL
-            )
+                    friends.forEach {
+                        friendFullNames.add(it.fullName)
+                    }
 
-            if (friends.isNotEmpty()) {
-                val friendFullNames = ArrayList<String>()
-
-                friends.forEach {
-                    friendFullNames.add(it.fullName)
+                    _friendFullNames.value = friendFullNames.toTypedArray()
                 }
 
-                _friendFullNames.value = friendFullNames.toTypedArray()
             }
         }
     }
@@ -64,14 +86,18 @@ class NewMeetingFragmentViewModel : ViewModel(), Observable {
     }
 
     fun addMeeting(): Boolean {
-
-        return if (meetingInvitation.value?.isComplete == true) {
-            FirestoreMeetingInvitationRepository.addMeetingInvitation(meetingInvitation.value!!)
-            true
-        } else {
-            false
+        return (meetingInvitation.value?.isComplete == true).let {
+            initInvitation?.let {
+                // TODO: check whether the invitation has been changed
+                if (id != null) {
+                    FirestoreMeetingInvitationRepository.updateMeetingInvitation(
+                        id,
+                        meetingInvitation.value!!
+                    )
+                }
+            } ?: FirestoreMeetingInvitationRepository.addMeetingInvitation(meetingInvitation.value!!)
+            it
         }
-
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

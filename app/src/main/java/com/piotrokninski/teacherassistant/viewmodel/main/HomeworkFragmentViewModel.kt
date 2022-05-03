@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeworkAdapterItem
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreHomeworkContract
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreHomeworkRepository
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
@@ -36,17 +35,17 @@ class HomeworkFragmentViewModel : ViewModel() {
         val assignedHomework: ArrayList<Homework>? = FirestoreHomeworkRepository.getHomework(
             currentUserId,
             viewType,
-            FirestoreHomeworkContract.STATUS_ASSIGNED
+            Homework.STATUS_ASSIGNED
         )
         val undeliveredHomework: ArrayList<Homework>? = FirestoreHomeworkRepository.getHomework(
             currentUserId,
             viewType,
-            FirestoreHomeworkContract.STATUS_UNDELIVERED
+            Homework.STATUS_UNDELIVERED
         )
         val completedHomework: ArrayList<Homework>? = FirestoreHomeworkRepository.getHomework(
             currentUserId,
             viewType,
-            FirestoreHomeworkContract.STATUS_COMPLETED
+            Homework.STATUS_COMPLETED
         )
 
         val homeworkItems = ArrayList<HomeworkAdapterItem>()

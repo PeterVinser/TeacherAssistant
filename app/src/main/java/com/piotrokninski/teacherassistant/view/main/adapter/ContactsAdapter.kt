@@ -9,7 +9,7 @@ import com.piotrokninski.teacherassistant.databinding.ContactFriendInvitationLis
 import com.piotrokninski.teacherassistant.databinding.ContactFriendListItemBinding
 import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
+import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.util.AppConstants
 
 class ContactsAdapter(
@@ -136,17 +136,17 @@ class ContactsAdapter(
 
             binding.contactFriendInvitationFullName.text =
                 when (friendInvitationAdapterItem.friendInvitation.invitationType) {
-                    FirestoreFriendInvitationContract.TYPE_STUDENT -> context.getString(
+                    FriendInvitation.TYPE_STUDENT -> context.getString(
                         R.string.friend_invitation_item_title_student,
                         fullName
                     )
 
-                    FirestoreFriendInvitationContract.TYPE_TUTOR -> context.getString(
+                    FriendInvitation.TYPE_TUTOR -> context.getString(
                         R.string.friend_invitation_item_title_tutor,
                         fullName
                     )
 
-                    FirestoreFriendInvitationContract.TYPE_FRIEND -> context.getString(
+                    FriendInvitation.TYPE_FRIEND -> context.getString(
                         R.string.friend_invitation_item_title_friend,
                         fullName
                     )

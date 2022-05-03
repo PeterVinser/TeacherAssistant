@@ -1,6 +1,5 @@
 package com.piotrokninski.teacherassistant.model.adapteritem
 
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreFriendInvitationContract
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
@@ -18,11 +17,11 @@ sealed class HomeAdapterItem {
 
         fun getInvitationType(): String? {
             return when (friendInvitation.invitationType) {
-                FirestoreFriendInvitationContract.TYPE_STUDENT -> "Zaprasza cię do grona uczniów"
+                FriendInvitation.TYPE_STUDENT -> "Zaprasza cię do grona uczniów"
 
-                FirestoreFriendInvitationContract.TYPE_TUTOR -> "Zaprasza cię jako swojego korepetytora"
+                FriendInvitation.TYPE_TUTOR -> "Zaprasza cię jako swojego korepetytora"
 
-                FirestoreFriendInvitationContract.TYPE_FRIEND -> "Zaprasza cię do grona znajomych"
+                FriendInvitation.TYPE_FRIEND -> "Zaprasza cię do grona znajomych"
 
                 else -> null
             }
@@ -37,7 +36,7 @@ sealed class HomeAdapterItem {
         override val id = homework.toString()
     }
 
-    data class MeetingInvitationItem(val meetingInvitation: MeetingInvitation): HomeAdapterItem() {
+    data class MeetingInvitationItem(val meetingInvitation: MeetingInvitation, val invited: Boolean): HomeAdapterItem() {
         override val id = meetingInvitation.invitingUserId
     }
 }

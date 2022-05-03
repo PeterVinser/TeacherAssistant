@@ -1,10 +1,12 @@
 package com.piotrokninski.teacherassistant.model.meeting
 
+import android.content.Context
 import android.util.Log
 import androidx.databinding.BaseObservable
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.piotrokninski.teacherassistant.util.WeekDate
+import java.io.Serializable
 import java.lang.Exception
 import java.util.*
 
@@ -12,7 +14,7 @@ data class MeetingInvitation(
     var title: String? = null,
     var description: String? = null,
     val invitingUserId: String,
-    val invitingUserFullName: String,
+    var invitingUserFullName: String? = null,
     var invitedUserId: String? = null,
     var invitedUserFullName: String? = null,
     var durationHours: Int? = null,
@@ -21,7 +23,7 @@ data class MeetingInvitation(
     var weekDate: WeekDate? = null,
     var mode: String = MEETING_TYPE_SINGULAR,
     val status: String = STATUS_PENDING
-) : BaseObservable() {
+) : BaseObservable(), Serializable {
 
     @get:Exclude
     val isComplete: Boolean
@@ -41,12 +43,12 @@ data class MeetingInvitation(
     fun dateToString(): String? {
         //TODO replace the temporary implementation with multiple dates/week dates.
         return when (mode) {
-            MEETING_TYPE_SINGULAR ->
-                if (date == null) null else "${date?.toLocaleString()}, ${durationHours}h ${durationMinutes}min"
-
-            MEETING_TYPE_RECURRING ->
-                if (weekDate == null) null else "${weekDate?.toString()}, ${weekDate?.durationHours}h ${weekDate?.durationMinutes}min"
-
+            MEETING_TYPE_SINGULAR -> date?.let {
+                "${date.toString()}, ${durationHours}h, ${durationMinutes}min"
+            }
+            MEETING_TYPE_RECURRING -> weekDate?.let {
+                "${weekDate?.toString()}, ${weekDate?.durationHours}h ${weekDate?.durationMinutes}min"
+            }
             else -> null
         }
     }
@@ -80,21 +82,22 @@ data class MeetingInvitation(
 
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
-        private const val INVITING_USER_ID = "invitingUserId"
+        const val INVITING_USER_ID = "invitingUserId"
         private const val INVITING_USER_FULL_NAME = "invitingUserFullName"
-        private const val INVITED_USER_ID = "invitedUserId"
+        const val INVITED_USER_ID = "invitedUserId"
         private const val INVITED_USER_FULL_NAME = "invitedUserFullName"
         private const val DURATION_HOURS = "durationHours"
         private const val DURATION_MINUTES = "durationMinutes"
         private const val DATE = "date"
         private const val WEEK_DATE = "weekDate"
         private const val MODE = "mode"
-        private const val STATUS = "status"
+        const val STATUS = "status"
 
         const val MEETING_TYPE_SINGULAR = "meetingTypeSingular"
         const val MEETING_TYPE_RECURRING = "meetingTypeRecurring"
 
         const val STATUS_PENDING = "pending"
+        const val STATUS_REJECTED = "rejected"
         const val STATUS_APPROVED = "approved"
 
         private const val TAG = "MeetingHolder"

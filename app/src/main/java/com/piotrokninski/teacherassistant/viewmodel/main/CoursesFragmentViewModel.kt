@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,7 @@ class CoursesFragmentViewModel : ViewModel() {
     val courses: LiveData<ArrayList<CourseAdapterItem>> = _courses
 
     init {
+        Log.d(TAG, "viewType: $viewType")
         viewModelScope.launch {
             getCourses()
         }
