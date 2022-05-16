@@ -1,17 +1,26 @@
 package com.piotrokninski.teacherassistant.repository.room
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.piotrokninski.teacherassistant.model.meeting.Meeting
+import com.piotrokninski.teacherassistant.model.meeting.RecurringMeeting
 import com.piotrokninski.teacherassistant.model.user.User
+import com.piotrokninski.teacherassistant.repository.room.dao.MeetingDAO
+import com.piotrokninski.teacherassistant.repository.room.dao.RecurringMeetingDAO
 import com.piotrokninski.teacherassistant.repository.room.dao.UserDAO
 import java.lang.NullPointerException
 
-@Database(entities = [User::class], version = 1)
-abstract class AppDatabase: RoomDatabase() {
+@Database(
+    entities = [User::class, Meeting::class, RecurringMeeting::class],
+    version = 2,
+    autoMigrations = [AutoMigration(from = 1, to = 2 )]
+)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
 
     abstract val userDao: UserDAO
+    abstract val meetingDAO: MeetingDAO
+    abstract val recurringMeetingDAO: RecurringMeetingDAO
 
     companion object {
         @Volatile

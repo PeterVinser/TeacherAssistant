@@ -244,4 +244,6 @@
     <string name="home_meeting_invitation_header_text">Zaproszenia na spotkania</string>
     <string name="home_meeting_received_invitation_header_text">Odebrane</string>
     <string name="home_meeting_sent_invitation_header_text">Wysłane</string>
+    <string name="menu_calendar_invitations_desc">Zaproszenia</string>
+    <string name="menu_calendar_sync_desc">Synchronizuj</string>
 </resources>

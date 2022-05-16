@@ -3,8 +3,6 @@ package com.piotrokninski.teacherassistant.util
 import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.Exclude
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
 
 data class WeekDate(
@@ -13,8 +11,21 @@ data class WeekDate(
     var minute: Int,
     var durationHours: Int = 1,
     var durationMinutes: Int = 0,
-    val timeZone: String = TimeZone.getDefault().id
+    val timeZone: String = TimeZone.getDefault().id,
+    @get:Exclude
+    var calendarId: Long? = null
 ) {
+
+    override fun equals(other: Any?): Boolean {
+        return other?.let {
+            if (it is WeekDate) {
+                this.weekDay == it.weekDay && this.hour == it.hour && this.minute == it.minute && this.durationHours == it.durationHours
+                        && this.durationMinutes == it.durationMinutes && this.timeZone == it.timeZone
+            } else {
+                false
+            }
+        } ?: false
+    }
 
     fun updateWeekDay(weekDay: WeekDays) {
         this.weekDay = weekDay
@@ -37,6 +48,17 @@ data class WeekDate(
         return "$localWeekDay ${timeToString()}"
     }
 
+    override fun hashCode(): Int {
+        var result = weekDay.hashCode()
+        result = 31 * result + hour
+        result = 31 * result + minute
+        result = 31 * result + durationHours
+        result = 31 * result + durationMinutes
+        result = 31 * result + timeZone.hashCode()
+        result = 31 * result + (calendarId?.hashCode() ?: 0)
+        return result
+    }
+
     companion object {
         private const val TAG = "WeekDate"
 
@@ -46,7 +68,7 @@ data class WeekDate(
         private const val DURATION_HOURS = "durationHours"
         private const val DURATION_MINUTES = "durationMinutes"
 
-        fun toWeekDate(map: Map<String, Any>): WeekDate? {
+        fun toWeekDate(map: Map<*, *>): WeekDate? {
             return try {
                 val weekDay = WeekDays.valueOf(map[WEEK_DAY] as String)
                 val hour = (map[HOUR] as Long).toInt()
@@ -63,10 +85,15 @@ data class WeekDate(
 
         fun createCurrentWeekDate(): WeekDate {
             val calendar = Calendar.getInstance()
-            val weekDayNumber = if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
+            val weekDayNumber =
+                if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
             val weekDay = WeekDays.values().firstOrNull { it.id == weekDayNumber }
 
-            return WeekDate(weekDay = weekDay!!, hour = calendar.get(Calendar.HOUR_OF_DAY), minute = calendar.get(Calendar.MINUTE))
+            return WeekDate(
+                weekDay = weekDay!!,
+                hour = calendar.get(Calendar.HOUR_OF_DAY),
+                minute = calendar.get(Calendar.MINUTE)
+            )
         }
     }
 }

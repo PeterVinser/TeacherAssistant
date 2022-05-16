@@ -1,9 +1,7 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,6 +31,11 @@ class CalendarFragment : Fragment() {
     private lateinit var adapter: CalendarAdapter
 
     private lateinit var displayedDate: Date
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +69,20 @@ class CalendarFragment : Fragment() {
         initRecyclerView()
 
         setupViewModel()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_calendar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.menu_calendar_invitations -> true
+
+            R.id.menu_calendar_sync -> true
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initRecyclerView() {
@@ -109,9 +126,6 @@ class CalendarFragment : Fragment() {
     }
 
     fun onPermissionResult(permissionGranted: Boolean) {
-        if (permissionGranted) {
-            CalendarProvider.insertEvent(requireContext())
-        }
         calendarPermissionAsked = false
     }
 }

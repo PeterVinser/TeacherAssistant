@@ -4,9 +4,14 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.piotrokninski.teacherassistant.model.meeting.Meeting
-import com.piotrokninski.teacherassistant.model.meeting.Meeting.Companion.toMeeting
+import com.piotrokninski.teacherassistant.model.meeting.Meeting.Companion.toSingularMeeting
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.*
+import kotlin.collections.ArrayList
 
 object FirestoreMeetingRepository {
     private const val TAG = "FirestoreMeetingReposit"
@@ -30,7 +35,7 @@ object FirestoreMeetingRepository {
             val meetings = ArrayList<Meeting>()
 
             query.get().await().forEach { meeting ->
-                meeting?.toMeeting()?.let { meetings.add(it) }
+                meeting?.toSingularMeeting()?.let { meetings.add(it) }
             }
 
             if (meetings.isEmpty()) {
@@ -58,7 +63,7 @@ object FirestoreMeetingRepository {
             val meetings = ArrayList<Meeting>()
 
             query.get().await().forEach { meeting ->
-                meeting?.toMeeting()?.let { 
+                meeting?.toSingularMeeting()?.let {
                     meetings.add(it)
                 }
             }
@@ -71,6 +76,65 @@ object FirestoreMeetingRepository {
         } catch (e: Exception) {
             Log.e(TAG, "getUpcomingWeekMeetings: ", e)
              null
+        }
+    }
+
+    suspend fun getUpcomingSingularMeetings(userId: String): ArrayList<Meeting>? {
+        val db = FirebaseFirestore.getInstance()
+
+        val meetingsQuery = db.collection(Meeting.COLLECTION_NAME)
+            .whereArrayContains(Meeting.ATTENDEE_IDS, userId)
+            .whereEqualTo(Meeting.SINGULAR, true)
+            .whereEqualTo(Meeting.COMPLETED, false)
+
+        return try {
+            val meetings = ArrayList<Meeting>()
+
+            meetingsQuery.get().await().forEach { meeting ->
+                meeting?.toSingularMeeting()?.let {
+                    it.id = meeting.id
+                    meetings.add(it)
+                }
+            }
+
+            meetings.ifEmpty { null }
+        } catch (e: Exception) {
+            Log.e(TAG, "getUpcomingSingularMeetings: ", e)
+            null
+        }
+    }
+
+    /**
+     * Experimental listener instead of traditional querying
+     */
+    fun addSingularMeetingsListener(userId: String): Flow<ArrayList<Meeting>?> {
+        val db = FirebaseFirestore.getInstance()
+
+        val meetingsQuery = db.collection(Meeting.COLLECTION_NAME)
+            .whereArrayContains(Meeting.ATTENDEE_IDS, userId)
+            .whereEqualTo(Meeting.SINGULAR, true)
+            .whereEqualTo(Meeting.COMPLETED, false)
+
+        return callbackFlow {
+            val listenerRegistration = meetingsQuery.addSnapshotListener { value, error ->
+                error?.let {
+                    cancel(message = "Error fetching meetings", cause = it)
+                    return@addSnapshotListener
+                }
+
+                val meetings = ArrayList<Meeting>()
+                value?.documentChanges?.forEach { change ->
+                    change.document.toSingularMeeting()?.let {
+                        it.id = change.document.id
+                        meetings.add(it)
+                    }
+                }
+
+                trySend(meetings.ifEmpty { null }).isSuccess
+            }
+            awaitClose {
+                listenerRegistration.remove()
+            }
         }
     }
 }

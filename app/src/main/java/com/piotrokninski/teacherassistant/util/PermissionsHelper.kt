@@ -28,24 +28,22 @@ object PermissionsHelper {
                         requestCalendarPermission(activity)
                     }
                     .setNegativeButton("No") { _, _ ->
-                        (activity as MainActivity).notifyCalendarFragment(false)
+                        (activity as MainActivity).onPermissionReceived(false)
                     }
                     .show()
             } else {
                 requestCalendarPermission(activity)
             }
         } else {
-            (activity as MainActivity).notifyCalendarFragment(true)
+            (activity as MainActivity).onPermissionReceived(true)
         }
     }
 
     fun onRequestPermissionsResult(activity: Activity, requestCode: Int, grantResults: IntArray) {
         when (requestCode) {
             AppConstants.PERMISSION_CALENDAR -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    (activity as MainActivity).notifyCalendarFragment(true)
-                } else {
-                    (activity as MainActivity).notifyCalendarFragment(false)
+                (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED).let {
+                    (activity as MainActivity).onPermissionReceived(it)
                 }
             }
         }

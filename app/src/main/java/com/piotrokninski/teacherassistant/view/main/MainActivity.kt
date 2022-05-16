@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -31,6 +32,7 @@ import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.MainActivityViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.MainActivityViewModelFactory
+import kotlinx.coroutines.flow.collect
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,11 +80,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val factory = MainActivityViewModelFactory()
+        val factory = MainActivityViewModelFactory(application)
         mainActivityViewModel =
             ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
 
         observeViewType()
+        observeChannel()
+    }
+
+    private fun observeChannel() {
+        lifecycleScope.launchWhenCreated {
+            mainActivityViewModel.eventFlow.collect{ event ->
+                when (event) {
+                    is MainActivityViewModel.MainEvent.CalendarPermissionEvent -> checkCalendarPermissions()
+                }
+            }
+        }
     }
 
     private fun observeViewType() {
@@ -169,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, StartActivity::class.java))
     }
 
-    fun checkCalendarPermissions() {
+    private fun checkCalendarPermissions() {
         PermissionsHelper.checkCalendarPermissions(this)
     }
 
@@ -182,7 +195,8 @@ class MainActivity : AppCompatActivity() {
         PermissionsHelper.onRequestPermissionsResult(this, requestCode, grantResults)
     }
 
-    fun notifyCalendarFragment(permissionGranted: Boolean) {
+    fun onPermissionReceived(permissionGranted: Boolean) {
+        mainActivityViewModel.updateCalendar()
         val activeFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
         if (activeFragment is CalendarFragment) {
             activeFragment.onPermissionResult(permissionGranted)

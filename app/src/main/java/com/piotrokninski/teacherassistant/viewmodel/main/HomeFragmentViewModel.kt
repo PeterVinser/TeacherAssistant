@@ -195,7 +195,6 @@ class HomeFragmentViewModel : ViewModel() {
                 } else {
                     viewModelScope.launch {
                         homeAdapterItem.meetingInvitation.id?.let {
-                            Log.d(TAG, "itemPositiveAction: $it")
                             HomeEvent.EditItemEvent(it, homeAdapterItem)
                         }?.let { eventChannel.send(it) }
                     }
@@ -244,7 +243,7 @@ class HomeFragmentViewModel : ViewModel() {
         }
     }
 
-    sealed class HomeEvent() {
+    sealed class HomeEvent {
         data class EditItemEvent(val itemId: String, val homeAdapterItem: HomeAdapterItem) :
             HomeEvent()
     }

@@ -30,7 +30,10 @@ object FirestoreRecurringMeetingsRepository {
             val recurringMeetings = ArrayList<RecurringMeeting>()
 
             query.get().await().forEach { recurringMeeting ->
-                recurringMeeting.toRecurringMeeting()?.let { recurringMeetings.add(it) }
+                recurringMeeting.toRecurringMeeting()?.let {
+                    it.id = recurringMeeting.id
+                    recurringMeetings.add(it)
+                }
             }
 
             if (recurringMeetings.isEmpty()) {

@@ -49,11 +49,11 @@ class CalendarFragmentViewModel : ViewModel() {
             //Creating the list of meetings based on recurring meetings until the end date
             recurringMeetings?.forEach { recurringMeeting ->
 
-                val meetingDates = recurringMeeting.meetingDates
+                val meetingDates = ArrayList(recurringMeeting.meetingDates)
 
                 meetingDates.sortWith(
                     compareBy(
-                        { it.weekDay!!.id },
+                        { it.weekDay.id },
                         { it.hour },
                         { it.minute })
                 )
@@ -77,8 +77,8 @@ class CalendarFragmentViewModel : ViewModel() {
                 //Ordering the queue to begin match the week day with the week day of the next date
                 for (i in 1..meetingDatesQueue.size) {
                     val polledWeekDate = meetingDatesQueue.peek()
-                    Log.d(TAG, "getMeetings: ${polledWeekDate!!.weekDay!!.id}")
-                    if (nextDateWeekDateNumerical == polledWeekDate.weekDay!!.id) {
+                    Log.d(TAG, "getMeetings: ${polledWeekDate!!.weekDay.id}")
+                    if (nextDateWeekDateNumerical == polledWeekDate.weekDay.id) {
                         break
                     } else {
                         meetingDatesQueue.add(meetingDatesQueue.poll())
@@ -97,7 +97,8 @@ class CalendarFragmentViewModel : ViewModel() {
                         recurringMeeting.attendeeIds,
                         title,
                         nextDate,
-                        false,
+                        singular = false,
+                        completed = false,
                         title,
                         weekDate!!.durationHours,
                         weekDate.durationMinutes
@@ -109,13 +110,13 @@ class CalendarFragmentViewModel : ViewModel() {
 
                     calendar.time = nextDate
 
-                    var daysToAdd = nextWeekDate!!.weekDay!!.id - weekDate.weekDay!!.id
+                    var daysToAdd = nextWeekDate!!.weekDay.id - weekDate.weekDay.id
                     if (daysToAdd <= 0) {
                         daysToAdd += 7
                     }
                     calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
-                    calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour!!)
-                    calendar.set(Calendar.MINUTE, nextWeekDate.minute!!)
+                    calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour)
+                    calendar.set(Calendar.MINUTE, nextWeekDate.minute)
 
                     weekDate = nextWeekDate
 

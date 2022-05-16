@@ -1,6 +1,5 @@
 package com.piotrokninski.teacherassistant.model.meeting
 
-import android.content.Context
 import android.util.Log
 import androidx.databinding.BaseObservable
 import com.google.firebase.firestore.DocumentSnapshot
@@ -22,7 +21,9 @@ data class MeetingInvitation(
     var date: Date? = null,
     var weekDate: WeekDate? = null,
     var mode: String = MEETING_TYPE_SINGULAR,
-    val status: String = STATUS_PENDING
+    val status: String = STATUS_PENDING,
+    @get:Exclude
+    var id: String? = null
 ) : BaseObservable(), Serializable {
 
     @get:Exclude
@@ -36,9 +37,6 @@ data class MeetingInvitation(
 
             else -> false
         }
-
-    @get:Exclude
-    var id: String? = null
 
     fun dateToString(): String? {
         //TODO replace the temporary implementation with multiple dates/week dates.
@@ -67,7 +65,7 @@ data class MeetingInvitation(
                     getLong(DURATION_HOURS)?.toInt(),
                     getLong(DURATION_MINUTES)?.toInt(),
                     getDate(DATE),
-                    get(WEEK_DATE)?.let { WeekDate.toWeekDate(it as Map<String, Any>) },
+                    get(WEEK_DATE)?.let { WeekDate.toWeekDate(it as Map<*, *>) },
                     getString(MODE)!!,
                     getString(STATUS)!!
                 )

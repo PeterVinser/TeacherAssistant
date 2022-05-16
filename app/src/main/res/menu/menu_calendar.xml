@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_calendar_invitations"
+        android:icon="@drawable/ic_menu_meeting_invitations"
+        android:title="@string/menu_calendar_invitations_desc"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_calendar_sync"
+        android:icon="@drawable/ic_sync"
+        android:title="@string/menu_calendar_sync_desc"
+        app:showAsAction="ifRoom"/>
+</menu>
