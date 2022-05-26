@@ -2,14 +2,18 @@ package com.piotrokninski.teacherassistant.model.friend
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
+import com.piotrokninski.teacherassistant.model.chat.Message
+import java.io.Serializable
 
 data class Friend(
     val userId: String,
     val fullName: String,
     val status: String,
     val friendshipType: String,
-    val invitationId: String? = null
-) {
+    val invitationId: String? = null,
+    val chatId: String,
+    val latestMessage: Message? = null
+) : Serializable {
 
     companion object {
         fun DocumentSnapshot.toFriend(): Friend? {
@@ -19,7 +23,8 @@ data class Friend(
                     getString(FULL_NAME)!!,
                     getString(STATUS)!!,
                     getString(FRIENDSHIP_TYPE)!!,
-                    getString(INVITATION_ID)
+                    getString(INVITATION_ID),
+                    getString(CHAT_ID)!!
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toFriend: ", e)
@@ -35,6 +40,9 @@ data class Friend(
         const val STATUS = "status"
         const val FRIENDSHIP_TYPE = "friendshipType"
         private const val INVITATION_ID = "invitationId"
+        private const val CHAT_ID = "chatId"
+        private const val LATEST_MESSAGE = "latestMessage"
+
         const val STATUS_APPROVED = "approved"
         //Set when the friend is being invited
         const val STATUS_INVITED = "invited"

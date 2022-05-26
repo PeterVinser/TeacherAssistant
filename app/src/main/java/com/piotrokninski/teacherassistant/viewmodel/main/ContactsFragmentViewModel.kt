@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMessageRepository
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.launch
@@ -19,6 +21,8 @@ class ContactsFragmentViewModel : ViewModel() {
     private val TAG = "ContactsFragmentViewMod"
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
+    private val viewType = MainPreferences.getViewType()
 
     private val _contactItems = MutableLiveData<List<ContactAdapterItem>>()
     val mContactAdapterItems: LiveData<List<ContactAdapterItem>> = _contactItems
@@ -29,79 +33,34 @@ class ContactsFragmentViewModel : ViewModel() {
 
     fun getFriends() {
         viewModelScope.launch {
-            val auxList = ArrayList<ContactAdapterItem>()
+//            val auxList = ArrayList<ContactAdapterItem>()
 
-            val studentsHeader = ContactAdapterItem.HeaderAdapterItem(R.string.header_item_students)
+            val friendItems = ArrayList<ContactAdapterItem>()
 
-            val students = ArrayList<ContactAdapterItem>()
+            // TODO: delete the pure friendship type
 
-            FirestoreFriendRepository.getApprovedFriends(
-                currentUserId,
-                Friend.TYPE_STUDENT
-            ).forEach { friend ->
-                val studentItem =
-                    ContactAdapterItem.FriendAdapterItem(friend.userId, friend.fullName)
-                students.add(studentItem)
+            val friends = when(viewType) {
+                AppConstants.VIEW_TYPE_STUDENT -> FirestoreFriendRepository.getApprovedFriends(
+                    currentUserId,
+                    Friend.TYPE_TUTOR
+                )
+                AppConstants.VIEW_TYPE_TUTOR -> FirestoreFriendRepository.getApprovedFriends(
+                    currentUserId,
+                    Friend.TYPE_STUDENT
+                )
+
+                else -> throw IllegalArgumentException("Unknown viewType")
             }
 
-            val tutorsHeader = ContactAdapterItem.HeaderAdapterItem(R.string.header_item_tutors)
-
-            val tutors = ArrayList<ContactAdapterItem>()
-
-            FirestoreFriendRepository.getApprovedFriends(
-                currentUserId,
-                Friend.TYPE_TUTOR
-            ).forEach { friend ->
-                val tutorItem = ContactAdapterItem.FriendAdapterItem(friend.userId, friend.fullName)
-                tutors.add(tutorItem)
+            friends.forEach { friend ->
+                val latestMessage = FirestoreMessageRepository.getLatestMessage(friend.chatId)
+                val read = latestMessage?.read?.let {
+                    it && latestMessage.senderId != currentUserId
+                } ?: true
+                friendItems.add(ContactAdapterItem.FriendAdapterItem(friend, latestMessage, read))
             }
 
-
-            when (MainPreferences.getViewType()) {
-                AppConstants.VIEW_TYPE_TUTOR -> {
-                    if (students.isNotEmpty()) {
-                        auxList.add(studentsHeader)
-                        auxList.addAll(students)
-                    }
-
-                    if (tutors.isNotEmpty()) {
-                        auxList.add(tutorsHeader)
-                        auxList.addAll(tutors)
-                    }
-                }
-
-                AppConstants.VIEW_TYPE_STUDENT -> {
-                    if (tutors.isNotEmpty()) {
-                        auxList.add(tutorsHeader)
-                        auxList.addAll(tutors)
-                    }
-
-                    if (students.isNotEmpty()) {
-                        auxList.add(studentsHeader)
-                        auxList.addAll(students)
-                    }
-                }
-            }
-
-            val friendsHeader = ContactAdapterItem.HeaderAdapterItem(R.string.header_item_friends)
-
-            val friends = ArrayList<ContactAdapterItem>()
-
-            FirestoreFriendRepository.getApprovedFriends(
-                currentUserId,
-                Friend.TYPE_FRIEND
-            ).forEach { friend ->
-                val friendItem =
-                    ContactAdapterItem.FriendAdapterItem(friend.userId, friend.fullName)
-                friends.add(friendItem)
-            }
-
-            if (friends.isNotEmpty()) {
-                auxList.add(friendsHeader)
-                auxList.addAll(friends)
-            }
-
-            _contactItems.value = auxList
+            _contactItems.value = friendItems
         }
     }
 

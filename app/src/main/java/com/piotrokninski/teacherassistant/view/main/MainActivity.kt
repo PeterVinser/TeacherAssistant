@@ -143,6 +143,10 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
     }
 
+    fun setToolbarTitle(title: String) {
+        binding.toolbar.title = title
+    }
+
     fun isBottomNavVisible(isVisible: Boolean) {
         if (isVisible) {
             binding.bottomNav.visibility = View.VISIBLE

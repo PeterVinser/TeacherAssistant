@@ -149,6 +149,9 @@
     <string name="contacts_no_invitations_found_text">Brak zaproszeń</string>
     <string name="header_item_title_placeholder">Tytuł</string>
 
+    <string name="students_label">Uczniowie</string>
+    <string name="tutors_label">Korepetytorzy</string>
+
     <string name="header_item_students">Uczniowie</string>
     <string name="header_item_tutors">Korepetytorzy</string>
     <string name="header_item_friends">Znajomi</string>

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentContactsBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
+import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.ContactsAdapter
@@ -45,6 +46,17 @@ class ContactsFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).isBottomNavVisible(true)
 
+        // TODO: move the data logic to view model with channel
+        val title = when(MainPreferences.getViewType()) {
+            AppConstants.VIEW_TYPE_STUDENT -> getString(R.string.tutors_label)
+
+            AppConstants.VIEW_TYPE_TUTOR -> getString(R.string.students_label)
+
+            else -> throw IllegalArgumentException("Unknown viewType")
+        }
+
+        (activity as MainActivity).setToolbarTitle(title)
+
         initRecyclerView()
 
         setupViewModel()
@@ -72,7 +84,7 @@ class ContactsFragment : Fragment() {
     private fun contactItemClicked(contactAdapterItem: ContactAdapterItem) {
         when (contactAdapterItem) {
             is ContactAdapterItem.FriendAdapterItem -> {
-                val action = ContactsFragmentDirections.actionContactsToUserProfile(contactAdapterItem.userId)
+                val action = ContactsFragmentDirections.actionContactsToChat(contactAdapterItem.friend)
                 this.findNavController().navigate(action)
             }
 

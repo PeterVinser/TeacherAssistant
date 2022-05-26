@@ -101,7 +101,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
             user.value!!.fullName,
             invitationType,
             invitationMessage = invitationMessage,
-            course = null
+            course = null,
+            chatId = null
         )
 
         FirestoreFriendInvitationRepository.addFriendInvitation(invitation)
@@ -123,7 +124,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
             user.value!!.fullName,
             invitationType,
             invitationMessage = invitationMessage,
-            course = null
+            course = null,
+            chatId = null
         )
     }
 

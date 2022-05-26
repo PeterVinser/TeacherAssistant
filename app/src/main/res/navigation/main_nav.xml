@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_contacts_to_user_profile"
             app:destination="@id/destination_user_profile" />
+        <action
+            android:id="@+id/action_contacts_to_chat"
+            app:destination="@id/destination_chat"/>
     </fragment>
     <fragment
         android:id="@+id/destination_homework"
@@ -149,5 +152,14 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_chat"
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.ChatFragment"
+        android:label="Wiadomości"
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="friend"
+            app:argType="com.piotrokninski.teacherassistant.model.friend.Friend"/>
     </fragment>
 </navigation>

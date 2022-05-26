@@ -15,7 +15,8 @@ data class FriendInvitation(
     val invitationType: String,
     var status: String = STATUS_PENDING,
     var invitationMessage: String?,
-    var course: Course?
+    var course: Course?,
+    val chatId: String?
 ) : Serializable {
 
     companion object {
@@ -30,7 +31,8 @@ data class FriendInvitation(
                     getString(TYPE)!!,
                     getString(STATUS)!!,
                     getString(INVITATION_MESSAGE),
-                    get(COURSE)?.let { toCourse(it as Map<String, Any>) }
+                    get(COURSE)?.let { toCourse(it as Map<String, Any>) },
+                    getString(CHAT_ID)
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toFriend: ", e)
@@ -50,6 +52,7 @@ data class FriendInvitation(
         private const val COURSE = "course"
         private const val TYPE = "invitationType"
         const val STATUS = "status"
+        const val CHAT_ID = "chatId"
 
         const val STATUS_PENDING = "pending"
         const val STATUS_APPROVED = "approved"

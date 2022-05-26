@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.view.main.adapter
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -102,6 +103,10 @@ class ContactsAdapter(
         ) {
             binding.friendItem = friendAdapterItem
             binding.contactItemLayout.setOnClickListener { clickListener(friendAdapterItem) }
+            if (friendAdapterItem.read) {
+                binding.contactFriendItemFullName.typeface = Typeface.DEFAULT_BOLD
+                binding.contactFriendItemMessage.typeface = Typeface.DEFAULT_BOLD
+            }
         }
     }
 
