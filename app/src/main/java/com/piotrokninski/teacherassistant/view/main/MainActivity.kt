@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
 import com.piotrokninski.teacherassistant.model.Invitation
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
@@ -33,7 +32,6 @@ import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.MainActivityViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.MainActivityViewModelFactory
-import kotlinx.coroutines.flow.collect
 
 class MainActivity : AppCompatActivity() {
 

@@ -5,11 +5,9 @@ import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
-import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.sin
 
 data class Meeting(
     var id: String? = null,

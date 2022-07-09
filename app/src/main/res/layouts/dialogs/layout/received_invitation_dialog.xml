@@ -8,8 +8,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="friendInvitation"
-            type="com.piotrokninski.teacherassistant.model.friend.FriendInvitation" />
+            name="invitation"
+            type="com.piotrokninski.teacherassistant.model.Invitation" />
     </data>
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="@{friendInvitation.invitingUserFullName}"
+            android:text="@{invitation.invitingUserFullName}"
             android:textAlignment="center"
             android:textSize="18sp"
             tools:text="Imię i nazwisko" />
@@ -45,7 +45,7 @@
             android:layout_margin="4dp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:text="@{friendInvitation.invitationMessage}"
+            android:text="@{invitation.message}"
             android:textAlignment="textStart"
             android:textSize="16sp"
             tools:text="Hej!" />

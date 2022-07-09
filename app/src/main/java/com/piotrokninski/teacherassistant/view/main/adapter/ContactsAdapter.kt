@@ -1,18 +1,11 @@
 package com.piotrokninski.teacherassistant.view.main.adapter
 
-import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.piotrokninski.teacherassistant.R
-import com.piotrokninski.teacherassistant.databinding.ContactFriendInvitationListItemBinding
 import com.piotrokninski.teacherassistant.databinding.ContactFriendListItemBinding
-import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
-import com.piotrokninski.teacherassistant.model.friend.Friend
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
-import com.piotrokninski.teacherassistant.util.AppConstants
 
 class ContactsAdapter(
     private val clickListener: (ContactAdapterItem.FriendAdapterItem) -> Unit

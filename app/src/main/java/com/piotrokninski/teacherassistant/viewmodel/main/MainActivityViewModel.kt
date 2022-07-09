@@ -2,15 +2,16 @@ package com.piotrokninski.teacherassistant.viewmodel.main
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.meeting.Meeting
 import com.piotrokninski.teacherassistant.model.meeting.RecurringMeeting
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.model.user.UserHint
 import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreRecurringMeetingsRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
@@ -22,8 +23,6 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "MainActivityViewModel"

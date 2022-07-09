@@ -1,16 +1,12 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.adapteritem.ContactAdapterItem
 import com.piotrokninski.teacherassistant.model.friend.Friend
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMessageRepository
 import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences

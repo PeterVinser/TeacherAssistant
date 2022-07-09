@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.Invitation.Companion.toInvitation
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import kotlinx.coroutines.tasks.await
 
 object FirestoreInvitationRepository {

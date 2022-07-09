@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.friend.Friend
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreInvitationRepository
@@ -132,8 +131,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
         invitation.value?.id?.let {
             FirestoreInvitationRepository.updateInvitation(
                 it,
-                FriendInvitation.STATUS,
-                FriendInvitation.STATUS_APPROVED
+                Invitation.Contract.STATUS,
+                Invitation.Contract.STATUS_APPROVED
             )
         }
 
@@ -148,8 +147,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
             invitation.value?.id?.let {
                 FirestoreInvitationRepository.updateInvitation(
                     it,
-                    FriendInvitation.STATUS,
-                    FriendInvitation.STATUS_REJECTED
+                    Invitation.Contract.STATUS,
+                    Invitation.Contract.STATUS_REJECTED
                 )
             }
 

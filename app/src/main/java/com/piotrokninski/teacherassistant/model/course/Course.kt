@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.piotrokninski.teacherassistant.model.Invitation
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.io.Serializable
 
@@ -56,7 +55,7 @@ data class Course(
 
         fun createCourseWithInvitation(invitation: Invitation): Course {
             return when (invitation.invitedAs) {
-                FriendInvitation.TYPE_STUDENT -> {
+                Invitation.Contract.STUDENT -> {
                     Course(
                         studentId = invitation.invitedUserId,
                         studentFullName = invitation.invitedUserFullName,
@@ -65,7 +64,7 @@ data class Course(
                     )
                 }
 
-                FriendInvitation.TYPE_TUTOR -> {
+                Invitation.Contract.TUTOR -> {
                     Course(
                         studentId = invitation.invitingUserId,
                         studentFullName = invitation.invitingUserFullName,

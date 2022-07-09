@@ -1,10 +1,7 @@
 package com.piotrokninski.teacherassistant.model.adapteritem
 
 import com.piotrokninski.teacherassistant.model.Invitation
-import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
-import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
 
 sealed class HomeAdapterItem {
     abstract val id: String

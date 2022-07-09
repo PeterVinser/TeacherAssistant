@@ -13,11 +13,6 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
-import com.piotrokninski.teacherassistant.model.course.Course
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
-import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
 import com.piotrokninski.teacherassistant.viewmodel.main.HomeFragmentViewModel
@@ -56,7 +51,7 @@ class HomeFragment : Fragment() {
         (activity as MainActivity).isBottomNavVisible(true)
 
         arguments?.let {
-            val userId = it.getString(FriendInvitation.INVITING_USER_ID)
+            val userId = it.getString(Invitation.Contract.INVITING_USER_ID)
             if (userId != null) {
                 navigateToProfile(userId)
             }

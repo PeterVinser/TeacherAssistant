@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.adapteritem.CalendarAdapterItem
 import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreRecurringMeetingsRepository
 import com.piotrokninski.teacherassistant.util.WeekDate
 import kotlinx.coroutines.launch
 import java.util.*

@@ -88,23 +88,6 @@ class ContactsFragment : Fragment() {
                 this.findNavController().navigate(action)
             }
 
-            is ContactAdapterItem.FriendInvitationAdapterItem -> {
-                val userId = when (contactAdapterItem.sentReceived) {
-                    AppConstants.SENT_INVITATIONS -> {
-                        contactAdapterItem.friendInvitation.invitedUserId
-                    }
-
-                    AppConstants.RECEIVED_INVITATIONS -> {
-                        contactAdapterItem.friendInvitation.invitingUserId
-                    }
-
-                    else -> throw IllegalArgumentException("Not a valid argument")
-                }
-
-                val action = ContactsFragmentDirections.actionContactsToUserProfile(userId)
-                this.findNavController().navigate(action)
-            }
-
             is ContactAdapterItem.HeaderAdapterItem -> {}
         }
     }

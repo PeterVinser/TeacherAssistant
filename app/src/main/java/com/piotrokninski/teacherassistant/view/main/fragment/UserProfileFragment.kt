@@ -12,12 +12,10 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.friend.Friend
-import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
 import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
 import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserProfileFragmentViewModelFactory
-import java.lang.IllegalArgumentException
 
 class UserProfileFragment : Fragment() {
     private val TAG = "UserProfileFragment"
@@ -68,7 +66,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun sendInvitation(invitationType: String, invitationMessage: String?) {
-        if (invitationType == FriendInvitation.TYPE_STUDENT) {
+        if (invitationType == Invitation.Contract.STUDENT) {
 
             val action = UserProfileFragmentDirections.actionUserProfileToInvitation(
                 Invitation.Contract.TYPE_FRIENDSHIP,
@@ -144,11 +142,11 @@ class UserProfileFragment : Fragment() {
                 binding.userProfileInvitation.visibility = View.VISIBLE
 
                 binding.userProfileInvitationDescription.text = when (invitation.invitedAs) {
-                    FriendInvitation.TYPE_STUDENT -> getString(R.string.invitation_student_type)
+                    Invitation.Contract.STUDENT -> getString(R.string.invitation_student_type)
 
-                    FriendInvitation.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
+                    Invitation.Contract.TUTOR -> getString(R.string.invitation_tutor_type)
 
-                    FriendInvitation.TYPE_FRIEND -> getString(R.string.invitation_friend_type)
+                    Invitation.Contract.FRIEND -> getString(R.string.invitation_friend_type)
 
                     else -> throw IllegalArgumentException("Unknown invitation type")
                 }
