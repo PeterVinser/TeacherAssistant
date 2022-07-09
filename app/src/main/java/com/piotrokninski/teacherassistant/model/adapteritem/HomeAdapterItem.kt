@@ -1,5 +1,6 @@
 package com.piotrokninski.teacherassistant.model.adapteritem
 
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
@@ -12,31 +13,52 @@ sealed class HomeAdapterItem {
         override val id = titleId.toString()
     }
 
-    data class FriendInvitationItem(val friendInvitation: FriendInvitation): HomeAdapterItem() {
-        override val id = friendInvitation.invitationId ?: friendInvitation.invitedUserId
+    data class InvitationItem(val invitation: Invitation, val received: Boolean): HomeAdapterItem() {
+        override val id = invitation.id ?: invitation.invitingUserId
 
-        fun getInvitationType(): String? {
-            return when (friendInvitation.invitationType) {
-                FriendInvitation.TYPE_STUDENT -> "Zaprasza cię do grona uczniów"
+        fun getInvitationDescription(): String? {
 
-                FriendInvitation.TYPE_TUTOR -> "Zaprasza cię jako swojego korepetytora"
+            val friendStarter = if (received) {
+                "Zaprasza cię"
+            } else {
+                "Zapraszony"
+            }
 
-                FriendInvitation.TYPE_FRIEND -> "Zaprasza cię do grona znajomych"
+            val eventStarter = if (received) {
+                "Zaprasza"
+            } else {
+                "Zapraszony"
+            }
+
+            return when (invitation.type) {
+                Invitation.Contract.TYPE_FRIENDSHIP -> {
+                    when (invitation.invitedAs) {
+                        Invitation.Contract.STUDENT -> "$friendStarter do grona uczniów"
+
+                        Invitation.Contract.TUTOR -> {
+                            if (received) {
+                                "Zaprasza cię jako swojego korepetytora"
+                            } else {
+                                "Zaproszony jako korepetytor"
+                            }
+                        }
+
+                        Invitation.Contract.FRIEND -> "$friendStarter do grona znajomych"
+
+                        else -> null
+                    }
+                }
+
+                Invitation.Contract.TYPE_COURSE -> "$eventStarter na nowe zajęcia"
+
+                Invitation.Contract.TYPE_MEETING -> "$eventStarter na nowe spotkanie"
 
                 else -> null
             }
         }
     }
 
-    data class CourseItem(val course: Course): HomeAdapterItem() {
-        override val id = course.courseId!!
-    }
-
     data class HomeworkItem(val homework: Homework): HomeAdapterItem() {
         override val id = homework.toString()
-    }
-
-    data class MeetingInvitationItem(val meetingInvitation: MeetingInvitation, val invited: Boolean): HomeAdapterItem() {
-        override val id = meetingInvitation.invitingUserId
     }
 }

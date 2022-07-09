@@ -31,8 +31,9 @@ data class RecurringMeeting(
     override fun equals(other: Any?): Boolean {
         return other?.let {
             if (it is RecurringMeeting) {
-                this.courseId == it.courseId && this.title == it.title && this.description == it.description && this.date == it.date
-                        && this.attendeeIds == it.attendeeIds && this.meetingDates == it.meetingDates && this.durationHours == it.durationHours
+                this.courseId == it.courseId && this.title == it.title && this.description == it.description
+                        && this.date == it.date && this.attendeeIds == it.attendeeIds
+                        && this.meetingDates == it.meetingDates && this.durationHours == it.durationHours
                         && this.durationMinutes == it.durationMinutes
             } else {
                 false

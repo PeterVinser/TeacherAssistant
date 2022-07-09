@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.adapteritem.CalendarAdapterItem
-import com.piotrokninski.teacherassistant.model.meeting.Meeting
+import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreRecurringMeetingsRepository
 import com.piotrokninski.teacherassistant.util.WeekDate
@@ -39,117 +39,118 @@ class CalendarFragmentViewModel : ViewModel() {
                 currentUserId,
                 startDate,
                 endDate
-            ) ?: ArrayList()
+            ) 
+            
+            if (meetings != null) {
 
-            //Meetings ordered by date already by query
-            val recurringMeetings =
-                FirestoreRecurringMeetingsRepository.getRecurringMeetings(currentUserId)
+                //Meetings ordered by date already by query
+                val recurringMeetings = meetings.filter { !it.singular }
 
-            //New algorithm
-            //Creating the list of meetings based on recurring meetings until the end date
-            recurringMeetings?.forEach { recurringMeeting ->
+                //New algorithm
+                //Creating the list of meetings based on recurring meetings until the end date
+                recurringMeetings.forEach { recurringMeeting ->
 
-                val meetingDates = ArrayList(recurringMeeting.meetingDates)
+                    val meetingDates = ArrayList(recurringMeeting.weekDates!!)
 
-                meetingDates.sortWith(
-                    compareBy(
-                        { it.weekDay.id },
-                        { it.hour },
-                        { it.minute })
-                )
-
-                //Queue used for queuing week dates
-                val meetingDatesQueue: Queue<WeekDate> = LinkedList()
-                meetingDatesQueue.addAll(meetingDates)
-
-                val title = recurringMeeting.title
-
-                var nextDate = recurringMeeting.date
-
-                calendar.time = nextDate
-                //For some reason the day of week starts with sunday (sunday->1)????
-                val nextDateWeekDateNumerical =
-                    if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
-                Log.d(TAG, "getMeetings: $title")
-                Log.d(TAG, "getMeetings: $nextDate")
-                Log.d(TAG, "getMeetings: $nextDateWeekDateNumerical")
-
-                //Ordering the queue to begin match the week day with the week day of the next date
-                for (i in 1..meetingDatesQueue.size) {
-                    val polledWeekDate = meetingDatesQueue.peek()
-                    Log.d(TAG, "getMeetings: ${polledWeekDate!!.weekDay.id}")
-                    if (nextDateWeekDateNumerical == polledWeekDate.weekDay.id) {
-                        break
-                    } else {
-                        meetingDatesQueue.add(meetingDatesQueue.poll())
-                    }
-                }
-
-                var weekDate = meetingDatesQueue.poll()
-                meetingDatesQueue.add(weekDate)
-
-                while (nextDate <= endDate) {
-                    val nextWeekDate = meetingDatesQueue.poll()
-
-                    val nextMeeting = Meeting(
-                        recurringMeeting.courseId,
-                        null,
-                        recurringMeeting.attendeeIds,
-                        title,
-                        nextDate,
-                        singular = false,
-                        completed = false,
-                        title,
-                        weekDate!!.durationHours,
-                        weekDate.durationMinutes
+                    meetingDates.sortWith(
+                        compareBy(
+                            { it.weekDay.id },
+                            { it.hour },
+                            { it.minute })
                     )
 
-                    if (nextMeeting !in meetings) {
-                        meetings.add(nextMeeting)
-                    }
+                    //Queue used for queuing week dates
+                    val meetingDatesQueue: Queue<WeekDate> = LinkedList()
+                    meetingDatesQueue.addAll(meetingDates)
+
+                    val title = recurringMeeting.title
+
+                    var nextDate = recurringMeeting.date!!
 
                     calendar.time = nextDate
+                    //For some reason the day of week starts with sunday (sunday->1)????
+                    val nextDateWeekDateNumerical =
+                        if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
 
-                    var daysToAdd = nextWeekDate!!.weekDay.id - weekDate.weekDay.id
-                    if (daysToAdd <= 0) {
-                        daysToAdd += 7
+                    //Ordering the queue to begin match the week day with the week day of the next date
+                    for (i in 1..meetingDatesQueue.size) {
+                        val polledWeekDate = meetingDatesQueue.peek()
+
+                        if (nextDateWeekDateNumerical == polledWeekDate?.weekDay?.id) {
+                            break
+                        } else {
+                            meetingDatesQueue.add(meetingDatesQueue.poll())
+                        }
                     }
-                    calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
-                    calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour)
-                    calendar.set(Calendar.MINUTE, nextWeekDate.minute)
 
-                    weekDate = nextWeekDate
-
-                    nextDate = calendar.time
+                    var weekDate = meetingDatesQueue.poll()
                     meetingDatesQueue.add(weekDate)
-                    Log.d(TAG, "getMeetings: $nextDate")
-                }
-            }
 
-            meetings.sortBy { it.date }
+                    while (nextDate <= endDate && weekDate != null) {
+                        val nextWeekDate = meetingDatesQueue.poll()
 
-            var prevDate: Date? = null
-            meetings.distinctBy { listOf(it.date, it.title) }.forEach { meeting ->
-                if (prevDate != null) {
-                    calendar.time = prevDate!!
-                    val prevDay = calendar.get(Calendar.DAY_OF_YEAR)
-                    val prevYear = calendar.get(Calendar.YEAR)
+                        calendar.time = nextDate
 
-                    calendar.time = meeting.date
-                    val day = calendar.get(Calendar.DAY_OF_YEAR)
-                    val year = calendar.get(Calendar.YEAR)
+                        var daysToAdd = nextWeekDate!!.weekDay.id - weekDate.weekDay.id
 
-                    if (prevDay != day || prevYear != year) {
-                        addMeetingsHeader(meeting.date, auxList)
+                        if (daysToAdd <= 0) {
+                            daysToAdd += 7
+                        }
+
+                        calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
+                        calendar.set(Calendar.HOUR_OF_DAY, nextWeekDate.hour)
+                        calendar.set(Calendar.MINUTE, nextWeekDate.minute)
+
+                        weekDate = nextWeekDate
+
+                        nextDate = calendar.time
+                        meetingDatesQueue.add(weekDate)
+
+                        val nextMeeting = Meeting(
+                            recurringMeeting.id,
+                            recurringMeeting.courseId,
+                            lessonId = null,
+                            recurringMeeting.attendeeIds!!,
+                            title,
+                            recurringMeeting.description,
+                            nextDate,
+                            weekDate.durationHours,
+                            weekDate.durationMinutes,
+                            singular = false,
+                            completed = false,
+                        )
+
+                        meetings.add(nextMeeting)
                     }
-                } else {
-                    addMeetingsHeader(meeting.date, auxList)
                 }
-                auxList.add(CalendarAdapterItem.MeetingAdapterItem(meeting))
-                prevDate = meeting.date
-            }
 
-            _meetingItems.value = auxList
+                meetings.sortBy { it.date }
+
+                var prevDate: Date? = null
+                meetings.forEach { meeting ->
+                    if (prevDate != null) {
+                        calendar.time = prevDate!!
+                        val prevDay = calendar.get(Calendar.DAY_OF_YEAR)
+                        val prevYear = calendar.get(Calendar.YEAR)
+
+                        calendar.time = meeting.date!!
+                        val day = calendar.get(Calendar.DAY_OF_YEAR)
+                        val year = calendar.get(Calendar.YEAR)
+
+                        if (prevDay != day || prevYear != year) {
+                            addMeetingsHeader(meeting.date!!, auxList)
+                        }
+                    } else {
+                        addMeetingsHeader(meeting.date!!, auxList)
+                    }
+                    auxList.add(CalendarAdapterItem.MeetingAdapterItem(meeting))
+                    prevDate = meeting.date
+                }
+
+                _meetingItems.value = auxList
+            } else {
+                _meetingItems.value = null
+            }
         }
     }
 

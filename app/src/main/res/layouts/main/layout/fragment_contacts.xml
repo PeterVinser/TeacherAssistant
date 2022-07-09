@@ -7,32 +7,32 @@
     tools:context=".view.main.fragment.ContactsFragment"
     android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/contacts_toggle_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        app:selectionRequired="true"
-        app:singleSelection="true"
-        android:layout_margin="8dp">
+<!--    <com.google.android.material.button.MaterialButtonToggleGroup-->
+<!--        android:id="@+id/contacts_toggle_button"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        app:selectionRequired="true"-->
+<!--        app:singleSelection="true"-->
+<!--        android:layout_margin="8dp">-->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/contacts_friends_toggle_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/contact_friends_toggle_button_text"
-            android:minWidth="144dp"
-            style="?attr/materialButtonOutlinedStyle"/>
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/contacts_friends_toggle_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/contact_friends_toggle_button_text"-->
+<!--            android:minWidth="144dp"-->
+<!--            style="?attr/materialButtonOutlinedStyle"/>-->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/contacts_invitations_toggle_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/contacts_invitations_toggle_button_text"
-            android:minWidth="144dp"
-            style="?attr/materialButtonOutlinedStyle"/>
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/contacts_invitations_toggle_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/contacts_invitations_toggle_button_text"-->
+<!--            android:minWidth="144dp"-->
+<!--            style="?attr/materialButtonOutlinedStyle"/>-->
 
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+<!--    </com.google.android.material.button.MaterialButtonToggleGroup>-->
 
     <TextView
         android:id="@+id/contacts_not_found"
@@ -58,6 +58,7 @@
         android:id="@+id/contacts_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         tools:listitem="@layout/contact_friend_list_item" />
 
 </LinearLayout>

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentNewMeetingBinding
-import com.piotrokninski.teacherassistant.model.meeting.MeetingInvitation
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.util.WeekDate
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.DatePickerDialogFragment
@@ -49,24 +49,20 @@ class NewMeetingFragment : Fragment() {
     private fun initMeetingInvitation() {
         arguments?.let {
             val safeArgs = NewMeetingFragmentArgs.fromBundle(it)
-            val meetingInvitation = safeArgs.meetingInvitation
+            val invitation = safeArgs.invitation
 
-            setupViewModel(safeArgs.meetingInvitation, safeArgs.id)
+            setupViewModel(invitation)
 
-            when (meetingInvitation?.mode) {
-                MeetingInvitation.MEETING_TYPE_SINGULAR -> {
-                    binding.newMeetingSingularToggleButton.isChecked = true
-                }
-
-                MeetingInvitation.MEETING_TYPE_RECURRING -> {
-                    binding.newMeetingRecurringToggleButton.isChecked = true
-                }
+            if (invitation?.meeting?.singular == true) {
+//                binding.newMeetingSingularToggleButton.isChecked = true
+            } else {
+//                binding.newMeetingRecurringToggleButton.isChecked = true
             }
         }
     }
 
-    private fun setupViewModel(meetingInvitation: MeetingInvitation?, id: String?) {
-        val factory = NewMeetingFragmentViewModelFactory(meetingInvitation, id)
+    private fun setupViewModel(invitation: Invitation?) {
+        val factory = NewMeetingFragmentViewModelFactory(invitation)
         newMeetingViewModel =
             ViewModelProvider(this, factory)[NewMeetingFragmentViewModel::class.java]
 
@@ -75,7 +71,7 @@ class NewMeetingFragment : Fragment() {
 
         observeFriendNames()
 
-        observeMeetingHolder()
+        observeMeeting()
     }
 
     private fun observeFriendNames() {
@@ -95,28 +91,28 @@ class NewMeetingFragment : Fragment() {
         }
     }
 
-    private fun observeMeetingHolder() {
-        newMeetingViewModel.meetingInvitation.observe(viewLifecycleOwner) { meetingHolder ->
-            if (meetingHolder != null) {
-                binding.newMeetingDate.text =
-                    newMeetingViewModel.meetingInvitation.value!!.dateToString()
+    private fun observeMeeting() {
+        newMeetingViewModel.meeting.observe(viewLifecycleOwner) { meeting ->
+            if (meeting != null) {
+//                binding.newMeetingDate.text =
+//                    newMeetingViewModel.meeting.value!!.dateToString()
             }
         }
     }
 
     private fun setupButtons() {
 
-        binding.newMeetingTypeToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            onMeetingTypeToggleClicked(checkedId, isChecked)
-        }
-
-        binding.newMeetingFriendTextView.setOnItemClickListener { _, _, position, _ ->
-            onFriendSelected(position)
-        }
-
-        binding.newMeetingDateButton.setOnClickListener {
-            onDateButtonClicked()
-        }
+//        binding.newMeetingTypeToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+//            onMeetingTypeToggleClicked(checkedId, isChecked)
+//        }
+//
+//        binding.newMeetingFriendTextView.setOnItemClickListener { _, _, position, _ ->
+//            onFriendSelected(position)
+//        }
+//
+//        binding.newMeetingDateButton.setOnClickListener {
+//            onDateButtonClicked()
+//        }
 
         binding.newMeetingCancelButton.setOnClickListener {
             onCancelClicked()
@@ -130,18 +126,16 @@ class NewMeetingFragment : Fragment() {
     private fun onMeetingTypeToggleClicked(checkedId: Int, isChecked: Boolean) {
         if (isChecked) {
             when (checkedId) {
-                R.id.new_meeting_singular_toggle_button -> {
-                    newMeetingViewModel.meetingInvitation.value!!.mode =
-                        MeetingInvitation.MEETING_TYPE_SINGULAR
+                R.id.invitation_meeting_singular_toggle_button -> {
+                    newMeetingViewModel.meeting.value!!.singular = true
                 }
 
-                R.id.new_meeting_recurring_toggle_button -> {
-                    newMeetingViewModel.meetingInvitation.value!!.mode =
-                        MeetingInvitation.MEETING_TYPE_RECURRING
+                R.id.invitation_meeting_recurring_toggle_button -> {
+                    newMeetingViewModel.meeting.value!!.singular = false
                 }
             }
 
-            binding.newMeetingDate.text = newMeetingViewModel.meetingInvitation.value!!.dateToString()
+//            binding.newMeetingDate.text = newMeetingViewModel.meeting.value!!.dateToString()
         }
     }
 
@@ -150,45 +144,41 @@ class NewMeetingFragment : Fragment() {
     }
 
     private fun onDateButtonClicked() {
-        when (newMeetingViewModel.meetingInvitation.value!!.mode) {
-            MeetingInvitation.MEETING_TYPE_SINGULAR -> {
-                val dialog = DatePickerDialogFragment(
-                    newMeetingViewModel.meetingInvitation.value?.date,
-                    newMeetingViewModel.meetingInvitation.value?.durationHours,
-                    newMeetingViewModel.meetingInvitation.value?.durationMinutes,
-                    DatePickerDialogFragment.MEETING_DATE_MODE
-                ) { date, durationHours, durationMinutes ->
-                    onSingularDateSelected(date, durationHours!!, durationMinutes!!)
-                }
-                dialog.show(childFragmentManager, "tag")
+        if (newMeetingViewModel.meeting.value!!.singular) {
+            val dialog = DatePickerDialogFragment(
+                newMeetingViewModel.meeting.value?.date,
+                newMeetingViewModel.meeting.value?.durationHours,
+                newMeetingViewModel.meeting.value?.durationMinutes,
+                DatePickerDialogFragment.MEETING_DATE_MODE
+            ) { date, durationHours, durationMinutes ->
+                onSingularDateSelected(date, durationHours!!, durationMinutes!!)
             }
+            dialog.show(childFragmentManager, "tag")
+        } else {
+            val prevWeekDate = newMeetingViewModel.meeting.value?.weekDates?.get(0)
 
-            MeetingInvitation.MEETING_TYPE_RECURRING -> {
-                val prevWeekDate = newMeetingViewModel.meetingInvitation.value?.weekDate
-
-                val dialog = prevWeekDate?.let {
-                    WeekDatePickerDialogFragment(it) { weekDate ->
-                        onRecurringDateSelected(weekDate)
-                    }
-                } ?: WeekDatePickerDialogFragment { weekDate ->
+            val dialog = prevWeekDate?.let {
+                WeekDatePickerDialogFragment(it) { weekDate ->
                     onRecurringDateSelected(weekDate)
                 }
-
-                dialog.show(childFragmentManager, "tag")
+            } ?: WeekDatePickerDialogFragment { weekDate ->
+                onRecurringDateSelected(weekDate)
             }
+
+            dialog.show(childFragmentManager, "tag")
         }
     }
 
     private fun onSingularDateSelected(date: Date, durationHours: Int, durationMinutes: Int) {
-        newMeetingViewModel.meetingInvitation.value!!.date = date
-        newMeetingViewModel.meetingInvitation.value!!.durationHours = durationHours
-        newMeetingViewModel.meetingInvitation.value!!.durationMinutes = durationMinutes
-        binding.newMeetingDate.text = newMeetingViewModel.meetingInvitation.value!!.dateToString()
+        newMeetingViewModel.meeting.value!!.date = date
+        newMeetingViewModel.meeting.value!!.durationHours = durationHours
+        newMeetingViewModel.meeting.value!!.durationMinutes = durationMinutes
+//        binding.newMeetingDate.text = newMeetingViewModel.meeting.value!!.dateToString()
     }
 
     private fun onRecurringDateSelected(weekDate: WeekDate) {
-        newMeetingViewModel.meetingInvitation.value!!.weekDate = weekDate
-        binding.newMeetingDate.text = newMeetingViewModel.meetingInvitation.value!!.dateToString()
+        newMeetingViewModel.meeting.value!!.weekDates = arrayListOf(weekDate)
+//        binding.newMeetingDate.text = newMeetingViewModel.meeting.value!!.dateToString()
     }
 
     private fun onCancelClicked() {

@@ -42,8 +42,7 @@ class NewHomeworkFragmentViewModel : ViewModel(), Observable {
     init {
         viewModelScope.launch {
             courses = FirestoreCourseRepository.getTaughtCourses(
-                currentUserId,
-                Course.STATUS_APPROVED
+                currentUserId
             )!!
 
             createCourseSnapshots()

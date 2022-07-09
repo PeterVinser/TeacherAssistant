@@ -24,7 +24,7 @@ class ContactsFragment : Fragment() {
     private lateinit var binding: FragmentContactsBinding
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
+    private lateinit var adapter: ContactsAdapter
 
     private lateinit var contactsViewModel: ContactsFragmentViewModel
 
@@ -61,19 +61,19 @@ class ContactsFragment : Fragment() {
 
         setupViewModel()
 
-        binding.contactsFriendsToggleButton.isChecked = true
-
-        binding.contactsToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            onToggleButtonClicked(
-                checkedId,
-                isChecked
-            )
-        }
+//        binding.contactsFriendsToggleButton.isChecked = true
+//
+//        binding.contactsToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+//            onToggleButtonClicked(
+//                checkedId,
+//                isChecked
+//            )
+//        }
     }
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = ContactsAdapter (requireContext()) { contactAdapterItem: ContactAdapterItem ->
+        adapter = ContactsAdapter { contactAdapterItem: ContactAdapterItem.FriendAdapterItem ->
             contactItemClicked(
                 contactAdapterItem
             )
@@ -118,7 +118,7 @@ class ContactsFragment : Fragment() {
     }
 
     private fun observeContactItems() {
-        contactsViewModel.mContactAdapterItems.observe(viewLifecycleOwner) {
+        contactsViewModel.contactAdapterItems.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.contactsNotFound.visibility = View.GONE
@@ -132,17 +132,17 @@ class ContactsFragment : Fragment() {
     }
 
     private fun onToggleButtonClicked(checkedId: Int, isChecked: Boolean) {
-        if (isChecked) {
-            when (checkedId) {
-                R.id.contacts_friends_toggle_button -> {
-                    contactsViewModel.getFriends()
-                }
-
-                R.id.contacts_invitations_toggle_button -> {
-                    contactsViewModel.getInvitations()
-                }
-            }
-        }
+//        if (isChecked) {
+//            when (checkedId) {
+//                R.id.contacts_friends_toggle_button -> {
+//                    contactsViewModel.getFriends()
+//                }
+//
+//                R.id.contacts_invitations_toggle_button -> {
+//                    contactsViewModel.getInvitations()
+//                }
+//            }
+//        }
     }
 
     override fun onResume() {

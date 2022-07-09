@@ -48,6 +48,29 @@ data class WeekDate(
         return "$localWeekDay ${timeToString()}"
     }
 
+    @get:Exclude
+    val nextDate: Date
+        get() {
+        val calendar = Calendar.getInstance()
+
+        val now = calendar.time
+
+        val weekDay = if (weekDay.id == 7) {
+            1
+        } else {
+            weekDay.id + 1
+        }
+
+        calendar.set(Calendar.DAY_OF_WEEK, weekDay)
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+
+        if (calendar.time < now) calendar.add(Calendar.DAY_OF_WEEK, 7)
+
+        return calendar.time
+    }
+
     override fun hashCode(): Int {
         var result = weekDay.hashCode()
         result = 31 * result + hour

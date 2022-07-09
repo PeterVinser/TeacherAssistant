@@ -1,7 +1,7 @@
 package com.piotrokninski.teacherassistant.model.adapteritem
 
 import com.piotrokninski.teacherassistant.R
-import com.piotrokninski.teacherassistant.model.meeting.Meeting
+import com.piotrokninski.teacherassistant.model.Meeting
 import java.util.*
 
 sealed class CalendarAdapterItem {
@@ -29,6 +29,6 @@ sealed class CalendarAdapterItem {
 
     data class MeetingAdapterItem(val meeting: Meeting): CalendarAdapterItem() {
         override val id = meeting.date.toString()
-        override val date = meeting.date
+        override val date = meeting.date!!
     }
 }

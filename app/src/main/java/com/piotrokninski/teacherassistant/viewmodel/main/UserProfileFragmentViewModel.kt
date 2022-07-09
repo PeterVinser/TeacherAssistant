@@ -8,11 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.model.user.User
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreInvitationRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
@@ -25,8 +26,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
     private val userRepository: RoomUserRepository
 
     //Needed when user is invited but did not respond yet
-    private val _friendInvitation = MutableLiveData<FriendInvitation>()
-    val friendInvitation: LiveData<FriendInvitation> = _friendInvitation
+    private val _invitation = MutableLiveData<Invitation>()
+    val invitation: LiveData<Invitation> = _invitation
 
     //Needed when user is already a friend
     private var friend: Friend? = null
@@ -58,8 +59,8 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
 
             friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
 
-            _friendInvitation.value = friend?.invitationId?.let {
-                FirestoreFriendInvitationRepository.getFriendInvitation(it)
+            _invitation.value = friend?.invitationId?.let {
+                FirestoreInvitationRepository.getInvitation(it)
             }
 
             updateFriendStatus()
@@ -91,56 +92,50 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
         }
     }
 
-    fun sendInvitation(invitationType: String, invitationMessage: String?) {
+    fun sendInvitation(invitedAs: String, invitationMessage: String?) {
 
-        val invitation = FriendInvitation(
+        val invitation = Invitation(
             null,
             currentUserId,
             currentUser.fullName,
             searchedUserId,
             user.value!!.fullName,
-            invitationType,
-            invitationMessage = invitationMessage,
-            course = null,
-            chatId = null
+            invitedAs,
+            type = Invitation.Contract.TYPE_FRIENDSHIP,
+            message = invitationMessage
         )
 
-        FirestoreFriendInvitationRepository.addFriendInvitation(invitation)
-//        InvitationCloudFunctions.sendFriendInvitation(invitation, null)
+        FirestoreInvitationRepository.addInvitation(invitation)
 
-        _friendInvitation.value = invitation
+        _invitation.value = invitation
 
         updateFriendStatus()
     }
 
     //Used when the detailed invitation is required (moving to the InvitationDetailsFragment)
-    fun prepareInvitation(invitationType: String, invitationMessage: String?): FriendInvitation {
+    fun prepareInvitation(invitedAs: String, invitationMessage: String?): Invitation {
 
-        return FriendInvitation(
+        return Invitation(
             null,
             currentUserId,
             currentUser.fullName,
             searchedUserId,
             user.value!!.fullName,
-            invitationType,
-            invitationMessage = invitationMessage,
-            course = null,
-            chatId = null
+            invitedAs,
+            type = Invitation.Contract.TYPE_FRIENDSHIP,
+            message = invitationMessage
         )
     }
 
     private suspend fun approveInvitation() {
 
-        Log.d(TAG, "approveInvitation: called")
-
-        friendInvitation.value?.invitationId?.let {
-            FirestoreFriendInvitationRepository.updateFriendInvitation(
+        invitation.value?.id?.let {
+            FirestoreInvitationRepository.updateInvitation(
                 it,
                 FriendInvitation.STATUS,
                 FriendInvitation.STATUS_APPROVED
             )
         }
-//        InvitationCloudFunctions.approveFriendInvitation(friendInvitation.value!!)
 
         friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
 
@@ -150,23 +145,20 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
     fun rejectInvitation() {
         if (friendStatus.value == Friend.STATUS_INVITING) {
 
-            friendInvitation.value?.invitationId?.let {
-                FirestoreFriendInvitationRepository.updateFriendInvitation(
+            invitation.value?.id?.let {
+                FirestoreInvitationRepository.updateInvitation(
                     it,
                     FriendInvitation.STATUS,
                     FriendInvitation.STATUS_REJECTED
                 )
             }
-//            InvitationCloudFunctions.rejectFriendInvitation(friendInvitation.value!!)
 
             updateFriendStatus()
         }
     }
 
     private fun cancelInvitation() {
-        friendInvitation.value?.invitationId?.let { FirestoreFriendInvitationRepository.deleteFriendInvitation(it) }
-
-//        InvitationCloudFunctions.cancelFriendInvitation(currentUserId, searchedUserId)
+        invitation.value?.id?.let { FirestoreInvitationRepository.deleteInvitation(it) }
     }
 
     private fun deleteFriend() {
@@ -177,7 +169,6 @@ class UserProfileFragmentViewModel(private val searchedUserId: String) : ViewMod
             FirestoreFriendRepository.deleteFriend(currentUserId, it.userId)
             FirestoreFriendRepository.deleteFriend(it.userId, currentUserId)
         }
-//        InvitationCloudFunctions.deleteFriend(currentUserId, searchedUserId)
 
         friend = null
 

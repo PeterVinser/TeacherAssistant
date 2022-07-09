@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentNewCourseBinding
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.util.WeekDate
 import com.piotrokninski.teacherassistant.view.main.MainActivity
@@ -48,7 +49,7 @@ class NewCourseFragment : Fragment() {
     private fun initCourse() {
         arguments?.let {
             val safeArgs = NewCourseFragmentArgs.fromBundle(it)
-            setupViewModel(safeArgs.course)
+            setupViewModel(safeArgs.invitation)
         }
     }
 
@@ -104,8 +105,7 @@ class NewCourseFragment : Fragment() {
     }
 
     private fun onConfirmClicked() {
-        if (newCourseViewModel.checkCourse()) {
-            newCourseViewModel.addCourse()
+        if (newCourseViewModel.addCourse()) {
             (activity as MainActivity).onBackPressed()
         } else {
             Toast.makeText(activity, "Uzupełnij szczegóły zajęć", Toast.LENGTH_SHORT).show()
@@ -116,8 +116,8 @@ class NewCourseFragment : Fragment() {
         (activity as MainActivity).onBackPressed()
     }
 
-    private fun setupViewModel(course: Course?) {
-        val factory = NewCourseFragmentViewModelFactory(course)
+    private fun setupViewModel(invitation: Invitation?) {
+        val factory = NewCourseFragmentViewModelFactory(invitation)
         newCourseViewModel =
             ViewModelProvider(this, factory)[NewCourseFragmentViewModel::class.java]
 
@@ -152,7 +152,7 @@ class NewCourseFragment : Fragment() {
             if (newCourseViewModel.editing) {
                 binding.newCourseTypeTextView.setText(course.type, false)
 
-                course.meetingDates?.forEach { meetingDate ->
+                course.weekDates?.forEach { meetingDate ->
                     val chip = Chip(activity)
                     chip.text = meetingDate.toString()
                     binding.newCourseChipGroup.addView(chip)

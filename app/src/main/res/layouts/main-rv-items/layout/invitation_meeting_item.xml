@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="invitationViewModel"
+            type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationFragmentViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/invitation_meeting_type_toggle_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_gravity="center"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/invitation_meeting_singular_toggle_button"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="160dp"
+                        android:text="@string/singular_meeting_text"
+                        android:checked="true"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/invitation_meeting_recurring_toggle_button"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="160dp"
+                        android:text="@string/recurring_meeting_text" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <EditText
+                    android:id="@+id/invitation_meeting_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:autofillHints="no"
+                    android:hint="@string/new_meeting_title"
+                    android:inputType="textMultiLine"
+                    android:minHeight="48dp"
+                    android:text="@={invitationViewModel.meeting.title}"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/invitation_meeting_date_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="@string/new_meeting_date_button_text" />
+
+                    <TextView
+                        android:id="@+id/invitation_meeting_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:textSize="18sp"
+                        android:text="@{invitationViewModel.meeting.dateToString()}"
+                        tools:text="1/1/1970 12:00" />
+
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/invitation_meeting_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:autofillHints="no"
+                    android:hint="@string/new_meeting_description_hint"
+                    android:inputType="textMultiLine"
+                    android:text="@={invitationViewModel.meeting.description}"
+                    android:minHeight="48dp" />
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</layout>

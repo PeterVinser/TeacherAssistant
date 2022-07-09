@@ -27,7 +27,7 @@
             android:gravity="center_horizontal">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/new_meeting_type_toggle_group"
+                android:id="@+id/invitation_meeting_type_toggle_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -35,7 +35,7 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/new_meeting_singular_toggle_button"
+                    android:id="@+id/invitation_meeting_singular_toggle_button"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                     android:checked="true"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/new_meeting_recurring_toggle_button"
+                    android:id="@+id/invitation_meeting_recurring_toggle_button"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <EditText
-                android:id="@+id/new_meeting_title"
+                android:id="@+id/invitation_meeting_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -62,7 +62,7 @@
                 android:hint="@string/new_meeting_title"
                 android:inputType="textMultiLine"
                 android:minHeight="48dp"
-                android:text="@={newMeetingViewModel.meetingInvitation.title}"
+                android:text="@={newMeetingViewModel.meeting.title}"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -92,14 +92,14 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/new_meeting_date_button"
+                    android:id="@+id/invitation_meeting_date_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="@string/new_meeting_date_button_text" />
 
                 <TextView
-                    android:id="@+id/new_meeting_date"
+                    android:id="@+id/invitation_meeting_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -110,14 +110,14 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/new_meeting_description"
+                android:id="@+id/invitation_meeting_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:autofillHints="no"
                 android:hint="@string/new_meeting_description_hint"
                 android:inputType="textMultiLine"
-                android:text="@={newMeetingViewModel.meetingInvitation.description}"
+                android:text="@={newMeetingViewModel.meeting.description}"
                 android:minHeight="48dp" />
 
         </LinearLayout>

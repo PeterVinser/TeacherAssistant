@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CalendarAdapter
@@ -61,7 +62,8 @@ class CalendarFragment : Fragment() {
         }
 
         binding.calendarAddMeetingsFab.setOnClickListener {
-            this.findNavController().navigate(R.id.destination_new_meeting)
+            val action = CalendarFragmentDirections.actionCalendarToInvitation(Invitation.Contract.TYPE_MEETING)
+            this.findNavController().navigate(action)
         }
 
         recyclerView = binding.calendarMeetingsRecyclerView

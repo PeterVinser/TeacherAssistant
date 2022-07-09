@@ -4,51 +4,61 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="android.view.View"/>
         <variable
-            name="friendInvitation"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.FriendInvitationItem" />
+            name="invitation"
+            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.InvitationItem" />
     </data>
 
     <LinearLayout
-        android:id="@+id/home_invitation_item_layout"
+        android:id="@+id/invitation_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/home_invitation_item_full_name"
+            android:id="@+id/invitation_item_full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="@{friendInvitation.friendInvitation.invitingUserFullName}"
+            android:text="@{invitation.received ? invitation.invitation.invitingUserFullName : invitation.invitation.invitedUserFullName}"
             android:textSize="18sp"
             tools:text="Imię i nazwisko" />
 
         <TextView
-            android:id="@+id/home_invitation_description"
+            android:id="@+id/invitation_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:text="@{invitation.getInvitationDescription()}"
             android:hint="@string/home_friend_invitation_text"
             android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/home_invitation_item_course_button"
+            android:id="@+id/invitation_item_attachment_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/home_invitation_course_button_text"
+            android:text="@string/invitation_attachment_course_text"
             android:textSize="16sp"
-            app:icon="@drawable/ic_dropdown_arrow_icon"
+            app:icon="@drawable/ic_dropup_arrow_icon"
             app:iconGravity="end"
             app:iconSize="32dp"
             style="?android:attr/buttonBarButtonStyle"/>
 
         <include
-            android:id="@+id/home_invitation_item_course_layout"
+            android:id="@+id/invitation_item_course_layout"
             layout="@layout/invitation_course"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="@{invitation.invitation.course == null ? View.GONE : View.VISIBLE}"/>
+
+        <include
+            android:id="@+id/invitation_item_meeting_layout"
+            layout="@layout/invitation_meeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{invitation.invitation.meeting == null ? View.GONE : View.VISIBLE}"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +66,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/home_invitation_item_reject_button"
+                android:id="@+id/invitation_item_reject_button"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +75,7 @@
                 android:text="@string/received_invitation_reject_button_text" />
 
             <Button
-                android:id="@+id/home_invitation_item_confirm_button"
+                android:id="@+id/invitation_item_confirm_button"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

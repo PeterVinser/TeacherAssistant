@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
@@ -82,7 +83,7 @@ class HomeFragment : Fragment() {
 
     private fun itemClickListener(homeAdapterItem: HomeAdapterItem) {
         when (homeAdapterItem) {
-            is HomeAdapterItem.FriendInvitationItem -> navigateToProfile(homeAdapterItem.friendInvitation.invitingUserId)
+            is HomeAdapterItem.InvitationItem -> navigateToProfile(homeAdapterItem.invitation.invitingUserId)
 
             is HomeAdapterItem.HomeworkItem -> {}
 
@@ -109,27 +110,21 @@ class HomeFragment : Fragment() {
         lifecycleScope.launchWhenCreated {
             homeViewModel.eventFlow.collect { event ->
                 when (event) {
-                    is HomeFragmentViewModel.HomeEvent.EditItemEvent -> editItem(event.itemId, event.homeAdapterItem)
+                    is HomeFragmentViewModel.HomeEvent.EditItemEvent -> editItem(event.homeAdapterItem)
                 }
             }
         }
     }
 
-    private fun editItem(id: String, item: HomeAdapterItem) {
+    private fun editItem(item: HomeAdapterItem) {
         val action = when (item) {
-            is HomeAdapterItem.CourseItem -> {
-                HomeFragmentDirections.actionHomeToNewCourse(item.course)
-            }
-
-            is HomeAdapterItem.MeetingInvitationItem -> {
-                HomeFragmentDirections.actionHomeToNewMeeting(item.meetingInvitation, id)
-            }
+            is HomeAdapterItem.InvitationItem ->
+                HomeFragmentDirections.actionHomeToInvitation(item.invitation.type, item.invitation)
 
             else -> null
         }
-        action?.let {
-            this.findNavController().navigate(action)
-        }
+
+        if (action != null) this.findNavController().navigate(action)
     }
 
 

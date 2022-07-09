@@ -22,8 +22,8 @@ class CoursesFragmentViewModel : ViewModel() {
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
-    private val _courses = MutableLiveData<ArrayList<CourseAdapterItem>>()
-    val courses: LiveData<ArrayList<CourseAdapterItem>> = _courses
+    private val _courses = MutableLiveData<ArrayList<Course>>()
+    val courses: LiveData<ArrayList<Course>> = _courses
 
     init {
         Log.d(TAG, "viewType: $viewType")
@@ -33,58 +33,20 @@ class CoursesFragmentViewModel : ViewModel() {
     }
 
     fun updateViewType() {
-        viewType = MainPreferences.getViewType() ?: throw IllegalStateException("The view type has not been initialized")
+        viewType = MainPreferences.getViewType()
+            ?: throw IllegalStateException("The view type has not been initialized")
     }
 
     private suspend fun getCourses() {
+        _courses.value = when (viewType) {
+            AppConstants.VIEW_TYPE_STUDENT ->
+                FirestoreCourseRepository.getStudiedCourses(currentUserId)
 
-        var approvedCourses: ArrayList<Course>? = null
-        var pendingCourses: ArrayList<Course>? = null
+            AppConstants.VIEW_TYPE_TUTOR ->
+                FirestoreCourseRepository.getTaughtCourses(currentUserId)
 
-        val courseItems = ArrayList<CourseAdapterItem>()
-
-        when (viewType) {
-            AppConstants.VIEW_TYPE_STUDENT -> {
-                approvedCourses = FirestoreCourseRepository.getStudiedCourses(
-                    currentUserId,
-                    Course.STATUS_APPROVED
-                )
-
-                pendingCourses = FirestoreCourseRepository.getStudiedCourses(
-                    currentUserId,
-                    Course.STATUS_PENDING
-                )
-            }
-
-            AppConstants.VIEW_TYPE_TUTOR -> {
-                approvedCourses = FirestoreCourseRepository.getTaughtCourses(
-                    currentUserId,
-                    Course.STATUS_APPROVED
-                )
-
-                pendingCourses = FirestoreCourseRepository.getTaughtCourses(
-                    currentUserId,
-                    Course.STATUS_PENDING
-                )
-            }
+            else -> null
         }
-
-        approvedCourses?.forEach {
-            courseItems.add(CourseAdapterItem.CourseItem(it))
-        }
-
-        if (!pendingCourses.isNullOrEmpty()) {
-            val pendingCoursesHeader =
-                CourseAdapterItem.HeaderItem(R.string.pending_courses_header_title)
-
-            courseItems.add(pendingCoursesHeader)
-        }
-
-        pendingCourses?.forEach {
-            courseItems.add(CourseAdapterItem.CourseItem(it))
-        }
-
-        _courses.value = courseItems
     }
 
     fun confirmCourse(course: Course) {

@@ -15,61 +15,32 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 
 class CoursesAdapter(
     private val clickListener: (Course) -> Unit,
-    private val buttonClickListener: (Int, Course) -> Unit,
-    private val viewType: String,
     private val context: Context
 ) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<CoursesAdapter.CourseViewHolder>() {
 
-    private val courseItems = ArrayList<CourseAdapterItem>()
+    private val courses = ArrayList<Course>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            COURSE_ITEM -> {
-                CourseViewHolder(CourseViewHolder.initBinding(parent), context)
-            }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
 
-            HEADER_ITEM -> {
-                HeaderViewHolder(HeaderViewHolder.initBinding(parent), context)
-            }
+        val layoutInflater = LayoutInflater.from(parent.context)
 
-            else -> throw ClassCastException("Unknown viewType")
-        }
+        val binding = CourseListItemBinding.inflate(layoutInflater, parent, false)
+
+        return CourseViewHolder(binding, context)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType) {
-            COURSE_ITEM -> {
-                (holder as CourseViewHolder).bind(
-                    (courseItems[position] as CourseAdapterItem.CourseItem).course,
-                    clickListener,
-                    buttonClickListener,
-                    viewType
-                )
-            }
-
-            HEADER_ITEM -> {
-                (holder as HeaderViewHolder).bind(
-                    courseItems[position] as CourseAdapterItem.HeaderItem
-                )
-            }
-        }
+    override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
+        holder.bind(courses[position], clickListener)
     }
 
     override fun getItemCount(): Int {
-        return courseItems.size
+        return courses.size
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (courseItems[position]) {
-            is CourseAdapterItem.CourseItem -> COURSE_ITEM
-            is CourseAdapterItem.HeaderItem -> HEADER_ITEM
-        }
-    }
-
-    fun setCourses(courseItems: List<CourseAdapterItem>) {
-        this.courseItems.clear()
-        this.courseItems.addAll(courseItems)
+    fun setCourses(courses: List<Course>) {
+        this.courses.clear()
+        this.courses.addAll(courses)
         notifyDataSetChanged()
     }
 
@@ -79,61 +50,14 @@ class CoursesAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        companion object {
-            fun initBinding(parent: ViewGroup): CourseListItemBinding {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                return CourseListItemBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                )
-            }
-        }
-
         fun bind(
             course: Course,
-            clickListener: (Course) -> Unit,
-            buttonClickListener: (Int, Course) -> Unit,
-            viewType: String
+            clickListener: (Course) -> Unit
         ) {
             binding.course = course
             binding.courseItemLayout.setOnClickListener { clickListener(course) }
 
-            if (course.status == Course.STATUS_APPROVED) {
-                binding.courseItemButtonsLayout.visibility = View.GONE
-            }
-
-            when (viewType) {
-                AppConstants.VIEW_TYPE_STUDENT -> {
-                    binding.courseItemUserProfession.text = context.getString(
-                        R.string.course_item_profession_text,
-                        context.getString(R.string.tutor_title_text)
-                    )
-                    binding.courseItemFullName.text = course.tutorFullName
-
-                    binding.courseItemCancelRejectButton.text = context.getString(R.string.course_item_reject_button_text)
-                    binding.courseItemCancelRejectButton.setOnClickListener { buttonClickListener(REJECT_BUTTON_ID, course) }
-
-                    binding.courseItemEditConfirmButton.text = context.getString(R.string.course_item_confirm_button_text)
-                    binding.courseItemEditConfirmButton.setOnClickListener { buttonClickListener(CONFIRM_BUTTON_ID, course) }
-                }
-
-                AppConstants.VIEW_TYPE_TUTOR -> {
-                    binding.courseItemUserProfession.text = context.getString(
-                        R.string.course_item_profession_text,
-                        context.getString(R.string.student_title_text)
-                    )
-                    binding.courseItemFullName.text = course.studentFullName
-
-                    binding.courseItemCancelRejectButton.text = context.getString(R.string.course_item_cancel_button_text)
-                    binding.courseItemCancelRejectButton.setOnClickListener { buttonClickListener(CANCEL_BUTTON_ID, course) }
-
-                    binding.courseItemEditConfirmButton.text = context.getText(R.string.course_item_edit_button_text)
-                    binding.courseItemEditConfirmButton.setOnClickListener { buttonClickListener(EDIT_BUTTON_ID, course) }
-                }
-            }
-
-            course.meetingDates!!.forEach { date ->
+            course.weekDates?.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date.toString()
 

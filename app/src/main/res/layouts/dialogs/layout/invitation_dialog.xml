@@ -50,14 +50,6 @@
 
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/invitation_dialog_message_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="@string/invitation_message_title"
-        android:textSize="18sp" />
-
     <EditText
         android:id="@+id/invitation_dialog_message"
         android:layout_width="match_parent"

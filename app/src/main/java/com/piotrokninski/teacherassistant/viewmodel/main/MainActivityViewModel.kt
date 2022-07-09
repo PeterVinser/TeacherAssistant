@@ -97,16 +97,17 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun updateCalendar() {
+        // TODO: update with new Meeting object
         viewModelScope.launch {
-            meetingRepository.deleteCompletedMeetings(Calendar.getInstance().timeInMillis)
-
-            FirestoreMeetingRepository.getUpcomingSingularMeetings(currentUserId)?.let { meetings ->
-                syncMeetings(meetings)
-            }
-
-            FirestoreRecurringMeetingsRepository.getRecurringMeetings(currentUserId)?.let { recurringMeetings ->
-                syncRecurringMeetings(recurringMeetings)
-            }
+//            meetingRepository.deleteCompletedMeetings(Calendar.getInstance().timeInMillis)
+//
+//            FirestoreMeetingRepository.getUpcomingSingularMeetings(currentUserId)?.let { meetings ->
+//                syncMeetings(meetings)
+//            }
+//
+//            FirestoreRecurringMeetingsRepository.getRecurringMeetings(currentUserId)?.let { recurringMeetings ->
+//                syncRecurringMeetings(recurringMeetings)
+//            }
         }
     }
 

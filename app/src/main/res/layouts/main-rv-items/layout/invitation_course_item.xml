@@ -7,7 +7,7 @@
 
         <variable
             name="invitationViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationDetailsFragmentViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationFragmentViewModel" />
     </data>
 
     <FrameLayout
@@ -74,12 +74,22 @@
                     android:textSize="16sp" />
 
 
-                <Spinner
-                    android:id="@+id/invitation_course_item_type_spinner"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/invitation_course_type_menu"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="192dp"
                     android:layout_height="wrap_content"
-                    android:entries="@array/lesson_types"
-                    android:minHeight="48dp" />
+                    android:layout_margin="8dp"
+                    android:hint="@string/lesson_type_hint">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/invitation_course_type_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        tools:ignore="LabelFor" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

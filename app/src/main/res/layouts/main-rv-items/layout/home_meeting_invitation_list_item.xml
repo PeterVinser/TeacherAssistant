@@ -4,9 +4,9 @@
 
     <data>
 
-        <variable
-            name="item"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.MeetingInvitationItem" />
+<!--        <variable-->
+<!--            name="item"-->
+<!--            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem" />-->
     </data>
 
     <LinearLayout
@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="@{item.meetingInvitation.title}"
             android:textAlignment="center"
             android:textSize="18sp"
             tools:text="Tytuł" />
@@ -37,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="@{item.meetingInvitation.dateToString()}"
             tools:text="Data"
             android:layout_margin="8dp"/>
 
@@ -53,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="16sp"
-                android:text="@{item.invited ? @string/reject_button_text : @string/cancel_button_text}"
                 tools:text="@string/reject_button_text"/>
 
             <Button
@@ -63,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="16sp"
-                android:text="@{item.invited ? @string/confirm_button_text : @string/edit_button_text}"
                 tools:text="@string/confirm_button_text"/>
 
         </LinearLayout>

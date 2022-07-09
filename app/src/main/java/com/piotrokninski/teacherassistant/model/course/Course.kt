@@ -2,6 +2,8 @@ package com.piotrokninski.teacherassistant.model.course
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Exclude
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.io.Serializable
@@ -12,28 +14,27 @@ data class Course(
     var tutorId: String,
     var studentFullName: String? = null,
     var tutorFullName: String? = null,
-    val status: String = STATUS_PENDING,
     var type: String? = null,
     var subject: String? = null,
-    var meetingDates: ArrayList<WeekDate>? = null
+    var weekDates: ArrayList<WeekDate>? = null
 ) : Serializable {
+
+    @get:Exclude
+    val isComplete: Boolean
+        get() = (!studentId.isNullOrEmpty() && weekDates != null
+                && !subject.isNullOrEmpty() && !type.isNullOrEmpty())
+
 
     companion object {
 
-        fun DocumentSnapshot.toCourse(): Course? {
-            return try {
-                toCourse(data!!)
-            } catch (e: Exception) {
-                Log.e(TAG, "toCourse: ", e)
-                null
-            }
-        }
+        fun DocumentSnapshot.toCourse(): Course?  =
+            toCourse(data!!)
 
         fun toCourse(map: Map<String, Any>): Course? {
             return try {
                 val meetingDates = ArrayList<WeekDate>()
 
-                (map[MEETING_DATES] as ArrayList<Map<String, Any>>).forEach {
+                (map[WEEK_DATES] as ArrayList<Map<String, Any>>).forEach {
                     WeekDate.toWeekDate(it)?.let { weekDate -> meetingDates.add(weekDate) }
                 }
 
@@ -43,7 +44,6 @@ data class Course(
                     map[TUTOR_ID] as String,
                     map[STUDENT_FULL_NAME] as String,
                     map[TUTOR_FULL_NAME] as String,
-                    map[STATUS] as String,
                     map[TYPE] as String,
                     map[SUBJECT] as String,
                     meetingDates
@@ -54,25 +54,23 @@ data class Course(
             }
         }
 
-        fun createCourseWithInvitation(friendInvitation: FriendInvitation): Course {
-            return when (friendInvitation.invitationType) {
+        fun createCourseWithInvitation(invitation: Invitation): Course {
+            return when (invitation.invitedAs) {
                 FriendInvitation.TYPE_STUDENT -> {
                     Course(
-                        studentId = friendInvitation.invitedUserId,
-                        studentFullName = friendInvitation.invitedUserFullName,
-                        tutorId = friendInvitation.invitingUserId,
-                        tutorFullName = friendInvitation.invitingUserFullName,
-                        status = STATUS_ATTACHED
+                        studentId = invitation.invitedUserId,
+                        studentFullName = invitation.invitedUserFullName,
+                        tutorId = invitation.invitingUserId,
+                        tutorFullName = invitation.invitingUserFullName
                     )
                 }
 
                 FriendInvitation.TYPE_TUTOR -> {
                     Course(
-                        studentId = friendInvitation.invitingUserId,
-                        studentFullName = friendInvitation.invitingUserFullName,
-                        tutorId = friendInvitation.invitedUserId,
-                        tutorFullName = friendInvitation.invitedUserFullName,
-                        status = STATUS_ATTACHED
+                        studentId = invitation.invitingUserId,
+                        studentFullName = invitation.invitingUserFullName,
+                        tutorId = invitation.invitedUserId!!,
+                        tutorFullName = invitation.invitedUserFullName
                     )
                 }
 
@@ -93,11 +91,10 @@ data class Course(
         const val STATUS = "status"
         private const val TYPE = "type"
         private const val SUBJECT = "subject"
-        private const val MEETING_DATES = "meetingDates"
+        private const val WEEK_DATES = "weekDates"
 
         const val STATUS_PENDING = "pending"
         const val STATUS_APPROVED = "approved"
-        private const val STATUS_ATTACHED = "attached" //when attached to invitation
 
         private const val TAG = "Course"
     }

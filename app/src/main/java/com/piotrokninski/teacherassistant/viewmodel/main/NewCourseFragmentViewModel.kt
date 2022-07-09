@@ -7,17 +7,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.user.User
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreCourseRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreFriendRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreInvitationRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
 import com.piotrokninski.teacherassistant.util.WeekDate
 import kotlinx.coroutines.launch
 
-class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(), Observable {
+class NewCourseFragmentViewModel(private val initInvitation: Invitation?) : ViewModel(), Observable {
     private val TAG = "NewCourseFragmentViewMo"
 
     private val userRepository: RoomUserRepository
@@ -32,6 +33,8 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
 
     var editing: Boolean = false
 
+    private var selectedStudent: Friend? = null
+
     @Bindable
     val course = MutableLiveData<Course>()
 
@@ -40,7 +43,7 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
         val userDao = AppDatabase.getInstance().userDao
         userRepository = RoomUserRepository(userDao)
 
-        course.value = initCourse?.let { course ->
+        course.value = initInvitation?.course?.let { course ->
             editing = true
             course
         }  ?: Course(tutorId = currentUserId)
@@ -49,8 +52,9 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
             currentUser = userRepository.getUser(currentUserId)!!
 
             course.value!!.tutorFullName = currentUser.fullName
+
             if (editing) {
-                _studentFullNames.value = arrayListOf(initCourse!!.studentFullName!!).toTypedArray()
+                _studentFullNames.value = arrayListOf(initInvitation!!.course!!.studentFullName!!).toTypedArray()
             } else {
                 students = FirestoreFriendRepository.getApprovedFriends(
                     currentUserId,
@@ -70,9 +74,33 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
         }
     }
 
-    fun addCourse() {
-        FirestoreCourseRepository.addCourse(course.value!!)
-//        CourseCloudFunctions.addCourse(course.value!!)
+    fun addCourse(): Boolean {
+        return (course.value?.isComplete == true).let {
+
+            initInvitation?.id?.let {
+
+                initInvitation.course = course.value
+
+                FirestoreInvitationRepository.updateInvitation(
+                    initInvitation
+                )
+            } ?: run {
+
+                val invitation = Invitation(
+                    invitingUserId = currentUser.userId,
+                    invitingUserFullName = currentUser.fullName,
+                    invitedUserId = selectedStudent!!.userId,
+                    invitedUserFullName = selectedStudent!!.fullName,
+                    invitedAs = Invitation.Contract.STUDENT,
+                    type = Invitation.Contract.TYPE_COURSE,
+                    course = course.value,
+                    chatId = selectedStudent!!.chatId
+                )
+
+                FirestoreInvitationRepository.addInvitation(invitation)
+            }
+            it
+        }
     }
 
     fun setCourseType(type: String) {
@@ -80,24 +108,20 @@ class NewCourseFragmentViewModel(private val initCourse: Course?) : ViewModel(),
     }
 
     fun addMeetingDate(meetingDate: WeekDate) {
-        val meetingDates = if (course.value!!.meetingDates != null) {
-            course.value!!.meetingDates!!
+        val meetingDates = if (course.value!!.weekDates != null) {
+            course.value!!.weekDates!!
         } else {
             ArrayList()
         }
         meetingDates.add(meetingDate)
-        course.value!!.meetingDates = meetingDates
+        course.value!!.weekDates = meetingDates
     }
 
     fun onStudentSelected(position: Int) {
-        val selectedStudent = students[position]
+        selectedStudent = students[position]
 
-        course.value!!.studentId = selectedStudent.userId
-        course.value!!.studentFullName = selectedStudent.fullName
-    }
-
-    fun checkCourse(): Boolean {
-        return !(course.value!!.studentId == null || course.value!!.meetingDates == null || course.value!!.subject == null || course.value!!.type == null)
+        course.value!!.studentId = selectedStudent!!.userId
+        course.value!!.studentFullName = selectedStudent!!.fullName
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

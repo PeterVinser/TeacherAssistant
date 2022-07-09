@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
+import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.model.friend.FriendInvitation
 import com.piotrokninski.teacherassistant.view.main.MainActivity
@@ -52,7 +53,7 @@ class UserProfileFragment : Fragment() {
     private fun onInviteClicked() {
         if (userProfileViewModel.friendStatus.value == Friend.STATUS_BLANK) {
             val dialog = InvitationDialogFragment (
-                { invitationType: String, invitationMessage: String? -> sendInvitation(invitationType, invitationMessage) },
+                { invitedAs: String, invitationMessage: String? -> sendInvitation(invitedAs, invitationMessage) },
                 userProfileViewModel.currentUser,
                 userProfileViewModel.user.value!!
             )
@@ -67,11 +68,15 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun sendInvitation(invitationType: String, invitationMessage: String?) {
-        if (invitationType == FriendInvitation.TYPE_FRIEND) {
-            userProfileViewModel.sendInvitation(invitationType, invitationMessage)
-        } else {
-            val action = UserProfileFragmentDirections.actionUserProfileToInvitationDetails(userProfileViewModel.prepareInvitation(invitationType, invitationMessage))
+        if (invitationType == FriendInvitation.TYPE_STUDENT) {
+
+            val action = UserProfileFragmentDirections.actionUserProfileToInvitation(
+                Invitation.Contract.TYPE_FRIENDSHIP,
+                userProfileViewModel.prepareInvitation(invitationType, invitationMessage)
+            )
             this.findNavController().navigate(action)
+        } else {
+            userProfileViewModel.sendInvitation(invitationType, invitationMessage)
         }
     }
 
@@ -134,11 +139,11 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun observeFriendInvitation() {
-        userProfileViewModel.friendInvitation.observe(viewLifecycleOwner) { invitation ->
+        userProfileViewModel.invitation.observe(viewLifecycleOwner) { invitation ->
             if (invitation != null) {
                 binding.userProfileInvitation.visibility = View.VISIBLE
 
-                binding.userProfileInvitationDescription.text = when (invitation.invitationType) {
+                binding.userProfileInvitationDescription.text = when (invitation.invitedAs) {
                     FriendInvitation.TYPE_STUDENT -> getString(R.string.invitation_student_type)
 
                     FriendInvitation.TYPE_TUTOR -> getString(R.string.invitation_tutor_type)
@@ -153,11 +158,11 @@ class UserProfileFragment : Fragment() {
 
                     binding.userProfileInvitationCourse.course = invitation.course
 
-                    invitation.course!!.meetingDates?.forEach { date ->
+                    invitation.course!!.weekDates?.forEach { date ->
                         val chip = Chip(context)
                         chip.text = date.toString()
 
-                        binding.userProfileInvitationCourse.homeInvitationItemCourseDates.addView(chip)
+                        binding.userProfileInvitationCourse.invitationItemCourseDates.addView(chip)
                     }
                 }
             } else {

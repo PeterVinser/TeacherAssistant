@@ -75,8 +75,7 @@
     <string name="invitation_type_student_text">Ucznia</string>
     <string name="invitation_type_tutor_text">Korepetytora</string>
     <string name="invitation_type_friend_text">Znajomego</string>
-    <string name="invitation_message_title">Napisz wiadomość</string>
-    <string name="invitation_message_hint">Cześć…</string>
+    <string name="invitation_message_hint">Wiadomość</string>
     <string name="dialog_cancel_text">Anuluj</string>
     <string name="invitation_dialog_details_text">Dalej</string>
     <string name="invitation_send_text">Wyślij</string>
@@ -203,10 +202,12 @@
 
     <string name="home_course_tutor_full_name_text">Korepetytor: %1$s</string>
     <string name="home_course_student_full_name_text">Uczeń: %1$s</string>
-    <string name="home_course_type_text">Tryb: %1$s</string>
+    <string name="course_type_text">Tryb: %1$s</string>
+    <string name="meeting_type_text">Rodzaj: %1$s</string>
 
     <string name="home_homework_due_date_text">Termin: %1$s</string>
-    <string name="home_invitation_course_button_text">Zajęcia</string>
+    <string name="invitation_attachment_course_text">Zajęcia</string>
+    <string name="invitation_attachment_meeting_text">Spotkanie</string>
 
     <string name="invitation_student_type">Zaprasza cię do grona uczniów</string>
     <string name="invitation_tutor_type">Zaprasza cię jako swojego korepetytora</string>
@@ -249,4 +250,6 @@
     <string name="home_meeting_sent_invitation_header_text">Wysłane</string>
     <string name="menu_calendar_invitations_desc">Zaproszenia</string>
     <string name="menu_calendar_sync_desc">Synchronizuj</string>
+
+    <string name="invitation_student_full_name">Uczeń: %1$s</string>
 </resources>

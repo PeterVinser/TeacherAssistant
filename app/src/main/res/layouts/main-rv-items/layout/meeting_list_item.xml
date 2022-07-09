@@ -5,7 +5,7 @@
     <data>
         <variable
             name="meeting"
-            type="com.piotrokninski.teacherassistant.model.meeting.Meeting" />
+            type="com.piotrokninski.teacherassistant.model.Meeting" />
     </data>
 
     <LinearLayout

@@ -25,13 +25,12 @@ object FirestoreCourseRepository {
             .update(field, value)
     }
 
-    suspend fun getStudiedCourses(userId: String, status: String): ArrayList<Course>? {
+    suspend fun getStudiedCourses(userId: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 
         val coursesRef = db.collection(Course.COLLECTION_NAME)
 
         val query = coursesRef.whereEqualTo(Course.STUDENT_ID, userId)
-            .whereEqualTo(Course.STATUS, status)
 
         return try {
 
@@ -52,13 +51,12 @@ object FirestoreCourseRepository {
         }
     }
 
-    suspend fun getTaughtCourses(userId: String, status: String): ArrayList<Course>? {
+    suspend fun getTaughtCourses(userId: String): ArrayList<Course>? {
         val db = FirebaseFirestore.getInstance()
 
         val coursesRef = db.collection(Course.COLLECTION_NAME)
 
         val query = coursesRef.whereEqualTo(Course.TUTOR_ID, userId)
-            .whereEqualTo(Course.STATUS, status)
 
         return try {
 

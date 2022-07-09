@@ -8,9 +8,9 @@ import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
 import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
 
-class ReceivedInvitationDialogFragment(private val friendInvitationItem: HomeAdapterItem.FriendInvitationItem,
-                                       private val profileCallback: (friendInvitationItem: HomeAdapterItem.FriendInvitationItem) -> Unit,
-                                       private val detailsCallback: (friendInvitationItem: HomeAdapterItem.FriendInvitationItem) -> Unit,
+class ReceivedInvitationDialogFragment(private val friendInvitationItem: HomeAdapterItem.InvitationItem,
+                                       private val profileCallback: (friendInvitationItem: HomeAdapterItem.InvitationItem) -> Unit,
+                                       private val detailsCallback: (friendInvitationItem: HomeAdapterItem.InvitationItem) -> Unit,
                                        private val refreshCallback: () -> Unit): DialogFragment() {
 
     private lateinit var binding: ReceivedInvitationDialogBinding
@@ -27,28 +27,28 @@ class ReceivedInvitationDialogFragment(private val friendInvitationItem: HomeAda
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.friendInvitation = friendInvitationItem.friendInvitation
-        binding.receivedInvitationDialogType.text = friendInvitationItem.getInvitationType()
-
-        if (friendInvitationItem.friendInvitation.invitationMessage.isNullOrEmpty()) {
-            binding.receivedInvitationDialogMessage.visibility = View.GONE
-        }
-
-        if (friendInvitationItem.friendInvitation.course == null) {
-            binding.receivedInvitationDialogDetailsButton.visibility = View.GONE
-        }
-
-        binding.receivedInvitationDialogRejectButton.setOnClickListener {
-//            InvitationCloudFunctions.rejectFriendInvitation(invitationItem.friendInvitation)
-            refreshCallback
-            dismiss()
-        }
-
-        binding.receivedInvitationDialogConfirmButton.setOnClickListener {
-//            InvitationCloudFunctions.approveFriendInvitation(invitationItem.friendInvitation)
-            refreshCallback
-            dismiss()
-        }
+//        binding.friendInvitation = friendInvitationItem.friendInvitation
+//        binding.receivedInvitationDialogType.text = friendInvitationItem.getInvitationType()
+//
+//        if (friendInvitationItem.friendInvitation.invitationMessage.isNullOrEmpty()) {
+//            binding.receivedInvitationDialogMessage.visibility = View.GONE
+//        }
+//
+//        if (friendInvitationItem.friendInvitation.course == null) {
+//            binding.receivedInvitationDialogDetailsButton.visibility = View.GONE
+//        }
+//
+//        binding.receivedInvitationDialogRejectButton.setOnClickListener {
+////            InvitationCloudFunctions.rejectFriendInvitation(invitationItem.friendInvitation)
+//            refreshCallback
+//            dismiss()
+//        }
+//
+//        binding.receivedInvitationDialogConfirmButton.setOnClickListener {
+////            InvitationCloudFunctions.approveFriendInvitation(invitationItem.friendInvitation)
+//            refreshCallback
+//            dismiss()
+//        }
 
         binding.receivedInvitationDialogProfileButton.setOnClickListener {
             profileCallback(friendInvitationItem)

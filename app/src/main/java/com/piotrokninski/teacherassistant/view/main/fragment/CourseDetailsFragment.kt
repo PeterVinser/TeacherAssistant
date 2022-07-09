@@ -139,7 +139,7 @@ class CourseDetailsFragment : Fragment() {
                 }
             }
 
-            course.meetingDates!!.forEach { date ->
+            course.weekDates!!.forEach { date ->
                 val chip = Chip(context)
                 chip.text = date.toString()
 

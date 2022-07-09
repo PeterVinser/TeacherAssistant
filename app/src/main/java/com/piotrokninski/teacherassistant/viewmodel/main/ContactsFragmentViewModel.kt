@@ -24,8 +24,8 @@ class ContactsFragmentViewModel : ViewModel() {
 
     private val viewType = MainPreferences.getViewType()
 
-    private val _contactItems = MutableLiveData<List<ContactAdapterItem>>()
-    val mContactAdapterItems: LiveData<List<ContactAdapterItem>> = _contactItems
+    private val _contactItems = MutableLiveData<List<ContactAdapterItem.FriendAdapterItem>>()
+    val contactAdapterItems: LiveData<List<ContactAdapterItem.FriendAdapterItem>> = _contactItems
 
     init {
         getFriends()
@@ -35,7 +35,7 @@ class ContactsFragmentViewModel : ViewModel() {
         viewModelScope.launch {
 //            val auxList = ArrayList<ContactAdapterItem>()
 
-            val friendItems = ArrayList<ContactAdapterItem>()
+            val friendItems = ArrayList<ContactAdapterItem.FriendAdapterItem>()
 
             // TODO: delete the pure friendship type
 
@@ -61,52 +61,6 @@ class ContactsFragmentViewModel : ViewModel() {
             }
 
             _contactItems.value = friendItems
-        }
-    }
-
-    fun getInvitations() {
-        viewModelScope.launch {
-            val auxList = ArrayList<ContactAdapterItem>()
-
-            val receivedInvitationsHeader =
-                ContactAdapterItem.HeaderAdapterItem(R.string.header_item_received_invitations)
-
-            val receivedInvitations = ArrayList<ContactAdapterItem>()
-
-            FirestoreFriendInvitationRepository.getReceivedFriendsInvitations(currentUserId, FriendInvitation.STATUS_PENDING)
-                ?.forEach { invitation ->
-                    val receivedInvitationItem = ContactAdapterItem.FriendInvitationAdapterItem(
-                        AppConstants.RECEIVED_INVITATIONS,
-                        invitation
-                    )
-                    receivedInvitations.add(receivedInvitationItem)
-                }
-
-            val sentInvitationsHeader =
-                ContactAdapterItem.HeaderAdapterItem(R.string.header_item_sent_invitations)
-
-            val sentInvitations = ArrayList<ContactAdapterItem>()
-
-            FirestoreFriendInvitationRepository.getSentFriendInvitations(currentUserId, FriendInvitation.STATUS_PENDING)
-                ?.forEach { invitation ->
-                    val sentInvitationItem = ContactAdapterItem.FriendInvitationAdapterItem(
-                        AppConstants.SENT_INVITATIONS,
-                        invitation
-                    )
-                    sentInvitations.add(sentInvitationItem)
-                }
-
-            if (receivedInvitations.isNotEmpty()) {
-                auxList.add(receivedInvitationsHeader)
-                auxList.addAll(receivedInvitations)
-            }
-
-            if (sentInvitations.isNotEmpty()) {
-                auxList.add(sentInvitationsHeader)
-                auxList.addAll(sentInvitations)
-            }
-
-            _contactItems.value = auxList
         }
     }
 }

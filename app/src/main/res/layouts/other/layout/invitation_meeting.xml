@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
-            name="course"
-            type="com.piotrokninski.teacherassistant.model.course.Course" />
+            name="meeting"
+            type="com.piotrokninski.teacherassistant.model.Meeting" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,33 +14,40 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/invitation_item_course_subject"
+            android:id="@+id/invitation_item_meeting_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{course.subject}"
+            android:text="@{meeting.title}"
             android:textSize="16sp"
-            tools:text="Przedmiot"
+            tools:text="Spotkanie"
             android:textAlignment="center"
             android:layout_margin="2dp"/>
 
         <TextView
-            android:id="@+id/invitation_item_course_type"
+            android:id="@+id/home_invitation_item_meeting_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@{@string/course_type_text(course.type)}"
-            tools:text="Tryb"/>
+            tools:text="Rodzaj"/>
+
+        <TextView
+            android:id="@+id/invitation_item_meeting_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@{meeting.dateToString()}"/>
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/invitation_item_course_dates"
+            android:id="@+id/invitation_item_meeting_week_dates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:visibility="@{meeting.singular ? View.GONE : View.VISIBLE}"/>
     </LinearLayout>
 </layout>
