@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.model
 
 import android.util.Log
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
@@ -9,6 +10,7 @@ import com.piotrokninski.teacherassistant.util.WeekDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Entity(tableName = Meeting.Contract.TABLE_NAME)
 data class Meeting(
     var id: String? = null,
     val courseId: String? = null,
@@ -21,7 +23,7 @@ data class Meeting(
     var durationMinutes: Int? = null,
     var singular: Boolean,
     val completed: Boolean,
-    var weekDates: ArrayList<WeekDate>? = null,
+    var weekDates: List<WeekDate>? = null,
     @get:Exclude
     @PrimaryKey(autoGenerate = true)
     var roomId: Int = 0,
@@ -63,7 +65,7 @@ data class Meeting(
                     map[Contract.ID] as String?,
                     map[Contract.COURSE_ID] as String?,
                     map[Contract.LESSON_ID] as String?,
-                    map[Contract.ATTENDEE_IDS] as ArrayList<String>,
+                    map[Contract.ATTENDEE_IDS] as List<String>,
                     map[Contract.TITLE] as String,
                     map[Contract.DESCRIPTION] as String?,
                     (map[Contract.DATE] as Timestamp).toDate(),

@@ -15,8 +15,7 @@ import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CoursesAdapter
-import com.piotrokninski.teacherassistant.viewmodel.main.CoursesFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.CoursesFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.CoursesViewModel
 
 class CoursesFragment : Fragment() {
 
@@ -25,7 +24,7 @@ class CoursesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CoursesAdapter
 
-    private lateinit var coursesViewModel: CoursesFragmentViewModel
+    private lateinit var coursesViewModel: CoursesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,9 +71,9 @@ class CoursesFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = CoursesFragmentViewModelFactory()
+        val factory = CoursesViewModel.Factory()
         coursesViewModel =
-            ViewModelProvider(this, factory)[CoursesFragmentViewModel::class.java]
+            ViewModelProvider(this, factory)[CoursesViewModel::class.java]
 
         initRecyclerView()
 

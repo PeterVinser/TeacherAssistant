@@ -5,26 +5,26 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.UserHintListItemBinding
 import com.piotrokninski.teacherassistant.databinding.UserProfileListItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.SearchUserAdapterItem
+import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.util.AppConstants
 
-class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> Unit) :
+class SearchUsersAdapter(private val clickListener: (Item) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TAG = "SearchUsersAdapter"
 
-    private val searchedUsers = ArrayList<SearchUserAdapterItem>()
+    private val searchedUsers = ArrayList<Item>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
         return when (viewType) {
-            AppConstants.HINTS_SEARCH_MODE -> {
+            Item.Hint.ID ->
                 UserHintViewHolder(UserHintViewHolder.initBinding(parent))
-            }
-            AppConstants.PROFILES_SEARCH_MODE -> {
+
+            Item.Profile.ID ->
                 UserProfileViewHolder(UserProfileViewHolder.initBinding(parent))
-            }
+
             else -> throw ClassCastException("Unknown viewType")
         }
     }
@@ -34,14 +34,14 @@ class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> U
         when (holder.itemViewType) {
             AppConstants.HINTS_SEARCH_MODE -> {
                 (holder as UserHintViewHolder).bind(
-                    searchedUsers[position] as SearchUserAdapterItem.UserAdapterHint,
+                    searchedUsers[position] as Item.Hint,
                     clickListener
                 )
             }
 
             AppConstants.PROFILES_SEARCH_MODE -> {
                 (holder as UserProfileViewHolder).bind(
-                    searchedUsers[position] as SearchUserAdapterItem.UserAdapterProfile,
+                    searchedUsers[position] as Item.Profile,
                     clickListener
                 )
             }
@@ -52,7 +52,7 @@ class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> U
         return searchedUsers.size
     }
 
-    fun setSearchedUsers(searchUserAdapters: List<SearchUserAdapterItem>) {
+    fun setSearchedUsers(searchUserAdapters: List<Item>) {
         this.searchedUsers.clear()
         this.searchedUsers.addAll(searchUserAdapters)
         notifyDataSetChanged()
@@ -60,8 +60,8 @@ class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> U
 
     override fun getItemViewType(position: Int): Int {
         return when (searchedUsers[position]) {
-            is SearchUserAdapterItem.UserAdapterHint -> AppConstants.HINTS_SEARCH_MODE
-            is SearchUserAdapterItem.UserAdapterProfile -> AppConstants.PROFILES_SEARCH_MODE
+            is Item.Hint -> Item.Hint.ID
+            is Item.Profile -> Item.Profile.ID
         }
     }
 
@@ -80,8 +80,8 @@ class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> U
         }
 
         fun bind(
-            userAdapterHint: SearchUserAdapterItem.UserAdapterHint,
-            clickListener: (SearchUserAdapterItem) -> Unit
+            userAdapterHint: Item.Hint,
+            clickListener: (Item) -> Unit
         ) {
             binding.userHint = userAdapterHint
             binding.userHintItemCardView.setOnClickListener { clickListener(userAdapterHint) }
@@ -102,11 +102,32 @@ class SearchUsersAdapter(private val clickListener: (SearchUserAdapterItem) -> U
         }
 
         fun bind(
-            userAdapterProfile: SearchUserAdapterItem.UserAdapterProfile,
-            clickListener: (SearchUserAdapterItem) -> Unit
+            userAdapterProfile: Item.Profile,
+            clickListener: (Item) -> Unit
         ) {
             binding.userProfile = userAdapterProfile
             binding.userProfileItemCardView.setOnClickListener { clickListener(userAdapterProfile) }
+        }
+    }
+
+    sealed class Item {
+
+        abstract val id: String
+
+        data class Hint(val userId: String, val fullName: String): Item() {
+            override val id = userId
+
+            companion object {
+                const val ID = 1
+            }
+        }
+
+        data class Profile(val user: User): Item() {
+            override val id = user.userId
+
+            companion object {
+                const val ID = 2
+            }
         }
     }
 }

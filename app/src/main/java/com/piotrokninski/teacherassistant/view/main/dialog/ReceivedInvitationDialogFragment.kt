@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.piotrokninski.teacherassistant.databinding.ReceivedInvitationDialogBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem
+import com.piotrokninski.teacherassistant.view.main.adapter.InvitationsAdapter
 
-class ReceivedInvitationDialogFragment(private val friendInvitationItem: HomeAdapterItem.InvitationItem,
-                                       private val profileCallback: (friendInvitationItem: HomeAdapterItem.InvitationItem) -> Unit,
-                                       private val detailsCallback: (friendInvitationItem: HomeAdapterItem.InvitationItem) -> Unit,
-                                       private val refreshCallback: () -> Unit): DialogFragment() {
+class ReceivedInvitationDialogFragment(
+    private val invitationItem: InvitationsAdapter.Item.Invitation,
+    private val profileCallback: (invitationItem: InvitationsAdapter.Item.Invitation) -> Unit,
+    private val detailsCallback: (invitationItem: InvitationsAdapter.Item.Invitation) -> Unit,
+    private val refreshCallback: () -> Unit): DialogFragment()
+{
 
     private lateinit var binding: ReceivedInvitationDialogBinding
 
@@ -51,13 +53,13 @@ class ReceivedInvitationDialogFragment(private val friendInvitationItem: HomeAda
 //        }
 
         binding.receivedInvitationDialogProfileButton.setOnClickListener {
-            profileCallback(friendInvitationItem)
+            profileCallback(invitationItem)
             refreshCallback
             dismiss()
         }
 
         binding.receivedInvitationDialogDetailsButton.setOnClickListener {
-            detailsCallback(friendInvitationItem)
+            detailsCallback(invitationItem)
             refreshCallback
             dismiss()
         }

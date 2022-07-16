@@ -15,8 +15,7 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.NotesAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.NewLessonDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.main.CourseDetailsFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.CourseDetailsFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.CourseDetailsViewModel
 
 class CourseDetailsFragment : Fragment() {
 
@@ -25,7 +24,7 @@ class CourseDetailsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesAdapter
 
-    private lateinit var courseDetailsViewModel: CourseDetailsFragmentViewModel
+    private lateinit var courseDetailsViewModel: CourseDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,9 +102,9 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupViewModel(course: Course) {
-        val factory = CourseDetailsFragmentViewModelFactory(course)
+        val factory = CourseDetailsViewModel.Factory(course)
         courseDetailsViewModel =
-            ViewModelProvider(this, factory).get(CourseDetailsFragmentViewModel::class.java)
+            ViewModelProvider(this, factory).get(CourseDetailsViewModel::class.java)
 
         initRecyclerView(courseDetailsViewModel.viewType)
 
@@ -160,5 +159,9 @@ class CourseDetailsFragment : Fragment() {
                 adapter.setNotes(notes)
             }
         }
+    }
+
+    class Factory: ViewModelProvider.Factory {
+
     }
 }

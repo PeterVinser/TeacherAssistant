@@ -1,0 +1,151 @@
+package com.piotrokninski.teacherassistant.view.main.fragment
+
+import android.os.Bundle
+import android.view.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.piotrokninski.teacherassistant.R
+import com.piotrokninski.teacherassistant.databinding.FragmentInvitationsBinding
+import com.piotrokninski.teacherassistant.model.Invitation
+import com.piotrokninski.teacherassistant.view.main.MainActivity
+import com.piotrokninski.teacherassistant.view.main.adapter.InvitationsAdapter
+import com.piotrokninski.teacherassistant.viewmodel.main.InvitationsViewModel
+
+class InvitationsFragment : Fragment() {
+    private val TAG = "HomeFragment"
+
+    private lateinit var binding: FragmentInvitationsBinding
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: InvitationsAdapter
+
+    private lateinit var invitationsViewModel: InvitationsViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        binding = FragmentInvitationsBinding.inflate(layoutInflater, container, false)
+
+        recyclerView = binding.homeRecyclerView
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).isBottomNavVisible(true)
+
+        arguments?.let {
+            val userId = it.getString(Invitation.Contract.INVITING_USER_ID)
+            if (userId != null) {
+                navigateToProfile(userId)
+            }
+        }
+
+        setupViewModel()
+    }
+
+    private fun initRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        adapter = InvitationsAdapter(
+            { invitationsAdapterItem: InvitationsAdapter.Item -> itemClickListener(invitationsAdapterItem) },
+            { invitationsAdapterItem: InvitationsAdapter.Item ->
+                invitationsViewModel.itemPositiveAction(invitationsAdapterItem)
+            },
+            { invitationsAdapterItem: InvitationsAdapter.Item ->
+                invitationsViewModel.itemNegativeAction(invitationsAdapterItem)
+            },
+            invitationsViewModel.viewType,
+            requireContext()
+        )
+        recyclerView.adapter = adapter
+    }
+
+    private fun itemClickListener(invitationsAdapterItem: InvitationsAdapter.Item) {
+        when (invitationsAdapterItem) {
+            is InvitationsAdapter.Item.Invitation -> navigateToProfile(invitationsAdapterItem.invitation.invitingUserId)
+
+            is InvitationsAdapter.Item.Homework -> {}
+
+            else -> {}
+        }
+    }
+
+    private fun navigateToProfile(userId: String) {
+        val action = InvitationsFragmentDirections.actionHomeToUserProfile(userId)
+        this.findNavController().navigate(action)
+    }
+
+    private fun setupViewModel() {
+        val factory = InvitationsViewModel.Factory()
+        invitationsViewModel = ViewModelProvider(this, factory)[InvitationsViewModel::class.java]
+
+        initRecyclerView()
+
+        invitationsViewModel.homeFeedItems.observe(viewLifecycleOwner) {
+            adapter.setItems(it)
+        }
+
+
+        lifecycleScope.launchWhenCreated {
+            invitationsViewModel.eventFlow.collect { event ->
+                when (event) {
+                    is InvitationsViewModel.HomeEvent.EditItemEvent -> editItem(event.invitationsAdapterItem)
+                }
+            }
+        }
+    }
+
+    private fun editItem(item: InvitationsAdapter.Item) {
+        val action = when (item) {
+            is InvitationsAdapter.Item.Invitation ->
+                InvitationsFragmentDirections.actionHomeToInvitation(item.invitation.type, item.invitation)
+
+            else -> null
+        }
+
+        if (action != null) this.findNavController().navigate(action)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_toolbar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.menu_toolbar_destination_user_account -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_user)
+                true
+            }
+            R.id.menu_toolbar_destination_search -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_searchUsers)
+                true
+            }
+            R.id.menu_toolbar_destination_calendar -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_calendar)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+}

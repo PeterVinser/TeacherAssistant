@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
 import com.piotrokninski.teacherassistant.databinding.HomeworkListItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.HomeworkAdapterItem
 import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.util.AppConstants
 import java.text.SimpleDateFormat
@@ -20,16 +19,17 @@ class HomeworkAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val homeworkItems = ArrayList<HomeworkAdapterItem>()
+    private val homeworkItems = ArrayList<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            HOMEWORK_ITEM -> {
-                HomeworkViewHolder(HomeworkViewHolder.initBinding(parent), context)
+
+            Item.Header.ID -> {
+                HeaderViewHolder(HeaderViewHolder.initBinding(parent), context)
             }
 
-            HEADER_ITEM -> {
-                HeaderViewHolder(HeaderViewHolder.initBinding(parent), context)
+            Item.Homework.ID -> {
+                HomeworkViewHolder(HomeworkViewHolder.initBinding(parent), context)
             }
 
             else -> throw IllegalArgumentException("Unknown viewType")
@@ -38,17 +38,17 @@ class HomeworkAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            HOMEWORK_ITEM -> {
-                (holder as HomeworkViewHolder).bind(
-                    (homeworkItems[position] as HomeworkAdapterItem.HomeworkItem).homework,
-                    clickListener,
-                    viewType
+            Item.Header.ID -> {
+                (holder as HeaderViewHolder).bind(
+                    (homeworkItems[position] as Item.Header)
                 )
             }
 
-            HEADER_ITEM -> {
-                (holder as HeaderViewHolder).bind(
-                    (homeworkItems[position] as HomeworkAdapterItem.HeaderItem)
+            Item.Homework.ID -> {
+                (holder as HomeworkViewHolder).bind(
+                    (homeworkItems[position] as Item.Homework).homework,
+                    clickListener,
+                    viewType
                 )
             }
         }
@@ -58,7 +58,7 @@ class HomeworkAdapter(
         return homeworkItems.size
     }
 
-    fun setHomework(homeworkItems: List<HomeworkAdapterItem>) {
+    fun setItems(homeworkItems: List<Item>) {
         this.homeworkItems.clear()
         this.homeworkItems.addAll(homeworkItems)
         notifyDataSetChanged()
@@ -67,9 +67,8 @@ class HomeworkAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (homeworkItems[position]) {
-            is HomeworkAdapterItem.HomeworkItem -> HOMEWORK_ITEM
-
-            is HomeworkAdapterItem.HeaderItem -> HEADER_ITEM
+            is Item.Header -> Item.Header.ID
+            is Item.Homework -> Item.Homework.ID
         }
     }
 
@@ -138,14 +137,31 @@ class HomeworkAdapter(
             }
         }
 
-        fun bind(headerAdapterItem: HomeworkAdapterItem.HeaderItem) {
+        fun bind(headerAdapterItem: Item.Header) {
             binding.headerItemTitle.text = context.getString(headerAdapterItem.titleId)
             binding.headerItemDivider.visibility = View.GONE
         }
     }
 
-    companion object {
-        const val HOMEWORK_ITEM = 1
-        const val HEADER_ITEM = 2
+    sealed class Item {
+
+        abstract val id: String
+
+
+        data class Header(val titleId: Int) : Item() {
+            override val id = titleId.toString()
+
+            companion object {
+                const val ID = 0
+            }
+        }
+
+        data class Homework(val homework: com.piotrokninski.teacherassistant.model.course.Homework) : Item() {
+            override val id = homework.toString()
+
+            companion object {
+                const val ID = 1
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.piotrokninski.teacherassistant.repository.room.dao
 
 import androidx.room.*
-import com.piotrokninski.teacherassistant.model.meeting.Meeting
+import com.piotrokninski.teacherassistant.model.Meeting
 
 @Dao
 interface MeetingDAO {
@@ -15,12 +15,12 @@ interface MeetingDAO {
     @Delete
     suspend fun deleteMeeting(meeting: Meeting): Int
 
-    @Query("DELETE FROM ${Meeting.TABLE_NAME} WHERE ${Meeting.DATE} < :date")
-    suspend fun deleteCompletedMeetings(date: Long)
+    @Query("DELETE FROM ${Meeting.Contract.TABLE_NAME} WHERE ${Meeting.Contract.DATE} < :date")
+    suspend fun deleteMeetingsBefore(date: Long)
 
-    @Query("DELETE FROM ${Meeting.TABLE_NAME}")
+    @Query("DELETE FROM ${Meeting.Contract.TABLE_NAME}")
     suspend fun deleteAllMeetings()
 
-    @Query("SELECT * FROM ${Meeting.TABLE_NAME}")
+    @Query("SELECT * FROM ${Meeting.Contract.TABLE_NAME}")
     suspend fun getAllMeetings(): List<Meeting>
 }

@@ -9,18 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.FragmentChatBinding
-import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.view.main.MainActivity
-import com.piotrokninski.teacherassistant.view.main.adapter.CalendarAdapter
 import com.piotrokninski.teacherassistant.view.main.adapter.ChatAdapter
-import com.piotrokninski.teacherassistant.viewmodel.main.ChatFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.ChatFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.ChatViewModel
 
 class ChatFragment : Fragment() {
 
     private lateinit var binding: FragmentChatBinding
 
-    private lateinit var chatViewModel: ChatFragmentViewModel
+    private lateinit var chatViewModel: ChatViewModel
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ChatAdapter
@@ -46,9 +43,9 @@ class ChatFragment : Fragment() {
 
         arguments?.let {
             val safeArgs = ChatFragmentArgs.fromBundle(it)
-            val friend = safeArgs.friend
-            setupViewModel(friend)
-            (activity as MainActivity).setToolbarTitle(friend.fullName)
+            val chatItem = safeArgs.chatItem
+            setupViewModel(chatItem.chat.id!!)
+            (activity as MainActivity).setToolbarTitle(chatItem.fullName)
         }
 
         binding.chatSendButton.setOnClickListener { onSendClicked() }
@@ -60,17 +57,17 @@ class ChatFragment : Fragment() {
         linearLayoutManager.stackFromEnd = false
         recyclerView.layoutManager = linearLayoutManager
         adapter = ChatAdapter({ timestamp ->
-            chatViewModel.fetchMeetingsBefore(timestamp)
+            chatViewModel.fetchMessagesBefore(timestamp)
         }, { position ->
             recyclerView.smoothScrollToPosition(position)
         })
         recyclerView.adapter = adapter
     }
 
-    private fun setupViewModel(friend: Friend) {
-        val factory = ChatFragmentViewModelFactory(friend)
+    private fun setupViewModel(chatId: String) {
+        val factory = ChatViewModel.Factory(chatId)
 
-        chatViewModel = ViewModelProvider(this, factory)[ChatFragmentViewModel::class.java]
+        chatViewModel = ViewModelProvider(this, factory)[ChatViewModel::class.java]
 
         observeChatItems()
     }

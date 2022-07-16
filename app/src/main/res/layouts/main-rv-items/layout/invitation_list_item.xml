@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="invitation"
-            type="com.piotrokninski.teacherassistant.model.adapteritem.HomeAdapterItem.InvitationItem" />
+            type="com.piotrokninski.teacherassistant.view.main.adapter.InvitationsAdapter.Item.Invitation" />
     </data>
 
     <LinearLayout

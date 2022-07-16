@@ -10,12 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
 import com.piotrokninski.teacherassistant.model.Invitation
-import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CalendarAdapter
 import com.piotrokninski.teacherassistant.view.main.dialog.DatePickerDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.main.CalendarFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.CalendarFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.CalendarViewModel
 import java.time.ZoneId
 import java.util.*
 
@@ -26,7 +24,7 @@ class CalendarFragment : Fragment() {
 
     private var calendarPermissionAsked = false
 
-    private lateinit var calendarViewModel: CalendarFragmentViewModel
+    private lateinit var calendarViewModel: CalendarViewModel
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CalendarAdapter
@@ -105,8 +103,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = CalendarFragmentViewModelFactory()
-        calendarViewModel = ViewModelProvider(this, factory)[CalendarFragmentViewModel::class.java]
+        val factory = CalendarViewModel.Factory()
+        calendarViewModel = ViewModelProvider(this, factory)[CalendarViewModel::class.java]
 
         observeMeetings()
     }

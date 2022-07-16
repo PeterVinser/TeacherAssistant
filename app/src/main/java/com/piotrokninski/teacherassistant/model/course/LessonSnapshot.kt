@@ -2,8 +2,6 @@ package com.piotrokninski.teacherassistant.model.course
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreLessonSnapshotContract
-import java.lang.Exception
 
 data class LessonSnapshot(
     val courseId: String,
@@ -14,9 +12,9 @@ data class LessonSnapshot(
         fun DocumentSnapshot.toLessonSnapshot(): LessonSnapshot? {
             return try {
 
-                val courseId = getString(FirestoreLessonSnapshotContract.COURSE_ID)!!
-                val lessonId = getString(FirestoreLessonSnapshotContract.LESSON_ID)!!
-                val topic = getString(FirestoreLessonSnapshotContract.TOPIC)!!
+                val courseId = getString(Contract.COURSE_ID)!!
+                val lessonId = getString(Contract.LESSON_ID)!!
+                val topic = getString(Contract.TOPIC)!!
 
                 LessonSnapshot(
                     courseId,
@@ -31,5 +29,16 @@ data class LessonSnapshot(
         }
 
         private const val TAG = "LessonSnapshot"
+    }
+
+    object Contract {
+
+        const val COLLECTION_NAME = "lessonSnapshots"
+
+        const val COURSE_ID = "courseId"
+
+        const val LESSON_ID = "lessonId"
+
+        const val TOPIC = "topic"
     }
 }

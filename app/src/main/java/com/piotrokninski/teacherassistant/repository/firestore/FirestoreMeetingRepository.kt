@@ -5,14 +5,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.model.Meeting.Companion.toMeeting
-import com.piotrokninski.teacherassistant.model.meeting.Meeting.Companion.toSingularMeeting
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import kotlin.collections.ArrayList
 
 object FirestoreMeetingRepository {
     private const val TAG = "FirestoreMeetingReposit"
@@ -76,12 +74,11 @@ object FirestoreMeetingRepository {
         }
     }
 
-    suspend fun getUpcomingSingularMeetings(userId: String): ArrayList<Meeting>? {
+    suspend fun getUpcomingMeetings(userId: String): ArrayList<Meeting>? {
         val db = FirebaseFirestore.getInstance()
 
         val meetingsQuery = db.collection(Meeting.Contract.COLLECTION_NAME)
             .whereArrayContains(Meeting.Contract.ATTENDEE_IDS, userId)
-            .whereEqualTo(Meeting.Contract.SINGULAR, true)
             .whereEqualTo(Meeting.Contract.COMPLETED, false)
 
         return try {

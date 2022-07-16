@@ -2,8 +2,6 @@ package com.piotrokninski.teacherassistant.model.user
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserHintContract
-import java.lang.Exception
 
 data class UserHint(val userId: String,
                     val fullName: String,
@@ -13,9 +11,9 @@ data class UserHint(val userId: String,
         fun DocumentSnapshot.toUserHint(): UserHint? {
             return try {
 
-                val userId = getString(FirestoreUserHintContract.USER_ID)!!
-                val fullName = getString(FirestoreUserHintContract.FULL_NAME)!!
-                val keywords = get(FirestoreUserHintContract.KEYWORDS) as ArrayList<String>
+                val userId = getString(Contract.USER_ID)!!
+                val fullName = getString(Contract.FULL_NAME)!!
+                val keywords = get(Contract.KEYWORDS) as ArrayList<String>
 
                 UserHint(userId, fullName, keywords)
 
@@ -38,5 +36,16 @@ data class UserHint(val userId: String,
         }
 
         private const val TAG = "UserHint"
+    }
+
+    object Contract {
+
+        const val COLLECTION_NAME = "usersHints"
+
+        const val USER_ID = "userId"
+
+        const val FULL_NAME = "fullName"
+
+        const val KEYWORDS = "keywords"
     }
 }

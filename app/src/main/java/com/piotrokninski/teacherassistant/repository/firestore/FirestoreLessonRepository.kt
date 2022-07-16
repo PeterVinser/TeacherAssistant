@@ -4,11 +4,9 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.piotrokninski.teacherassistant.model.course.Lesson
 import com.piotrokninski.teacherassistant.model.course.Lesson.Companion.toLesson
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreLessonSnapshotContract
 import com.piotrokninski.teacherassistant.model.course.LessonSnapshot
 import com.piotrokninski.teacherassistant.model.course.LessonSnapshot.Companion.toLessonSnapshot
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 object FirestoreLessonRepository {
     private const val TAG = "FirestoreNoteRepository"
@@ -60,9 +58,9 @@ object FirestoreLessonRepository {
     suspend fun getCourseLessonSnapshots(courseId: String): ArrayList<LessonSnapshot>? {
         val db = FirebaseFirestore.getInstance()
 
-        val lessonSnapshotsRef = db.collection(FirestoreLessonSnapshotContract.COLLECTION_NAME)
+        val lessonSnapshotsRef = db.collection(LessonSnapshot.Contract.COLLECTION_NAME)
 
-        val query = lessonSnapshotsRef.whereEqualTo(FirestoreLessonSnapshotContract.COURSE_ID, courseId)
+        val query = lessonSnapshotsRef.whereEqualTo(LessonSnapshot.Contract.COURSE_ID, courseId)
 
         return try {
 

@@ -1,7 +1,6 @@
 package com.piotrokninski.teacherassistant.repository.room.repository
 
-import androidx.annotation.ArrayRes
-import com.piotrokninski.teacherassistant.model.meeting.Meeting
+import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.repository.room.dao.MeetingDAO
 
 class RoomMeetingRepository(private val dao: MeetingDAO) {
@@ -32,8 +31,8 @@ class RoomMeetingRepository(private val dao: MeetingDAO) {
         return ids
     }
 
-    suspend fun deleteCompletedMeetings(date: Long) {
-        return dao.deleteCompletedMeetings(date)
+    suspend fun deleteMeetingsBefore(date: Long) {
+        return dao.deleteMeetingsBefore(date)
     }
 
     suspend fun deleteAllMeetings() {

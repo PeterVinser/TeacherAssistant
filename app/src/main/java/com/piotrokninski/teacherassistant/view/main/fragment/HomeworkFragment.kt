@@ -16,8 +16,7 @@ import com.piotrokninski.teacherassistant.model.course.Homework
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeworkAdapter
-import com.piotrokninski.teacherassistant.viewmodel.main.HomeworkFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.HomeworkFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.HomeworkViewModel
 
 class HomeworkFragment : Fragment() {
 
@@ -26,7 +25,7 @@ class HomeworkFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HomeworkAdapter
 
-    private lateinit var homeworkViewModel: HomeworkFragmentViewModel
+    private lateinit var homeworkViewModel: HomeworkViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,8 +68,8 @@ class HomeworkFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = HomeworkFragmentViewModelFactory()
-        homeworkViewModel = ViewModelProvider(this, factory)[HomeworkFragmentViewModel::class.java]
+        val factory = HomeworkViewModel.Factory()
+        homeworkViewModel = ViewModelProvider(this, factory)[HomeworkViewModel::class.java]
 
         initRecyclerView(homeworkViewModel.viewType)
 
@@ -94,7 +93,7 @@ class HomeworkFragment : Fragment() {
 
                 binding.homeworkLayout.gravity = Gravity.TOP
 
-                adapter.setHomework(homework)
+                adapter.setItems(homework)
             }
         }
     }

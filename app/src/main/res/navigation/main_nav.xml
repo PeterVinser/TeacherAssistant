@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/destination_home">
+    app:startDestination="@id/destination_invitations">
     <fragment
-        android:id="@+id/destination_home"
-        android:name="com.piotrokninski.teacherassistant.view.main.fragment.HomeFragment"
+        android:id="@+id/destination_invitations"
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.InvitationsFragment"
         android:label="@string/menu_main_home_text"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_invitations" >
         <action
             android:id="@+id/action_home_to_user"
             app:destination="@id/menu_toolbar_destination_user_account" />
@@ -22,12 +22,6 @@
             android:id="@+id/action_home_to_calendar"
             app:destination="@id/menu_toolbar_destination_calendar"/>
         <action
-            android:id="@+id/action_home_to_newCourse"
-            app:destination="@id/destination_new_course"/>
-        <action
-            android:id="@+id/action_home_to_new_meeting"
-            app:destination="@id/destination_new_meeting"/>
-        <action
             android:id="@+id/action_home_to_invitation"
             app:destination="@id/destination_invitation"/>
     </fragment>
@@ -37,17 +31,14 @@
         android:label="@string/menu_toolbar_calendar_text"
         tools:layout="@layout/fragment_calendar" >
         <action
-            android:id="@+id/action_calendar_to_new_meeting"
-            app:destination="@id/destination_new_meeting"/>
-        <action
             android:id="@+id/action_calendar_to_invitation"
             app:destination="@id/destination_invitation"/>
     </fragment>
     <fragment
         android:id="@+id/destination_contacts"
-        android:name="com.piotrokninski.teacherassistant.view.main.fragment.ContactsFragment"
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.HomeFragment"
         android:label="@string/menu_main_contacts_text"
-        tools:layout="@layout/fragment_contacts" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_contacts_to_user_profile"
             app:destination="@id/destination_user_profile" />
@@ -87,9 +78,6 @@
             android:id="@+id/action_courses_to_courseDetails"
             app:destination="@id/destination_course_details"/>
         <action
-            android:id="@+id/action_courses_to_newCourse"
-            app:destination="@id/destination_new_course" />
-        <action
             android:id="@+id/action_course_to_invitation"
             app:destination="@id/destination_invitation"/>
     </fragment>
@@ -114,8 +102,8 @@
     </fragment>
     <fragment
         android:id="@+id/destination_invitation"
-        android:name="com.piotrokninski.teacherassistant.view.main.fragment.InvitationFragment"
-        tools:layout="@layout/fragment_invitation">
+        android:name="com.piotrokninski.teacherassistant.view.main.fragment.InvitationDetailsFragment"
+        tools:layout="@layout/fragment_invitation_details">
         <argument
             android:name="invitation"
             app:argType="com.piotrokninski.teacherassistant.model.Invitation"
@@ -126,7 +114,7 @@
             app:argType="string"/>
         <action
             android:id="@+id/action_invitation_to_home"
-            app:destination="@id/destination_home" />
+            app:destination="@id/destination_invitations" />
     </fragment>
     <fragment
         android:id="@+id/destination_course_details"
@@ -137,30 +125,9 @@
             app:argType="com.piotrokninski.teacherassistant.model.course.Course" />
     </fragment>
     <fragment
-        android:id="@+id/destination_new_course"
-        android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewCourseFragment"
-        tools:layout="@layout/fragment_new_course">
-        <argument
-            android:name="invitation"
-            app:argType="com.piotrokninski.teacherassistant.model.Invitation"
-            app:nullable="true"
-            android:defaultValue="@null"/>
-    </fragment>
-    <fragment
         android:id="@+id/destination_new_homework"
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewHomeworkFragment"
         tools:layout="@layout/fragment_new_homework">
-    </fragment>
-    <fragment
-        android:id="@+id/destination_new_meeting"
-        android:name="com.piotrokninski.teacherassistant.view.main.fragment.NewMeetingFragment"
-        android:label="Nowe spotkanie"
-        tools:layout="@layout/fragment_new_meeting">
-        <argument
-            android:name="invitation"
-            app:argType="com.piotrokninski.teacherassistant.model.Invitation"
-            app:nullable="true"
-            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/destination_chat"
@@ -168,7 +135,7 @@
         android:label="Wiadomości"
         tools:layout="@layout/fragment_chat">
         <argument
-            android:name="friend"
-            app:argType="com.piotrokninski.teacherassistant.model.friend.Friend"/>
+            android:name="chatItem"
+            app:argType="com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter$ChatItem" />
     </fragment>
 </navigation>

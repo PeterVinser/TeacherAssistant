@@ -7,23 +7,19 @@ import com.google.firebase.firestore.Exclude
 import java.util.*
 
 data class Message(
+    var id: String?,
     val text: String,
     val senderId: String,
     val senderFullName: String,
     val itemId: String?,
-    val timestamp: Timestamp,
-    val read: Boolean,
-    @get:Exclude
-    var id: String? = null
+    val timestamp: Timestamp
 ) {
 
     fun toSnapshot(): String {
         val textSnap = if (text.length < 23) {
             text
         } else {
-            text.slice(0..22)
-            text.trim()
-            "${text}..."
+            "${text.slice(0..22).trim()}..."
         }
         val calendar = Calendar.getInstance()
         calendar.time = timestamp.toDate()
@@ -51,12 +47,12 @@ data class Message(
         fun toMessage(map: Map<String, Any>): Message? {
             return try {
                 Message(
+                    map[ID] as String?,
                     map[TEXT] as String,
                     map[SENDER_ID] as String,
                     map[SENDER_FULL_NAME] as String,
                     map[ITEM_ID] as String?,
-                    map[TIMESTAMP] as Timestamp,
-                    map[READ] as Boolean
+                    map[TIMESTAMP] as Timestamp
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toCourse: ", e)
@@ -67,12 +63,12 @@ data class Message(
         // Contract
         const val COLLECTION_NAME = "messages"
 
+        const val ID = "id"
         const val TEXT = "text"
         const val SENDER_ID = "senderId"
         const val SENDER_FULL_NAME = "senderFullName"
         const val ITEM_ID = "itemId"
         const val TIMESTAMP = "timestamp"
-        const val READ = "read"
 
         private const val TAG = "Message"
     }

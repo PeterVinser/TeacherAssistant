@@ -5,7 +5,7 @@
     <data>
         <variable
             name="userProfileViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.main.UserProfileViewModel" />
     </data>
 
     <LinearLayout

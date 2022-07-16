@@ -7,22 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserProfileBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.friend.Friend
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.dialog.InvitationDialogFragment
-import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserProfileFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.UserProfileViewModel
 
 class UserProfileFragment : Fragment() {
     private val TAG = "UserProfileFragment"
 
     private lateinit var binding: FragmentUserProfileBinding
 
-    private lateinit var userProfileViewModel: UserProfileFragmentViewModel
+    private lateinit var userProfileViewModel: UserProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,9 +77,9 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupViewModel(userId: String) {
-        val factory = UserProfileFragmentViewModelFactory(userId)
+        val factory = UserProfileViewModel.Factory(userId)
 
-        userProfileViewModel = ViewModelProvider(this, factory).get(UserProfileFragmentViewModel::class.java)
+        userProfileViewModel = ViewModelProvider(this, factory).get(UserProfileViewModel::class.java)
 
         binding.userProfileViewModel = userProfileViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -151,18 +149,18 @@ class UserProfileFragment : Fragment() {
                     else -> throw IllegalArgumentException("Unknown invitation type")
                 }
 
-                if (invitation.course != null) {
-                    binding.userProfileInvitationCourse.root.visibility = View.VISIBLE
-
-                    binding.userProfileInvitationCourse.course = invitation.course
-
-                    invitation.course!!.weekDates?.forEach { date ->
-                        val chip = Chip(context)
-                        chip.text = date.toString()
-
-                        binding.userProfileInvitationCourse.invitationItemCourseDates.addView(chip)
-                    }
-                }
+//                if (invitation.course != null) {
+//                    binding.userProfileInvitationCourse.root.visibility = View.VISIBLE
+//
+//                    binding.userProfileInvitationCourse.course = invitation.course
+//
+//                    invitation.course!!.weekDates?.forEach { date ->
+//                        val chip = Chip(context)
+//                        chip.text = date.toString()
+//
+//                        binding.userProfileInvitationCourse.invitationItemCourseDates.addView(chip)
+//                    }
+//                }
             } else {
                 binding.userProfileInvitation.visibility = View.GONE
             }

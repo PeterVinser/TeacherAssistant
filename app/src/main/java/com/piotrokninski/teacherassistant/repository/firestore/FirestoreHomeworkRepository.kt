@@ -17,27 +17,33 @@ object FirestoreHomeworkRepository {
         db.collection(Homework.COLLECTION_NAME).add(homework)
     }
 
+    suspend fun getHomework(userId: String, viewType: String) = getHomework(userId, viewType, null)
+
     suspend fun getHomework(
         userId: String,
         viewType: String,
-        status: String
+        status: String?
     ): ArrayList<Homework>? {
         val db = FirebaseFirestore.getInstance()
 
         val homeworksRef = db.collection(Homework.COLLECTION_NAME)
 
-        val query = when (viewType) {
+        var query = when (viewType) {
             AppConstants.VIEW_TYPE_STUDENT -> homeworksRef.whereEqualTo(
                 Homework.STUDENT_ID,
                 userId
-            ).whereEqualTo(Homework.STATUS, status)
+            )
 
             AppConstants.VIEW_TYPE_TUTOR -> homeworksRef.whereEqualTo(
                 Homework.TUTOR_ID,
                 userId
-            ).whereEqualTo(Homework.STATUS, status)
+            )
 
             else -> throw IllegalArgumentException("Unknown viewType")
+        }
+
+        if (status != null) {
+            query = query.whereEqualTo(Homework.STATUS, status)
         }
 
         return try {

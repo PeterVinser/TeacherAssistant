@@ -30,8 +30,7 @@ import com.piotrokninski.teacherassistant.util.PermissionsHelper
 import com.piotrokninski.teacherassistant.util.notifications.FcmManager
 import com.piotrokninski.teacherassistant.view.main.fragment.CalendarFragment
 import com.piotrokninski.teacherassistant.view.start.StartActivity
-import com.piotrokninski.teacherassistant.viewmodel.main.MainActivityViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.MainActivityViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,7 +43,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
 
-    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var mainActivityViewModel: MainViewModel
+
+    // TODO: change the soft input mode outside of the chat fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,9 +80,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val factory = MainActivityViewModelFactory(application)
+        val factory = MainViewModel.Factory(application)
         mainActivityViewModel =
-            ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
+            ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
         observeViewType()
         observeChannel()
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launchWhenCreated {
             mainActivityViewModel.eventFlow.collect{ event ->
                 when (event) {
-                    is MainActivityViewModel.MainEvent.CalendarPermissionEvent -> checkCalendarPermissions()
+                    is MainViewModel.MainEvent.CalendarPermissionEvent -> checkCalendarPermissions()
                 }
             }
         }

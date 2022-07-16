@@ -1,29 +1,27 @@
 package com.piotrokninski.teacherassistant.view.main.adapter
 
-import android.provider.Telephony
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.piotrokninski.teacherassistant.databinding.ReceivedMessageItemBinding
 import com.piotrokninski.teacherassistant.databinding.SentMessageItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.ChatAdapterItem
-import java.lang.IllegalArgumentException
+import com.piotrokninski.teacherassistant.model.chat.Message
 
 class ChatAdapter(
     private val fetchItems: (Timestamp) -> Unit,
     private val scrollToPosition: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val chatItems = ArrayList<ChatAdapterItem>()
+    private val chatItems = ArrayList<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            RECEIVED_MESSAGE_ITEM -> {
+            Item.ReceivedMessage.ID -> {
                 ReceivedMessageViewHolder(ReceivedMessageViewHolder.initBinding(parent))
             }
 
-            SENT_MESSAGE_ITEM -> {
+            Item.SentMessage.ID -> {
                 SentMessageViewHolder(SentMessageViewHolder.initBinding(parent))
             }
 
@@ -35,9 +33,11 @@ class ChatAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            RECEIVED_MESSAGE_ITEM -> (holder as ReceivedMessageViewHolder).bind(chatItems[position] as ChatAdapterItem.ReceivedMessage)
+            Item.ReceivedMessage.ID -> (holder as ReceivedMessageViewHolder)
+                .bind(chatItems[position] as Item.ReceivedMessage)
 
-            SENT_MESSAGE_ITEM -> (holder as SentMessageViewHolder).bind(chatItems[position] as ChatAdapterItem.SentMessage)
+            Item.SentMessage.ID -> (holder as SentMessageViewHolder)
+                .bind(chatItems[position] as Item.SentMessage)
         }
 
         if (position == chatItems.size - 1) fetchItems(chatItems[position].timeStamp)
@@ -49,12 +49,12 @@ class ChatAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (chatItems[position]) {
-            is ChatAdapterItem.ReceivedMessage -> RECEIVED_MESSAGE_ITEM
-            is ChatAdapterItem.SentMessage -> SENT_MESSAGE_ITEM
+            is Item.ReceivedMessage -> Item.ReceivedMessage.ID
+            is Item.SentMessage -> Item.SentMessage.ID
         }
     }
 
-    fun setChatItems(chatItems: ArrayList<ChatAdapterItem>) {
+    fun setChatItems(chatItems: ArrayList<Item>) {
         if (this.chatItems.firstOrNull()?.timeStamp != chatItems.firstOrNull()?.timeStamp) {
             this.chatItems.clear()
             this.chatItems.addAll(chatItems)
@@ -71,7 +71,7 @@ class ChatAdapter(
     class ReceivedMessageViewHolder(private val binding: ReceivedMessageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(receivedMessageItem: ChatAdapterItem.ReceivedMessage) {
+        fun bind(receivedMessageItem: Item.ReceivedMessage) {
             binding.message = receivedMessageItem.message
         }
 
@@ -91,7 +91,7 @@ class ChatAdapter(
     class SentMessageViewHolder(private val binding: SentMessageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(sentMessageItem: ChatAdapterItem.SentMessage) {
+        fun bind(sentMessageItem: Item.SentMessage) {
             binding.message = sentMessageItem.message
         }
 
@@ -107,8 +107,27 @@ class ChatAdapter(
         }
     }
 
-    companion object {
-        const val RECEIVED_MESSAGE_ITEM = 0
-        const val SENT_MESSAGE_ITEM = 1
+    sealed class Item {
+
+        abstract val id: String
+        abstract val timeStamp: Timestamp
+
+        data class ReceivedMessage(val message: Message) : Item() {
+            override val id = message.timestamp.toString()
+            override val timeStamp = message.timestamp
+
+            companion object {
+                const val ID = 0
+            }
+        }
+
+        data class SentMessage(val message: Message): Item() {
+            override val id = message.timestamp.toString()
+            override val timeStamp = message.timestamp
+
+            companion object {
+                const val ID = 1
+            }
+        }
     }
 }

@@ -12,15 +12,14 @@ import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.util.notifications.FcmManager
 import com.piotrokninski.teacherassistant.view.main.MainActivity
-import com.piotrokninski.teacherassistant.viewmodel.start.StartActivityViewModel
-import com.piotrokninski.teacherassistant.viewmodel.start.factory.StartActivityViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.start.StartViewModel
 
 class StartActivity : AppCompatActivity() {
     private val TAG = "StartActivity"
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var startActivityViewModel: StartActivityViewModel
+    private lateinit var startViewModel: StartViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +67,9 @@ class StartActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val factory = StartActivityViewModelFactory()
+        val factory = StartViewModel.Factory()
 
-        startActivityViewModel = ViewModelProvider(this, factory).get(StartActivityViewModel::class.java)
+        startViewModel = ViewModelProvider(this, factory).get(StartViewModel::class.java)
     }
 
 }

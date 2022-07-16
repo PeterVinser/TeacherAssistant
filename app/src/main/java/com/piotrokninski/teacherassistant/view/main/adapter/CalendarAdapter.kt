@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
 import com.piotrokninski.teacherassistant.databinding.MeetingListItemBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.CalendarAdapterItem
 import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,14 +20,14 @@ class CalendarAdapter(
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TAG = "CalendarAdapter"
 
-    private val calendarItems = ArrayList<CalendarAdapterItem>()
+    private val calendarItems = ArrayList<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CALENDAR_HEADER_ITEM -> {
+            Item.Header.ID -> {
                 HeaderViewHolder(HeaderViewHolder.initBinding(parent), context)
             }
-            CALENDAR_MEETING_ITEM -> {
+            Item.Meeting.ID -> {
                 MeetingViewHolder(MeetingViewHolder.initBinding(parent))
             }
             else -> {
@@ -38,9 +38,11 @@ class CalendarAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            CALENDAR_HEADER_ITEM -> (holder as HeaderViewHolder).bind(calendarItems[position] as CalendarAdapterItem.HeaderAdapterItem)
+            Item.Header.ID -> (holder as HeaderViewHolder)
+                .bind(calendarItems[position] as Item.Header)
 
-            CALENDAR_MEETING_ITEM -> (holder as MeetingViewHolder).bind(calendarItems[position] as CalendarAdapterItem.MeetingAdapterItem)
+            Item.Meeting.ID -> (holder as MeetingViewHolder)
+                .bind(calendarItems[position] as Item.Meeting)
         }
 
         val firstItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
@@ -55,12 +57,12 @@ class CalendarAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (calendarItems[position]) {
-            is CalendarAdapterItem.HeaderAdapterItem -> CALENDAR_HEADER_ITEM
-            is CalendarAdapterItem.MeetingAdapterItem -> CALENDAR_MEETING_ITEM
+            is Item.Header -> Item.Header.ID
+            is Item.Meeting -> Item.Meeting.ID
         }
     }
 
-    fun setCalendarItems(meetings: ArrayList<CalendarAdapterItem>) {
+    fun setCalendarItems(meetings: ArrayList<Item>) {
         this.calendarItems.clear()
         this.calendarItems.addAll(meetings)
         notifyDataSetChanged()
@@ -69,7 +71,7 @@ class CalendarAdapter(
 
     fun moveToDate(date: Date) {
         val position =
-            calendarItems.indexOfFirst { it.date >= date && it is CalendarAdapterItem.HeaderAdapterItem}
+            calendarItems.indexOfFirst { it.date >= date && it is Item.Header }
         linearLayoutManager.scrollToPositionWithOffset(position, 0)
         scrollListener(calendarItems[position].date)
     }
@@ -90,8 +92,8 @@ class CalendarAdapter(
             private const val TAG = "CalendarAdapter"
         }
 
-        fun bind(calendarMeetingItem: CalendarAdapterItem.MeetingAdapterItem) {
-            binding.meeting = calendarMeetingItem.meeting
+        fun bind(meetingItem: Item.Meeting) {
+            binding.meeting = meetingItem.meeting
         }
     }
 
@@ -110,13 +112,44 @@ class CalendarAdapter(
             }
         }
 
-        fun bind(calendarHeaderItem: CalendarAdapterItem.HeaderAdapterItem) {
-            binding.headerItemTitle.text = context.getString(calendarHeaderItem.titleId)
+        fun bind(headerItem: Item.Header) {
+            binding.headerItemTitle.text = context.getString(headerItem.titleId)
         }
     }
 
-    companion object {
-        const val CALENDAR_HEADER_ITEM = 0
-        const val CALENDAR_MEETING_ITEM = 1
+
+    sealed class Item {
+
+        abstract val id: String
+        abstract val date: Date
+
+        data class Header(val titleId: Int, override val date: Date): Item() {
+            override val id = titleId.toString()
+
+            companion object {
+                fun getHeaders(): Map<Int, Int> {
+                    return mapOf(
+                        Calendar.MONDAY to R.string.monday_full,
+                        Calendar.TUESDAY to R.string.tuesday_full,
+                        Calendar.WEDNESDAY to R.string.wednesday_full,
+                        Calendar.THURSDAY to R.string.thursday_full,
+                        Calendar.FRIDAY to R.string.friday_full,
+                        Calendar.SATURDAY to R.string.saturday_full,
+                        Calendar.SUNDAY to R.string.sunday_full
+                    )
+                }
+
+                const val ID = 0
+            }
+        }
+
+        data class Meeting(val meeting: com.piotrokninski.teacherassistant.model.Meeting): Item() {
+            override val id = meeting.date.toString()
+            override val date = meeting.date!!
+
+            companion object {
+                const val ID = 1
+            }
+        }
     }
 }

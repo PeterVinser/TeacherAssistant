@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentSearchUsersBinding
-import com.piotrokninski.teacherassistant.model.adapteritem.SearchUserAdapterItem
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.SearchUsersAdapter
-import com.piotrokninski.teacherassistant.viewmodel.main.SearchUsersFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.SearchUsersFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.SearchUsersViewModel
 
 class SearchUsersFragment : Fragment() {
     private val TAG = "SearchUsersFragment"
@@ -26,7 +24,7 @@ class SearchUsersFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SearchUsersAdapter
 
-    private lateinit var searchUsersFragmentViewModel: SearchUsersFragmentViewModel
+    private lateinit var searchUsersViewModel: SearchUsersViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,22 +53,24 @@ class SearchUsersFragment : Fragment() {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = SearchUsersAdapter{ searchUserAdapterItem: SearchUserAdapterItem -> searchedUserClicked(searchUserAdapterItem) }
+        adapter = SearchUsersAdapter {
+                searchUsersAdapterItem: SearchUsersAdapter.Item -> searchedUserClicked(searchUsersAdapterItem)
+        }
         recyclerView.adapter = adapter
     }
 
-    private fun searchedUserClicked(searchUserAdapterItem: SearchUserAdapterItem) {
+    private fun searchedUserClicked(searchUserAdapterItem: SearchUsersAdapter.Item) {
         (activity as MainActivity).hideKeyboard()
         val action = SearchUsersFragmentDirections.actionSearchedUsersToUserProfile(searchUserAdapterItem.id)
         this.findNavController().navigate(action)
     }
 
     private fun setupViewModel() {
-        val factory = SearchUsersFragmentViewModelFactory()
-        searchUsersFragmentViewModel = ViewModelProvider(this, factory).get(
-            SearchUsersFragmentViewModel::class.java)
+        val factory = SearchUsersViewModel.Factory()
+        searchUsersViewModel = ViewModelProvider(this, factory).get(
+            SearchUsersViewModel::class.java)
 
-        searchUsersFragmentViewModel.mSearchUsersItemsAdapter.observe(viewLifecycleOwner) {
+        searchUsersViewModel.mSearchUsersItemsAdapter.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.searchUsersNotFound.visibility = View.GONE
@@ -91,18 +91,18 @@ class SearchUsersFragment : Fragment() {
 
         (menu.findItem(R.id.users_search_view).actionView as SearchView).setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchUsersFragmentViewModel.setSearchMode(AppConstants.PROFILES_SEARCH_MODE)
+                searchUsersViewModel.setSearchMode(AppConstants.PROFILES_SEARCH_MODE)
                 if (query != null) {
-                    searchUsersFragmentViewModel.searchUsers(query.lowercase())
+                    searchUsersViewModel.searchUsers(query.lowercase())
                     (activity as MainActivity).hideKeyboard()
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                searchUsersFragmentViewModel.setSearchMode(AppConstants.HINTS_SEARCH_MODE)
+                searchUsersViewModel.setSearchMode(AppConstants.HINTS_SEARCH_MODE)
                 if (newText != null) {
-                    searchUsersFragmentViewModel.searchUsers(newText.lowercase())
+                    searchUsersViewModel.searchUsers(newText.lowercase())
                     Log.d(TAG, "onQueryTextChange: $newText")
                 }
                 return true

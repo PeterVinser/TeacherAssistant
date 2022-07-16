@@ -3,7 +3,6 @@ package com.piotrokninski.teacherassistant.model.user
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.messaging.FirebaseMessaging
-import com.piotrokninski.teacherassistant.model.contract.firestore.FirestoreUserNotificationSettingsContract
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserNotificationSettingsRepository
 
 data class UserNotificationSettings(val tokens: Map<String, Boolean>) {
@@ -12,7 +11,7 @@ data class UserNotificationSettings(val tokens: Map<String, Boolean>) {
 
         fun DocumentSnapshot.toUserNotificationSettings(): UserNotificationSettings? {
             return try {
-                val tokens = get(FirestoreUserNotificationSettingsContract.TOKENS) as Map<String, Boolean>
+                val tokens = get(Contract.TOKENS) as Map<String, Boolean>
 
                 UserNotificationSettings(tokens)
             } catch (e: Exception) {
@@ -46,5 +45,11 @@ data class UserNotificationSettings(val tokens: Map<String, Boolean>) {
         }
 
         private const val TAG = "UserNotificationSetting"
+    }
+
+    object Contract {
+        const val COLLECTION_NAME = "userNotificationSettings"
+
+        const val TOKENS = "tokens"
     }
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="invitationViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationFragmentViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationDetailsViewModel" />
     </data>
 
     <FrameLayout

@@ -11,15 +11,14 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserAccountBinding
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
-import com.piotrokninski.teacherassistant.viewmodel.main.UserAccountFragmentViewModel
-import com.piotrokninski.teacherassistant.viewmodel.main.factory.UserAccountFragmentViewModelFactory
+import com.piotrokninski.teacherassistant.viewmodel.main.UserAccountViewModel
 import java.lang.IllegalArgumentException
 
 class UserAccountFragment : Fragment() {
 
     private lateinit var binding: FragmentUserAccountBinding
 
-    private lateinit var userAccountViewModel: UserAccountFragmentViewModel
+    private lateinit var userAccountViewModel: UserAccountViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +62,8 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = UserAccountFragmentViewModelFactory()
-        userAccountViewModel = ViewModelProvider(this, factory)[UserAccountFragmentViewModel::class.java]
+        val factory = UserAccountViewModel.Factory()
+        userAccountViewModel = ViewModelProvider(this, factory)[UserAccountViewModel::class.java]
 
         binding.userViewModel = userAccountViewModel
         binding.lifecycleOwner = this

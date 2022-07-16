@@ -5,8 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.provider.CalendarContract
 import android.util.Log
-import com.piotrokninski.teacherassistant.model.meeting.Meeting
-import com.piotrokninski.teacherassistant.model.meeting.RecurringMeeting
+import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.util.*
 
@@ -23,8 +22,8 @@ object CalendarProvider {
         contentValues.apply {
             put(CalendarContract.Events.TITLE, meeting.title)
             put(CalendarContract.Events.DESCRIPTION, meeting.description)
-            put(CalendarContract.Events.DTSTART, meeting.date.time)
-            put(CalendarContract.Events.DTEND, meeting.date.time + duration)
+            meeting.date?.let {  put(CalendarContract.Events.DTSTART, it.time) }
+            meeting.date?.let {  put(CalendarContract.Events.DTSTART, it.time + duration) }
             put(CalendarContract.Events.CALENDAR_ID, 1)
             put(CalendarContract.Events.EVENT_TIMEZONE, timezone)
         }
@@ -44,8 +43,8 @@ object CalendarProvider {
         contentValues.apply {
             put(CalendarContract.Events.TITLE, meeting.title)
             put(CalendarContract.Events.DESCRIPTION, meeting.description)
-            put(CalendarContract.Events.DTSTART, meeting.date.time)
-            put(CalendarContract.Events.DTEND, meeting.date.time + duration)
+            meeting.date?.let { put(CalendarContract.Events.DTSTART, it.time) }
+            meeting.date?.let { put(CalendarContract.Events.DTSTART, it.time + duration) }
         }
 
         meeting.calendarId?.let {
@@ -65,7 +64,7 @@ object CalendarProvider {
         }
     }
 
-    private fun insertWeekDate(context: Context, title: String, description: String?, weekDate: WeekDate): Long? {
+    fun insertWeekDate(context: Context, title: String, description: String?, weekDate: WeekDate): Long? {
         val contentResolver = context.contentResolver
         val timezone = Calendar.getInstance().timeZone.id
         val contentValues = ContentValues()
@@ -92,13 +91,7 @@ object CalendarProvider {
         return uri?.lastPathSegment?.toLong()
     }
 
-    fun insertRecurringMeeting(context: Context, recurringMeeting: RecurringMeeting) {
-        recurringMeeting.meetingDates.forEach { weekDate ->
-            weekDate.calendarId = insertWeekDate(context, recurringMeeting.title, recurringMeeting.description, weekDate)
-        }
-    }
-
-    private fun deleteWeekDate(context: Context, weekDate: WeekDate) {
+    fun deleteWeekDate(context: Context, weekDate: WeekDate) {
         val contentResolver = context.contentResolver
 
         Log.d(TAG, "deleteWeekDate: ${weekDate.calendarId}")
@@ -107,12 +100,6 @@ object CalendarProvider {
             val deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, it)
             contentResolver.delete(deleteUri, null, null)
             Log.d(TAG, "deleteWeekDate: $weekDate")
-        }
-    }
-
-    fun deleteRecurringMeeting(context: Context, meeting: RecurringMeeting) {
-        meeting.meetingDates.forEach { weekDate ->
-            deleteWeekDate(context, weekDate)
         }
     }
 

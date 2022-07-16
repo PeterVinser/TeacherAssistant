@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1a790275cd46f66e12b167314da78b11",
+    "identityHash": "6256c2fb7e16448a25330ecd262025c3",
     "entities": [
       {
         "tableName": "user_table_name",
@@ -86,8 +86,14 @@
       },
       {
         "tableName": "meetings_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseId` TEXT, `lessonId` TEXT, `attendeeIds` TEXT NOT NULL, `title` TEXT NOT NULL, `date` INTEGER NOT NULL, `singular` INTEGER NOT NULL, `completed` INTEGER NOT NULL, `description` TEXT, `durationHours` INTEGER, `durationMinutes` INTEGER, `id` TEXT, `roomId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `calendarId` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT, `courseId` TEXT, `lessonId` TEXT, `attendeeIds` TEXT, `title` TEXT, `description` TEXT, `date` INTEGER, `durationHours` INTEGER, `durationMinutes` INTEGER, `singular` INTEGER NOT NULL, `completed` INTEGER NOT NULL, `weekDates` TEXT, `roomId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `calendarId` INTEGER)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
           {
             "fieldPath": "courseId",
             "columnName": "courseId",
@@ -104,36 +110,24 @@
             "fieldPath": "attendeeIds",
             "columnName": "attendeeIds",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "date",
-            "columnName": "date",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "singular",
-            "columnName": "singular",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "completed",
-            "columnName": "completed",
-            "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "description",
             "columnName": "description",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -149,8 +143,20 @@
             "notNull": false
           },
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "singular",
+            "columnName": "singular",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completed",
+            "columnName": "completed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekDates",
+            "columnName": "weekDates",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -180,7 +186,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1a790275cd46f66e12b167314da78b11')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6256c2fb7e16448a25330ecd262025c3')"
     ]
   }
 }

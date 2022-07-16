@@ -6,7 +6,7 @@
     <data>
         <variable
             name="homeworkViewModel"
-            type="com.piotrokninski.teacherassistant.viewmodel.main.NewHomeworkFragmentViewModel" />
+            type="com.piotrokninski.teacherassistant.viewmodel.main.NewHomeworkViewModel" />
     </data>
 
 
