@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6256c2fb7e16448a25330ecd262025c3",
+    "identityHash": "4f5f9c93f43695182c86a5ac297251a1",
     "entities": [
       {
         "tableName": "user_table_name",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "meetings_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT, `courseId` TEXT, `lessonId` TEXT, `attendeeIds` TEXT, `title` TEXT, `description` TEXT, `date` INTEGER, `durationHours` INTEGER, `durationMinutes` INTEGER, `singular` INTEGER NOT NULL, `completed` INTEGER NOT NULL, `weekDates` TEXT, `roomId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `calendarId` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT, `courseId` TEXT, `lessonId` TEXT, `attendeeIds` TEXT, `title` TEXT, `description` TEXT, `date` INTEGER, `durationHours` INTEGER, `durationMinutes` INTEGER, `singular` INTEGER NOT NULL, `completed` INTEGER NOT NULL, `weekDate` TEXT, `roomId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `calendarId` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -155,8 +155,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "weekDates",
-            "columnName": "weekDates",
+            "fieldPath": "weekDate",
+            "columnName": "weekDate",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -186,7 +186,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6256c2fb7e16448a25330ecd262025c3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4f5f9c93f43695182c86a5ac297251a1')"
     ]
   }
 }

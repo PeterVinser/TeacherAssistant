@@ -11,9 +11,7 @@ data class WeekDate(
     var minute: Int,
     var durationHours: Int = 1,
     var durationMinutes: Int = 0,
-    val timeZone: String = TimeZone.getDefault().id,
-    @get:Exclude
-    var calendarId: Long? = null
+    val timeZone: String = TimeZone.getDefault().id
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -78,7 +76,6 @@ data class WeekDate(
         result = 31 * result + durationHours
         result = 31 * result + durationMinutes
         result = 31 * result + timeZone.hashCode()
-        result = 31 * result + (calendarId?.hashCode() ?: 0)
         return result
     }
 

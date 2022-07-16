@@ -23,7 +23,7 @@ data class Meeting(
     var durationMinutes: Int? = null,
     var singular: Boolean,
     val completed: Boolean,
-    var weekDates: List<WeekDate>? = null,
+    var weekDate: WeekDate? = null,
     @get:Exclude
     @PrimaryKey(autoGenerate = true)
     var roomId: Int = 0,
@@ -35,7 +35,7 @@ data class Meeting(
     val isComplete: Boolean
         get() = (!title.isNullOrEmpty() && !description.isNullOrEmpty()
                 && durationHours != null && durationMinutes != null
-                && date != null && (singular == (weekDates == null)))
+                && date != null && (singular == (weekDate == null)))
 
     fun dateToString(): String? {
         return if (singular) {
@@ -45,7 +45,7 @@ data class Meeting(
                 "${date.toString()}, ${durationHours}h, ${durationMinutes}min"
             }
         } else {
-            weekDates?.get(0)?.toString()
+            weekDate?.toString()
         }
     }
 
@@ -55,11 +55,11 @@ data class Meeting(
 
         fun toMeeting(map: Map<String, Any>): Meeting? {
             return try {
-                val weekDates = ArrayList<WeekDate>()
-
-                (map[Contract.WEEK_DATES] as List<Map<*, *>>?)?.forEach {
-                    WeekDate.toWeekDate(it)?.let { weekDate -> weekDates.add(weekDate) }
-                }
+//                val weekDates = ArrayList<WeekDate>()
+//
+//                (map[Contract.WEEK_DATES] as List<Map<*, *>>?)?.forEach {
+//                    WeekDate.toWeekDate(it)?.let { weekDate -> weekDates.add(weekDate) }
+//                }
 
                 Meeting(
                     map[Contract.ID] as String?,
@@ -73,7 +73,7 @@ data class Meeting(
                     (map[Contract.DURATION_MINUTES] as Long).toInt(),
                     map[Contract.SINGULAR] as Boolean,
                     map[Contract.COMPLETED] as Boolean,
-                    weekDates
+                    (map[Contract.WEEK_DATE] as Map<*, *>?)?.let{ WeekDate.toWeekDate(it) }
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toMeeting: ", e)
@@ -100,6 +100,7 @@ data class Meeting(
         const val DESCRIPTION = "description"
         const val DURATION_HOURS = "durationHours"
         const val DURATION_MINUTES = "durationMinutes"
+        const val WEEK_DATE = "weekDate"
         const val WEEK_DATES = "weekDates"
 
     }

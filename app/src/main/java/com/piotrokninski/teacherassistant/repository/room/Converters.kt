@@ -31,33 +31,13 @@ class Converters {
         string?.split(";")
 
     @TypeConverter
-    fun listOfWeekDateToString(weekDates: List<WeekDate>): String = run {
-        val stringArray = ArrayList<String>()
-
-        weekDates.forEach {
-            stringArray.add(weekDateToString(it))
-        }
-
-        return arrayListToString(stringArray)
-    }
-
-    @TypeConverter
-    fun stringToListOfWeekDates(string: String): List<WeekDate> = run {
-        val weekDates = ArrayList<WeekDate>()
-
-        stringToList(string)?.forEach {
-            weekDates.add(stringToWeekDate(it))
-        }
-
-        return weekDates
-    }
-
-    private fun weekDateToString(weekDate: WeekDate): String =
+    fun weekDateToString(weekDate: WeekDate): String =
         "${weekDate.weekDay.name},${weekDate.hour},${weekDate.minute}," +
                 "${weekDate.durationHours},${weekDate.durationMinutes}," +
-                "${weekDate.timeZone},${weekDate.calendarId}"
+                weekDate.timeZone
 
-    private fun stringToWeekDate(string: String): WeekDate = run {
+    @TypeConverter
+    fun stringToWeekDate(string: String): WeekDate = run {
         val weekDateArray = string.split(",")
         return WeekDate(
             WeekDays.valueOf(weekDateArray[0]),
@@ -65,8 +45,7 @@ class Converters {
             weekDateArray[2].toInt(),
             weekDateArray[3].toInt(),
             weekDateArray[4].toInt(),
-            weekDateArray[5],
-            weekDateArray[6].toLongOrNull()
+            weekDateArray[5]
         )
     }
 }

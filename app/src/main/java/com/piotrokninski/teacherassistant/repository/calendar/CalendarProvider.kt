@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.provider.CalendarContract
-import android.util.Log
 import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.util.WeekDate
 import java.util.*
@@ -18,19 +17,31 @@ object CalendarProvider {
 
         val contentValues = ContentValues()
 
-        val duration = (meeting.durationHours!! * 60 + meeting.durationMinutes!!) * 60 * 1000
         contentValues.apply {
             put(CalendarContract.Events.TITLE, meeting.title)
             put(CalendarContract.Events.DESCRIPTION, meeting.description)
             meeting.date?.let {  put(CalendarContract.Events.DTSTART, it.time) }
-            meeting.date?.let {  put(CalendarContract.Events.DTSTART, it.time + duration) }
             put(CalendarContract.Events.CALENDAR_ID, 1)
             put(CalendarContract.Events.EVENT_TIMEZONE, timezone)
         }
 
-        val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, contentValues)
+        if (meeting.singular) {
+            val duration = (meeting.durationHours!! * 60 + meeting.durationMinutes!!) * 60 * 1000
 
-        Log.d(TAG, "insertMeeting: $meeting")
+            meeting.date?.let {
+                contentValues.put(CalendarContract.Events.DTSTART, it.time + duration)
+            }
+        } else {
+            meeting.weekDate?.let {
+                val duration = "PT${it.durationHours}H${it.durationMinutes}M"
+                val rrule = "FREQ=WEEKLY;BYDAY=${it.weekDay.rrule};INTERVAL=1"
+
+                contentValues.put(CalendarContract.Events.DURATION, duration)
+                contentValues.put(CalendarContract.Events.RRULE, rrule)
+            }
+        }
+
+        val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, contentValues)
 
         return uri?.lastPathSegment?.toLong()
     }
@@ -39,18 +50,31 @@ object CalendarProvider {
         val contentResolver = context.contentResolver
         val contentValues = ContentValues()
 
-        val duration = (meeting.durationHours!! * 60 + meeting.durationMinutes!!) * 60 * 1000
         contentValues.apply {
             put(CalendarContract.Events.TITLE, meeting.title)
             put(CalendarContract.Events.DESCRIPTION, meeting.description)
             meeting.date?.let { put(CalendarContract.Events.DTSTART, it.time) }
-            meeting.date?.let { put(CalendarContract.Events.DTSTART, it.time + duration) }
+        }
+
+        if (meeting.singular) {
+            val duration = (meeting.durationHours!! * 60 + meeting.durationMinutes!!) * 60 * 1000
+
+            meeting.date?.let {
+                contentValues.put(CalendarContract.Events.DTSTART, it.time + duration)
+            }
+        } else {
+            meeting.weekDate?.let {
+                val duration = "PT${it.durationHours}H${it.durationMinutes}M"
+                val rrule = "FREQ=WEEKLY;BYDAY=${it.weekDay.rrule};INTERVAL=1"
+
+                contentValues.put(CalendarContract.Events.DURATION, duration)
+                contentValues.put(CalendarContract.Events.RRULE, rrule)
+            }
         }
 
         meeting.calendarId?.let {
             val updateUri = ContentUris.withAppendedId(CalendarContract.EventDays.CONTENT_URI, it)
             contentResolver.update(updateUri, contentValues, null, null)
-            Log.d(TAG, "updateMeeting: $meeting")
         }
     }
 
@@ -60,64 +84,6 @@ object CalendarProvider {
         meeting.calendarId?.let {
             val deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, it)
             contentResolver.delete(deleteUri, null, null)
-            Log.d(TAG, "deleteMeeting: $meeting")
         }
-    }
-
-    fun insertWeekDate(context: Context, title: String, description: String?, weekDate: WeekDate): Long? {
-        val contentResolver = context.contentResolver
-        val timezone = Calendar.getInstance().timeZone.id
-        val contentValues = ContentValues()
-
-        val date = getNextDate(weekDate)
-
-        val duration = "PT${weekDate.durationHours}H${weekDate.durationMinutes}M"
-        val rrule = "FREQ=WEEKLY;BYDAY=${weekDate.weekDay.rrule};INTERVAL=1"
-
-        contentValues.apply {
-            put(CalendarContract.Events.TITLE, title)
-            put(CalendarContract.Events.DESCRIPTION, description)
-            put(CalendarContract.Events.DTSTART, date.time)
-            put(CalendarContract.Events.DURATION, duration)
-            put(CalendarContract.Events.RRULE, rrule)
-            put(CalendarContract.Events.CALENDAR_ID, 1)
-            put(CalendarContract.Events.EVENT_TIMEZONE, timezone)
-        }
-
-        val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, contentValues)
-
-        Log.d(TAG, "insertWeekDate: $title, $weekDate")
-
-        return uri?.lastPathSegment?.toLong()
-    }
-
-    fun deleteWeekDate(context: Context, weekDate: WeekDate) {
-        val contentResolver = context.contentResolver
-
-        Log.d(TAG, "deleteWeekDate: ${weekDate.calendarId}")
-
-        weekDate.calendarId?.let {
-            val deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, it)
-            contentResolver.delete(deleteUri, null, null)
-            Log.d(TAG, "deleteWeekDate: $weekDate")
-        }
-    }
-
-    private fun getNextDate(weekDate: WeekDate): Date {
-        val calendar = Calendar.getInstance()
-        val currentDay =
-            if (calendar.get(Calendar.DAY_OF_WEEK) == 1) 7 else calendar.get(Calendar.DAY_OF_WEEK) - 1
-        val weekDayNum = weekDate.weekDay.id
-
-        var daysToAdd = weekDayNum - currentDay
-        if (daysToAdd <= 0) daysToAdd += 7
-
-        calendar.add(Calendar.DAY_OF_WEEK, daysToAdd)
-        calendar.set(Calendar.HOUR_OF_DAY, weekDate.hour)
-        calendar.set(Calendar.MINUTE, weekDate.minute)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-
-        return calendar.time
     }
 }

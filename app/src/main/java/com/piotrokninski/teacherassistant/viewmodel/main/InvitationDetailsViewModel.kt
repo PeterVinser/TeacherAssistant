@@ -73,7 +73,7 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
                 )
 
                 if (friends.isNotEmpty()) {
-                    val friendFullNames = java.util.ArrayList<String>()
+                    val friendFullNames = ArrayList<String>()
 
                     friends.forEach {
                         friendFullNames.add(it.fullName)
@@ -194,13 +194,13 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
         meeting.value!!.durationHours = durationHours
         meeting.value!!.durationMinutes = durationMinutes
 
-        meeting.value?.weekDates = null
+        meeting.value?.weekDate = null
 
         registry.notifyChange(this, BR.meeting)
     }
 
     fun onRecurringDateSelected(weekDate: WeekDate) {
-        meeting.value!!.weekDates = arrayListOf(weekDate)
+        meeting.value!!.weekDate = weekDate
 
         meeting.value!!.date = weekDate.nextDate
         meeting.value!!.durationHours = weekDate.durationHours

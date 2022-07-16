@@ -189,7 +189,7 @@ class InvitationsAdapter(
 
                 binding.invitationItemMeetingLayout.invitationItemMeetingWeekDates.removeAllViews()
 
-                meeting.weekDates?.forEach { weekDate ->
+                meeting.weekDate?.let { weekDate ->
                     val chip = Chip(context)
                     chip.text = weekDate.toString()
 

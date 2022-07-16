@@ -104,43 +104,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         meetings.forEach { meeting ->
             savedMeetings.filter { it.id == meeting.id }.ifEmpty {
-                if (meeting.singular) {
-                    meeting.calendarId = CalendarProvider.insertMeeting(getApplication(), meeting)
-                    meetingRepository.insertMeeting(meeting)
-                } else {
-                    meeting.weekDates?.forEach { weekDate ->
-                        weekDate.calendarId = CalendarProvider.insertWeekDate(
-                            getApplication(),
-                            meeting.title!!,
-                            meeting.description,
-                            weekDate
-                        )
-                    }
-                }
+                meeting.calendarId = CalendarProvider.insertMeeting(getApplication(), meeting)
+                meetingRepository.insertMeeting(meeting)
                 null
             }?.forEach { savedMeeting ->
-                if (meeting.singular) {
-                    if (!equals(meeting, savedMeeting)) {
-                        meeting.roomId = savedMeeting.roomId
-                        meeting.calendarId = savedMeeting.calendarId
-                        CalendarProvider.updateMeeting(getApplication(), meeting)
-                        meetingRepository.updateMeeting(meeting)
-                    }
-                } else {
-                    // TODO: fix the weekDates and complete sync implementation
-                    if (!equals(meeting, savedMeeting)) {
-                        savedMeeting.weekDates?.forEach { weekDate ->
-                            CalendarProvider.deleteWeekDate(getApplication(), weekDate)
-                        }
-                        meeting.weekDates?.forEach { weekDate ->
-                            weekDate.calendarId = CalendarProvider.insertWeekDate(
-                                getApplication(),
-                                meeting.title!!,
-                                meeting.description,
-                                weekDate
-                            )
-                        }
-                    }
+                if (!equals(meeting, savedMeeting)) {
+                    meeting.roomId = savedMeeting.roomId
+                    meeting.calendarId = savedMeeting.calendarId
+                    CalendarProvider.updateMeeting(getApplication(), meeting)
+                    meetingRepository.updateMeeting(meeting)
                 }
 
                 meetings.remove(meeting)
@@ -160,7 +132,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         that.description == other.description &&
         that.date == other.date &&
         that.durationHours == other.durationHours &&
-        that.durationMinutes == other.durationMinutes
+        that.durationMinutes == other.durationMinutes &&
+        that.weekDate == other.weekDate
 
     sealed class MainEvent {
         object CalendarPermissionEvent : MainEvent()

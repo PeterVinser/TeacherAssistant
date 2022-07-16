@@ -211,7 +211,7 @@ class InvitationDetailsFragment : Fragment() {
 
                 dialog.show(childFragmentManager, "tag")
             } else {
-                val prevWeekDate = invitationViewModel.meeting.value?.weekDates?.get(0)
+                val prevWeekDate = invitationViewModel.meeting.value?.weekDate
 
                 val dialog = prevWeekDate?.let {
                     WeekDatePickerDialogFragment(it) { weekDate ->
