@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/destination_invitations"
+        android:id="@+id/destination_home"
         android:icon="@drawable/ic_menu_home"
         android:title="@string/menu_main_home_text" />
     <item
@@ -14,7 +14,7 @@
         android:icon="@drawable/ic_menu_homework"
         android:title="@string/menu_main_exercises_text" />
     <item
-        android:id="@+id/destination_contacts"
-        android:icon="@drawable/ic_menu_contacts"
-        android:title="@string/menu_main_contacts_text" />
+        android:id="@+id/destination_calendar"
+        android:icon="@drawable/ic_calendar_icon"
+        android:title="@string/menu_bottom_calendar_text" />
 </menu>

@@ -39,6 +39,10 @@ object CalendarProvider {
                 contentValues.put(CalendarContract.Events.DURATION, duration)
                 contentValues.put(CalendarContract.Events.RRULE, rrule)
             }
+
+            if (meeting.weekDate == null) {
+                return null
+            }
         }
 
         val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, contentValues)

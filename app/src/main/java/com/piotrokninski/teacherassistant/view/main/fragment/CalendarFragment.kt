@@ -47,7 +47,9 @@ class CalendarFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (activity as MainActivity).isBottomNavVisible(false)
+        (activity as MainActivity).isBottomNavVisible(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
 
         binding.calendarMeetingDate.setOnClickListener {
             val dialog = DatePickerDialogFragment(

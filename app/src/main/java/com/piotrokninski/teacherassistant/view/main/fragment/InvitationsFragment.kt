@@ -26,11 +26,6 @@ class InvitationsFragment : Fragment() {
 
     private lateinit var invitationsViewModel: InvitationsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +33,7 @@ class InvitationsFragment : Fragment() {
 
         binding = FragmentInvitationsBinding.inflate(layoutInflater, container, false)
 
-        recyclerView = binding.homeRecyclerView
+        recyclerView = binding.invitationsRecyclerView
 
         return binding.root
     }
@@ -46,7 +41,7 @@ class InvitationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).isBottomNavVisible(true)
+        (activity as MainActivity).isBottomNavVisible(false)
 
         arguments?.let {
             val userId = it.getString(Invitation.Contract.INVITING_USER_ID)
@@ -112,40 +107,13 @@ class InvitationsFragment : Fragment() {
     private fun editItem(item: InvitationsAdapter.Item) {
         val action = when (item) {
             is InvitationsAdapter.Item.Invitation ->
-                InvitationsFragmentDirections.actionHomeToInvitation(item.invitation.type, item.invitation)
+                InvitationsFragmentDirections.actionInvitationsToInvitationDetails(
+                    item.invitation.type, item.invitation
+                )
 
             else -> null
         }
 
         if (action != null) this.findNavController().navigate(action)
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_toolbar, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when (item.itemId) {
-            R.id.menu_toolbar_destination_user_account -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_user)
-                true
-            }
-            R.id.menu_toolbar_destination_search -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_searchUsers)
-                true
-            }
-            R.id.menu_toolbar_destination_calendar -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_calendar)
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
-        }
     }
 }

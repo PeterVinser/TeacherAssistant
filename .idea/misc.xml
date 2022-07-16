@@ -54,6 +54,7 @@
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_launcher_background.xml" value="0.137" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_left_arrow.xml" value="0.137" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_menu_contacts.xml" value="0.137" />
+        <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_search_icon.xml" value="0.137" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_settings_icon.xml" value="0.137" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_sync.xml" value="0.137" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/dialogs/drawable/ic_add_icon.xml" value="0.137" />
@@ -100,6 +101,7 @@
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_new_meeting.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_user_account.xml" value="0.10562310030395136" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_user_profile.xml" value="0.1911231884057971" />
+        <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/other/drawable/ic_invitation_icon.xml" value="0.1" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/other/drawable/ic_menu_meeting_invitations.xml" value="0.1405" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/other/drawable/ic_sync.xml" value="0.1405" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/other/layout/invitation_course.xml" value="0.22" />
@@ -108,6 +110,7 @@
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_bottom.xml" value="0.2171875" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_calendar.xml" value="0.22" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_course.xml" value="0.2171875" />
+        <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/menu/menu_toolbar.xml" value="0.1" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_dropdown_arrow_icon.xml" value="0.1" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_dropup_arrow_icon.xml" value="0.1" />
         <entry key="..\:/Users/piotr/StudioProjects/TeacherAssistant/app/src/main/res/drawable/ic_note_icon.xml" value="0.1" />

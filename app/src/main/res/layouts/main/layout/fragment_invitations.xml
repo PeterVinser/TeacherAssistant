@@ -7,22 +7,8 @@
     android:orientation="vertical"
     tools:context=".view.main.fragment.InvitationsFragment">
 
-    <TextView
-        android:id="@+id/home_welcome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/home_welcome_text"
-        android:textSize="20sp"
-        android:textAlignment="center"/>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/materialDivider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_recycler_view"
+        android:id="@+id/invitations_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="32dp"/>

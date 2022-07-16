@@ -24,8 +24,8 @@
     <string name="sign_in_text">Zaloguj się</string>
     <string name="sign_up_text">Zarejestruj się</string>
     <string name="minimum_password_text">Minimum password</string>
-    <string name="menu_toolbar_calendar_text">Kalendarz</string>
-    <string name="menu_main_contacts_text">Kontakty</string>
+    <string name="menu_bottom_calendar_text">Kalendarz</string>
+    <string name="menu_main_invitations_text">Zaproszenia</string>
     <string name="menu_main_exercises_text">Zadania</string>
     <string name="menu_user_account_settings_text">Ustawienia</string>
     <string name="settings_sign_out_text">Wyloguj</string>

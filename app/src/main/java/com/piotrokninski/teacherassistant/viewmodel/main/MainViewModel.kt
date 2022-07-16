@@ -19,6 +19,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "MainActivityViewModel"
@@ -115,7 +116,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     meetingRepository.updateMeeting(meeting)
                 }
 
-                meetings.remove(meeting)
                 savedMeetings.remove(savedMeeting)
             }
         }

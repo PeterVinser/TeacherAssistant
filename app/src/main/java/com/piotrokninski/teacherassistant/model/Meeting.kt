@@ -55,11 +55,6 @@ data class Meeting(
 
         fun toMeeting(map: Map<String, Any>): Meeting? {
             return try {
-//                val weekDates = ArrayList<WeekDate>()
-//
-//                (map[Contract.WEEK_DATES] as List<Map<*, *>>?)?.forEach {
-//                    WeekDate.toWeekDate(it)?.let { weekDate -> weekDates.add(weekDate) }
-//                }
 
                 Meeting(
                     map[Contract.ID] as String?,

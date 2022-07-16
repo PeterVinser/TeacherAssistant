@@ -1,12 +1,11 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +26,11 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +38,7 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        recyclerView = binding.contactsRecyclerView
+        recyclerView = binding.homeRecyclerView
 
         return binding.root
     }
@@ -75,7 +79,7 @@ class HomeFragment : Fragment() {
         if (chatItem.chat.id != null) {
             homeViewModel.markAsRead(chatItem.chat.id)
 
-            HomeFragmentDirections.actionContactsToChat(chatItem).let { action ->
+            HomeFragmentDirections.actionHomeToChat(chatItem).let { action ->
                 this.findNavController().navigate(action)
             }
         } else {
@@ -95,14 +99,48 @@ class HomeFragment : Fragment() {
         homeViewModel.chatItems.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
-                binding.contactsNotFound.visibility = View.GONE
+                binding.homeChatsNotFound.visibility = View.GONE
             } else {
                 recyclerView.visibility = View.GONE
-                binding.contactsNotFound.visibility = View.VISIBLE
+                binding.homeChatsNotFound.visibility = View.VISIBLE
             }
             adapter.setChatItems(it)
         }
 
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_toolbar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.destination_user_account -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_user)
+                true
+            }
+            R.id.destination_search -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_searchUsers)
+                true
+            }
+            R.id.destination_invitations -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_invitations)
+                true
+            }
+            R.id.destination_calendar -> {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_home_to_calendar)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     override fun onResume() {

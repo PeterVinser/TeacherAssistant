@@ -31,21 +31,25 @@ class Converters {
         string?.split(";")
 
     @TypeConverter
-    fun weekDateToString(weekDate: WeekDate): String =
-        "${weekDate.weekDay.name},${weekDate.hour},${weekDate.minute}," +
-                "${weekDate.durationHours},${weekDate.durationMinutes}," +
-                weekDate.timeZone
+    fun weekDateToString(weekDate: WeekDate?): String? =
+        weekDate?.let {
+            "${weekDate.weekDay.name},${weekDate.hour},${weekDate.minute}," +
+                    "${weekDate.durationHours},${weekDate.durationMinutes}," +
+                    weekDate.timeZone }
 
     @TypeConverter
-    fun stringToWeekDate(string: String): WeekDate = run {
-        val weekDateArray = string.split(",")
-        return WeekDate(
-            WeekDays.valueOf(weekDateArray[0]),
-            weekDateArray[1].toInt(),
-            weekDateArray[2].toInt(),
-            weekDateArray[3].toInt(),
-            weekDateArray[4].toInt(),
-            weekDateArray[5]
-        )
+    fun stringToWeekDate(string: String?): WeekDate? = run {
+        string?.let {
+            val weekDateArray = it.split(",")
+            return WeekDate(
+                WeekDays.valueOf(weekDateArray[0]),
+                weekDateArray[1].toInt(),
+                weekDateArray[2].toInt(),
+                weekDateArray[3].toInt(),
+                weekDateArray[4].toInt(),
+                weekDateArray[5]
+            )
+        }
+        return null
     }
 }
