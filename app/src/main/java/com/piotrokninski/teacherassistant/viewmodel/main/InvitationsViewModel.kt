@@ -46,7 +46,7 @@ class InvitationsViewModel : ViewModel() {
             val assignedHomework = FirestoreHomeworkRepository.getHomework(
                 currentUserId,
                 viewType,
-                Homework.STATUS_ASSIGNED
+                Homework.Contract.STATUS_ASSIGNED
             )
 
             if (!receivedInvitations.isNullOrEmpty()) {

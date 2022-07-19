@@ -14,36 +14,25 @@ object FirestoreHomeworkRepository {
     fun addHomework(homework: Homework) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(Homework.COLLECTION_NAME).add(homework)
+        db.collection(Homework.Contract.COLLECTION_NAME).add(homework)
     }
 
-    suspend fun getHomework(userId: String, viewType: String) = getHomework(userId, viewType, null)
+    suspend fun getHomework(userId: String, idField: String) = getHomework(userId, idField, null)
 
     suspend fun getHomework(
         userId: String,
-        viewType: String,
+        idField: String,
         status: String?
     ): ArrayList<Homework>? {
         val db = FirebaseFirestore.getInstance()
 
-        val homeworksRef = db.collection(Homework.COLLECTION_NAME)
+        val homeworksRef = db.collection(Homework.Contract.COLLECTION_NAME)
 
-        var query = when (viewType) {
-            AppConstants.VIEW_TYPE_STUDENT -> homeworksRef.whereEqualTo(
-                Homework.STUDENT_ID,
-                userId
-            )
-
-            AppConstants.VIEW_TYPE_TUTOR -> homeworksRef.whereEqualTo(
-                Homework.TUTOR_ID,
-                userId
-            )
-
-            else -> throw IllegalArgumentException("Unknown viewType")
-        }
-
-        if (status != null) {
-            query = query.whereEqualTo(Homework.STATUS, status)
+        val query = if (status != null) {
+            homeworksRef.whereEqualTo(idField, userId)
+                .whereEqualTo(Homework.Contract.STATUS, status)
+        } else {
+            homeworksRef.whereEqualTo(idField, userId)
         }
 
         return try {

@@ -16,7 +16,7 @@ object FirestoreMessageRepository {
         val db = FirebaseFirestore.getInstance()
 
         val document = db.collection(Chat.Contract.COLLECTION_NAME).document(chatId)
-            .collection(Message.COLLECTION_NAME).document()
+            .collection(Message.Contract.COLLECTION_NAME).document()
 
         message.id = document.id
 
@@ -27,7 +27,7 @@ object FirestoreMessageRepository {
         val db = FirebaseFirestore.getInstance()
 
         val query = db.collection(Chat.Contract.COLLECTION_NAME).document(chatId)
-            .collection(Message.COLLECTION_NAME).orderBy(Message.TIMESTAMP, Query.Direction.DESCENDING)
+            .collection(Message.Contract.COLLECTION_NAME).orderBy(Message.Contract.TIMESTAMP, Query.Direction.DESCENDING)
             .limit(1)
 
         try {
@@ -47,7 +47,8 @@ object FirestoreMessageRepository {
         val db = FirebaseFirestore.getInstance()
 
         val query = db.collection(Chat.Contract.COLLECTION_NAME).document(chatId)
-            .collection(Message.COLLECTION_NAME).orderBy(Message.TIMESTAMP, Query.Direction.DESCENDING)
+            .collection(Message.Contract.COLLECTION_NAME)
+            .orderBy(Message.Contract.TIMESTAMP, Query.Direction.DESCENDING)
             .limit(30)
 
         return try {
@@ -70,8 +71,8 @@ object FirestoreMessageRepository {
         val db = FirebaseFirestore.getInstance()
 
         val query = db.collection(Chat.Contract.COLLECTION_NAME).document(chatId)
-            .collection(Message.COLLECTION_NAME).whereLessThan(Message.TIMESTAMP, time)
-            .orderBy(Message.TIMESTAMP, Query.Direction.DESCENDING)
+            .collection(Message.Contract.COLLECTION_NAME).whereLessThan(Message.Contract.TIMESTAMP, time)
+            .orderBy(Message.Contract.TIMESTAMP, Query.Direction.DESCENDING)
             .limit(30)
 
         return try {

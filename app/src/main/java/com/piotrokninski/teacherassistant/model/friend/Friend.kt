@@ -19,12 +19,12 @@ data class Friend(
         fun DocumentSnapshot.toFriend(): Friend? {
             return try {
                 Friend(
-                    getString(USER_ID)!!,
-                    getString(FULL_NAME)!!,
-                    getString(STATUS)!!,
-                    getString(FRIENDSHIP_TYPE)!!,
-                    getString(INVITATION_ID),
-                    getString(CHAT_ID)!!
+                    getString(Contract.USER_ID)!!,
+                    getString(Contract.FULL_NAME)!!,
+                    getString(Contract.STATUS)!!,
+                    getString(Contract.FRIENDSHIP_TYPE)!!,
+                    getString(Contract.INVITATION_ID),
+                    getString(Contract.CHAT_ID)!!
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toFriend: ", e)
@@ -32,16 +32,19 @@ data class Friend(
             }
         }
 
-        //Contract
+        private const val TAG = "Friend"
+    }
+    
+    object Contract {
+
         const val COLLECTION_NAME = "friends"
 
-        private const val USER_ID = "userId"
-        private const val FULL_NAME = "fullName"
+        const val USER_ID = "userId"
+        const val FULL_NAME = "fullName"
         const val STATUS = "status"
         const val FRIENDSHIP_TYPE = "friendshipType"
-        private const val INVITATION_ID = "invitationId"
-        private const val CHAT_ID = "chatId"
-        private const val LATEST_MESSAGE = "latestMessage"
+        const val INVITATION_ID = "invitationId"
+        const val CHAT_ID = "chatId"
 
         const val STATUS_APPROVED = "approved"
         //Set when the friend is being invited
@@ -55,7 +58,5 @@ data class Friend(
         const val TYPE_TUTOR = "tutor"
         const val TYPE_FRIEND = "friend"
         const val TYPE_ALL = "all"
-
-        private const val TAG = "Friend"
     }
 }

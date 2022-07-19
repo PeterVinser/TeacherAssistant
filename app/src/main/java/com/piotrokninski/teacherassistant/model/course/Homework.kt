@@ -17,7 +17,7 @@ data class Homework(
     var dueDate: Date? = null,
     val reminderDate: Date? = null,
     var reminded: Boolean = false,
-    val status: String = STATUS_ASSIGNED,
+    val status: String = Contract.STATUS_ASSIGNED,
     var description: String? = null
 ) {
     companion object {
@@ -26,20 +26,20 @@ data class Homework(
             return try {
 
                 Homework(
-                    getString(COURSE_ID)!!,
-                    getString(LESSON_ID),
-                    getString(STUDENT_FULL_NAME)!!,
-                    getString(STUDENT_FULL_NAME)!!,
-                    getString(TUTOR_ID)!!,
-                    getString(TUTOR_FULL_NAME)!!,
-                    getString(TOPIC),
-                    getString(SUBJECT)!!,
-                    getDate(CREATION_DATE),
-                    getDate(DUE_DATE)!!,
-                    getDate(REMINDER_DATE)!!,
-                    getBoolean(REMINDED)!!,
-                    getString(STATUS)!!,
-                    getString(DESCRIPTION)!!
+                    getString(Contract.COURSE_ID)!!,
+                    getString(Contract.LESSON_ID),
+                    getString(Contract.STUDENT_ID)!!,
+                    getString(Contract.STUDENT_FULL_NAME)!!,
+                    getString(Contract.TUTOR_ID)!!,
+                    getString(Contract.TUTOR_FULL_NAME)!!,
+                    getString(Contract.TOPIC),
+                    getString(Contract.SUBJECT)!!,
+                    getDate(Contract.CREATION_DATE),
+                    getDate(Contract.DUE_DATE)!!,
+                    getDate(Contract.REMINDER_DATE)!!,
+                    getBoolean(Contract.REMINDED)!!,
+                    getString(Contract.STATUS)!!,
+                    getString(Contract.DESCRIPTION)!!
                 )
 
             } catch (e: Exception) {
@@ -59,28 +59,30 @@ data class Homework(
             )
         }
 
-        //Contract
+        private const val TAG = "Homework"
+    }
+    
+    object Contract {
+
         const val COLLECTION_NAME = "homework"
 
         const val COURSE_ID = "courseId"
-        private const val LESSON_ID = "lessonId"
+        const val LESSON_ID = "lessonId"
         const val STUDENT_ID = "studentId"
-        private const val STUDENT_FULL_NAME = "studentFullName"
+        const val STUDENT_FULL_NAME = "studentFullName"
         const val TUTOR_ID = "tutorId"
-        private const val TUTOR_FULL_NAME = "tutorFullName"
-        private const val TOPIC = "topic"
-        private const val SUBJECT = "subject"
-        private const val CREATION_DATE = "creationDate"
-        private const val DUE_DATE = "dueDate"
-        private const val REMINDER_DATE = "reminderDate"
-        private const val REMINDED = "reminded"
+        const val TUTOR_FULL_NAME = "tutorFullName"
+        const val TOPIC = "topic"
+        const val SUBJECT = "subject"
+        const val CREATION_DATE = "creationDate"
+        const val DUE_DATE = "dueDate"
+        const val REMINDER_DATE = "reminderDate"
+        const val REMINDED = "reminded"
         const val STATUS = "status"
-        private const val DESCRIPTION = "description"
+        const val DESCRIPTION = "description"
 
         const val STATUS_ASSIGNED = "assigned"
         const val STATUS_COMPLETED = "completed"
         const val STATUS_UNDELIVERED = "undelivered"
-
-        private const val TAG = "Homework"
     }
 }

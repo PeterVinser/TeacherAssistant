@@ -33,18 +33,18 @@ data class Course(
             return try {
                 val meetingDates = ArrayList<WeekDate>()
 
-                (map[WEEK_DATES] as ArrayList<Map<String, Any>>).forEach {
+                (map[Contract.WEEK_DATES] as ArrayList<Map<String, Any>>).forEach {
                     WeekDate.toWeekDate(it)?.let { weekDate -> meetingDates.add(weekDate) }
                 }
 
                 Course(
-                    map[COURSE_ID] as String?,
-                    map[STUDENT_ID] as String,
-                    map[TUTOR_ID] as String,
-                    map[STUDENT_FULL_NAME] as String,
-                    map[TUTOR_FULL_NAME] as String,
-                    map[TYPE] as String,
-                    map[SUBJECT] as String,
+                    map[Contract.COURSE_ID] as String?,
+                    map[Contract.STUDENT_ID] as String,
+                    map[Contract.TUTOR_ID] as String,
+                    map[Contract.STUDENT_FULL_NAME] as String,
+                    map[Contract.TUTOR_FULL_NAME] as String,
+                    map[Contract.TYPE] as String,
+                    map[Contract.SUBJECT] as String,
                     meetingDates
                 )
             } catch (e: Exception) {
@@ -79,22 +79,21 @@ data class Course(
             }
         }
 
-        //Contract
+        private const val TAG = "Course"
+    }
+    
+    object Contract {
+
         const val COLLECTION_NAME = "courses"
 
         const val COURSE_ID = "courseId"
         const val STUDENT_ID = "studentId"
         const val TUTOR_ID = "tutorId"
-        private const val STUDENT_FULL_NAME = "studentFullName"
-        private const val TUTOR_FULL_NAME = "tutorFullName"
+        const val STUDENT_FULL_NAME = "studentFullName"
+        const val TUTOR_FULL_NAME = "tutorFullName"
         const val STATUS = "status"
-        private const val TYPE = "type"
-        private const val SUBJECT = "subject"
-        private const val WEEK_DATES = "weekDates"
-
-        const val STATUS_PENDING = "pending"
-        const val STATUS_APPROVED = "approved"
-
-        private const val TAG = "Course"
+        const val TYPE = "type"
+        const val SUBJECT = "subject"
+        const val WEEK_DATES = "weekDates"
     }
 }

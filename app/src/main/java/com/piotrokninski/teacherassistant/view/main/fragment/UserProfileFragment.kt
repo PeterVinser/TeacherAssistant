@@ -47,7 +47,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun onInviteClicked() {
-        if (userProfileViewModel.friendStatus.value == Friend.STATUS_BLANK) {
+        if (userProfileViewModel.friendStatus.value == Friend.Contract.STATUS_BLANK) {
             val dialog = InvitationDialogFragment (
                 { invitedAs: String, invitationMessage: String? -> sendInvitation(invitedAs, invitationMessage) },
                 userProfileViewModel.currentUser,
@@ -94,27 +94,27 @@ class UserProfileFragment : Fragment() {
     private fun observeFriendStatus() {
         userProfileViewModel.friendStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
-                Friend.STATUS_BLANK ->
+                Friend.Contract.STATUS_BLANK ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_invite_button_text)
 
-                Friend.STATUS_INVITED ->
+                Friend.Contract.STATUS_INVITED ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_cancel_button_text)
 
-                Friend.STATUS_INVITING ->
+                Friend.Contract.STATUS_INVITING ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_approve_button_text)
 
-                Friend.STATUS_APPROVED ->
+                Friend.Contract.STATUS_APPROVED ->
                     binding.userProfileInviteButton.text =
                         getString(R.string.user_profile_delete_button_text)
 
-                Friend.STATUS_BLOCKED ->
+                Friend.Contract.STATUS_BLOCKED ->
                     binding.userProfileInviteButton.visibility = View.GONE
             }
 
-            if (status == Friend.STATUS_INVITING) {
+            if (status == Friend.Contract.STATUS_INVITING) {
                 binding.userProfileRejectButton.visibility = View.VISIBLE
             } else {
                 binding.userProfileRejectButton.visibility = View.GONE

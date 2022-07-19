@@ -92,10 +92,12 @@
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_chat.xml" value="0.2171875" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_contacts.xml" value="0.2171875" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_course_details.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_homework.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_homework_details.xml" value="0.22" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_invitation.xml" value="0.2171875" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_invitation_details.xml" value="0.22" />
+        <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_invitations.xml" value="0.1" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_new_course.xml" value="0.22" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_new_homework.xml" value="0.22" />
         <entry key="..\:/Users/piotr/AndroidStudioProjects/TeacherAssistant/app/src/main/res/layouts/main/layout/fragment_new_meeting.xml" value="0.16666666666666666" />

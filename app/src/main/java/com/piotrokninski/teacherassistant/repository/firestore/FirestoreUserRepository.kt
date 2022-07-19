@@ -13,14 +13,14 @@ object FirestoreUserRepository {
     fun setUserData(user: User) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(User.COLLECTION_NAME).document(user.userId)
+        db.collection(User.Contract.COLLECTION_NAME).document(user.userId)
             .set(user)
     }
 
     suspend fun getUserDataOnce(userId: String): User? {
         val db = FirebaseFirestore.getInstance()
 
-        val usersCollectionRef = db.collection(User.COLLECTION_NAME)
+        val usersCollectionRef = db.collection(User.Contract.COLLECTION_NAME)
 
         return try {
             usersCollectionRef.document(userId).get().await().toUser()
@@ -34,9 +34,10 @@ object FirestoreUserRepository {
         val db = FirebaseFirestore.getInstance()
 
         //TODO change the return to return try and add nullable return type
+        // TODO: change this abomination 
         val users = ArrayList<User>()
 
-        val usersCollectionRef = db.collection(User.COLLECTION_NAME)
+        val usersCollectionRef = db.collection(User.Contract.COLLECTION_NAME)
 
         hints.forEach { hint ->
 

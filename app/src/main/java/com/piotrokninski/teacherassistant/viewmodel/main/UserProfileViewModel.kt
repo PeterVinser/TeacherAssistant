@@ -65,7 +65,7 @@ class UserProfileViewModel(private val searchedUserId: String) : ViewModel(), Ob
 
     private fun updateFriendStatus() {
         if (friend == null) {
-            _friendStatus.value = Friend.STATUS_BLANK
+            _friendStatus.value = Friend.Contract.STATUS_BLANK
         } else {
             _friendStatus.value = friend!!.status
         }
@@ -75,13 +75,13 @@ class UserProfileViewModel(private val searchedUserId: String) : ViewModel(), Ob
         viewModelScope.launch {
 
             when (friendStatus.value) {
-                Friend.STATUS_INVITED -> cancelInvitation()
+                Friend.Contract.STATUS_INVITED -> cancelInvitation()
 
-                Friend.STATUS_INVITING -> approveInvitation()
+                Friend.Contract.STATUS_INVITING -> approveInvitation()
 
-                Friend.STATUS_APPROVED -> deleteFriend()
+                Friend.Contract.STATUS_APPROVED -> deleteFriend()
 
-                Friend.STATUS_BLOCKED -> blocked()
+                Friend.Contract.STATUS_BLOCKED -> blocked()
             }
 
             updateFriendStatus()
@@ -139,7 +139,7 @@ class UserProfileViewModel(private val searchedUserId: String) : ViewModel(), Ob
     }
 
     fun rejectInvitation() {
-        if (friendStatus.value == Friend.STATUS_INVITING) {
+        if (friendStatus.value == Friend.Contract.STATUS_INVITING) {
 
             invitation.value?.id?.let {
                 FirestoreInvitationRepository.updateInvitation(

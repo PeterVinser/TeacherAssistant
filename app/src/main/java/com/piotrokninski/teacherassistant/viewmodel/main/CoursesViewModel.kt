@@ -44,20 +44,6 @@ class CoursesViewModel : ViewModel() {
         }
     }
 
-    fun confirmCourse(course: Course) {
-        course.courseId?.let { id ->
-            FirestoreCourseRepository.updateCourse(
-                id,
-                Course.STATUS,
-                Course.STATUS_APPROVED
-            )
-        }
-    }
-
-    fun deleteCourse(courseId: String) {
-        FirestoreCourseRepository.deleteCourse(courseId)
-    }
-
     class Factory: ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(CoursesViewModel::class.java)) {

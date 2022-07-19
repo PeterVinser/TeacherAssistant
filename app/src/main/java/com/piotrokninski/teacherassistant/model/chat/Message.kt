@@ -47,12 +47,12 @@ data class Message(
         fun toMessage(map: Map<String, Any>): Message? {
             return try {
                 Message(
-                    map[ID] as String?,
-                    map[TEXT] as String,
-                    map[SENDER_ID] as String,
-                    map[SENDER_FULL_NAME] as String,
-                    map[ITEM_ID] as String?,
-                    map[TIMESTAMP] as Timestamp
+                    map[Contract.ID] as String?,
+                    map[Contract.TEXT] as String,
+                    map[Contract.SENDER_ID] as String,
+                    map[Contract.SENDER_FULL_NAME] as String,
+                    map[Contract.ITEM_ID] as String?,
+                    map[Contract.TIMESTAMP] as Timestamp
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "toCourse: ", e)
@@ -60,7 +60,10 @@ data class Message(
             }
         }
 
-        // Contract
+        private const val TAG = "Message"
+    }
+
+    object Contract {
         const val COLLECTION_NAME = "messages"
 
         const val ID = "id"
@@ -69,7 +72,5 @@ data class Message(
         const val SENDER_FULL_NAME = "senderFullName"
         const val ITEM_ID = "itemId"
         const val TIMESTAMP = "timestamp"
-
-        private const val TAG = "Message"
     }
 }

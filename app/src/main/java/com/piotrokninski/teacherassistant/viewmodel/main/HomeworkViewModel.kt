@@ -29,13 +29,21 @@ class HomeworkViewModel : ViewModel() {
 
     private suspend fun getHomework() {
 
-        val homework = FirestoreHomeworkRepository.getHomework(currentUserId, viewType)
+        val homework = when (viewType) {
+            AppConstants.VIEW_TYPE_STUDENT ->
+                FirestoreHomeworkRepository.getHomework(currentUserId, Homework.Contract.STUDENT_ID)
 
-        val assignedHomework = homework?.filter { it.status == Homework.STATUS_ASSIGNED }
+            AppConstants.VIEW_TYPE_TUTOR ->
+                FirestoreHomeworkRepository.getHomework(currentUserId, Homework.Contract.TUTOR_ID)
 
-        val undeliveredHomework = homework?.filter { it.status == Homework.STATUS_UNDELIVERED }
+            else -> throw IllegalArgumentException("Unknown viewType")
+        }
 
-        val completedHomework = homework?.filter { it.status == Homework.STATUS_COMPLETED }
+        val assignedHomework = homework?.filter { it.status == Homework.Contract.STATUS_ASSIGNED }
+
+        val undeliveredHomework = homework?.filter { it.status == Homework.Contract.STATUS_UNDELIVERED }
+
+        val completedHomework = homework?.filter { it.status == Homework.Contract.STATUS_COMPLETED }
 
         val homeworkItems = ArrayList<HomeworkAdapter.Item>()
 

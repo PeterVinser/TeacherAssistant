@@ -63,8 +63,8 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
                 currentUser = FirestoreUserRepository.getUserDataOnce(currentUserId)!!
 
                 val friendType = when (type) {
-                    Invitation.Contract.TYPE_COURSE -> Friend.TYPE_STUDENT
-                    else -> Friend.TYPE_ALL
+                    Invitation.Contract.TYPE_COURSE -> Friend.Contract.TYPE_STUDENT
+                    else -> Friend.Contract.TYPE_ALL
                 }
 
                 friends = FirestoreFriendRepository.getApprovedFriends(

@@ -13,8 +13,8 @@ object FirestoreFriendRepository {
     fun deleteFriend(userId: String, friendId: String) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(User.COLLECTION_NAME).document(userId)
-            .collection(Friend.COLLECTION_NAME).document(friendId)
+        db.collection(User.Contract.COLLECTION_NAME).document(userId)
+            .collection(Friend.Contract.COLLECTION_NAME).document(friendId)
             .delete()
     }
 
@@ -22,8 +22,8 @@ object FirestoreFriendRepository {
         val db = FirebaseFirestore.getInstance()
 
         val friendsCollectionRef =
-            db.collection(User.COLLECTION_NAME).document(userId)
-                .collection(Friend.COLLECTION_NAME).document(friendId)
+            db.collection(User.Contract.COLLECTION_NAME).document(userId)
+                .collection(Friend.Contract.COLLECTION_NAME).document(friendId)
 
         return try {
             friendsCollectionRef.get().await().toFriend()
@@ -39,18 +39,18 @@ object FirestoreFriendRepository {
         val friends = ArrayList<Friend>()
 
         val friendsCollectionRef =
-            db.collection(User.COLLECTION_NAME).document(userId)
-                .collection(Friend.COLLECTION_NAME)
+            db.collection(User.Contract.COLLECTION_NAME).document(userId)
+                .collection(Friend.Contract.COLLECTION_NAME)
 
-        val friendsQuery = if (friendshipType != Friend.TYPE_ALL) {
+        val friendsQuery = if (friendshipType != Friend.Contract.TYPE_ALL) {
             friendsCollectionRef.whereEqualTo(
-                Friend.STATUS,
-                Friend.STATUS_APPROVED
-            ).whereEqualTo(Friend.FRIENDSHIP_TYPE, friendshipType)
+                Friend.Contract.STATUS,
+                Friend.Contract.STATUS_APPROVED
+            ).whereEqualTo(Friend.Contract.FRIENDSHIP_TYPE, friendshipType)
         } else {
             friendsCollectionRef.whereEqualTo(
-                Friend.STATUS,
-                Friend.STATUS_APPROVED
+                Friend.Contract.STATUS,
+                Friend.Contract.STATUS_APPROVED
             )
         }
 

@@ -14,14 +14,14 @@ object FirestoreLessonRepository {
     fun setLesson(lesson: Lesson) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(Lesson.COLLECTION_NAME).document()
+        db.collection(Lesson.Contract.COLLECTION_NAME).document()
             .set(lesson)
     }
 
     suspend fun addLesson(lesson: Lesson) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(Lesson.COLLECTION_NAME).add(lesson).await().id
+        db.collection(Lesson.Contract.COLLECTION_NAME).add(lesson).await().id
 
 //        val lessonSnapshot = LessonSnapshot(lesson.courseId, lessonId, lesson.topic)
 
@@ -31,9 +31,9 @@ object FirestoreLessonRepository {
     suspend fun getCourseLessons(courseId: String): ArrayList<Lesson>? {
         val db = FirebaseFirestore.getInstance()
 
-        val lessonsRef = db.collection(Lesson.COLLECTION_NAME)
+        val lessonsRef = db.collection(Lesson.Contract.COLLECTION_NAME)
 
-        val query = lessonsRef.whereEqualTo(Lesson.COURSE_ID, courseId)
+        val query = lessonsRef.whereEqualTo(Lesson.Contract.COURSE_ID, courseId)
 
         return try {
 
