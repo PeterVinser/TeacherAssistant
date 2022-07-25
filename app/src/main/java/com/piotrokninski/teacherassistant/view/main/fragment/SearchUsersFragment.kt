@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -26,11 +27,6 @@ class SearchUsersFragment : Fragment() {
 
     private lateinit var searchUsersViewModel: SearchUsersViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +41,38 @@ class SearchUsersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_search, menu)
+
+                (menu.findItem(R.id.users_search_view).actionView as SearchView).isIconified = false
+
+                (menu.findItem(R.id.users_search_view).actionView as SearchView).setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        searchUsersViewModel.setSearchMode(AppConstants.PROFILES_SEARCH_MODE)
+                        if (query != null) {
+                            searchUsersViewModel.searchUsers(query.lowercase())
+                            (activity as MainActivity).hideKeyboard()
+                        }
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        searchUsersViewModel.setSearchMode(AppConstants.HINTS_SEARCH_MODE)
+                        if (newText != null) {
+                            searchUsersViewModel.searchUsers(newText.lowercase())
+                            Log.d(TAG, "onQueryTextChange: $newText")
+                        }
+                        return true
+                    }
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+        })
 
         initRecyclerView()
 
@@ -67,8 +95,7 @@ class SearchUsersFragment : Fragment() {
 
     private fun setupViewModel() {
         val factory = SearchUsersViewModel.Factory()
-        searchUsersViewModel = ViewModelProvider(this, factory).get(
-            SearchUsersViewModel::class.java)
+        searchUsersViewModel = ViewModelProvider(this, factory)[SearchUsersViewModel::class.java]
 
         searchUsersViewModel.mSearchUsersItemsAdapter.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
@@ -82,31 +109,5 @@ class SearchUsersFragment : Fragment() {
             }
             adapter.setSearchedUsers(it)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_search, menu)
-
-        (menu.findItem(R.id.users_search_view).actionView as SearchView).isIconified = false
-
-        (menu.findItem(R.id.users_search_view).actionView as SearchView).setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchUsersViewModel.setSearchMode(AppConstants.PROFILES_SEARCH_MODE)
-                if (query != null) {
-                    searchUsersViewModel.searchUsers(query.lowercase())
-                    (activity as MainActivity).hideKeyboard()
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchUsersViewModel.setSearchMode(AppConstants.HINTS_SEARCH_MODE)
-                if (newText != null) {
-                    searchUsersViewModel.searchUsers(newText.lowercase())
-                    Log.d(TAG, "onQueryTextChange: $newText")
-                }
-                return true
-            }
-        })
     }
 }

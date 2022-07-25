@@ -3,6 +3,7 @@ package com.piotrokninski.teacherassistant.view.main.fragment
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -26,11 +27,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +44,38 @@ class HomeFragment : Fragment() {
 
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).isBottomNavVisible(true)
+
+        requireActivity().addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_toolbar, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.destination_user_account -> {
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            .navigate(R.id.action_home_to_user)
+                        true
+                    }
+                    R.id.destination_search -> {
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            .navigate(R.id.action_home_to_searchUsers)
+                        true
+                    }
+                    R.id.destination_invitations -> {
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            .navigate(R.id.action_home_to_invitations)
+                        true
+                    }
+                    R.id.destination_calendar -> {
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            .navigate(R.id.action_home_to_calendar)
+                        true
+                    }
+                    else -> true
+                }
+            }
+        })
 
         // TODO: move the data logic to view model with channel
         val title = when(MainPreferences.getViewType()) {
@@ -107,40 +135,6 @@ class HomeFragment : Fragment() {
             adapter.setChatItems(it)
         }
 
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_toolbar, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when (item.itemId) {
-            R.id.destination_user_account -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_user)
-                true
-            }
-            R.id.destination_search -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_searchUsers)
-                true
-            }
-            R.id.destination_invitations -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_invitations)
-                true
-            }
-            R.id.destination_calendar -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_home_to_calendar)
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
-        }
     }
 
     override fun onResume() {

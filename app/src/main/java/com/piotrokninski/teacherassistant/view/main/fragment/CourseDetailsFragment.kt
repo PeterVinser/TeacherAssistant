@@ -2,6 +2,7 @@ package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,11 +27,6 @@ class CourseDetailsFragment : Fragment() {
 
     private lateinit var courseDetailsViewModel: CourseDetailsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +42,16 @@ class CourseDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         (activity as MainActivity).isBottomNavVisible(false)
+
+        requireActivity().addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_course, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+        })
 
         binding.courseDetailsAddLessonButton.setOnClickListener { onAddNoteClicked() }
 
@@ -84,10 +90,6 @@ class CourseDetailsFragment : Fragment() {
         )
 
         courseDetailsViewModel.addLesson(newNote)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_course, menu)
     }
 
     private fun initRecyclerView(viewType: String) {

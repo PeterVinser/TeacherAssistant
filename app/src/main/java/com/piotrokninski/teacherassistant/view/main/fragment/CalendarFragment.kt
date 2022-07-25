@@ -1,13 +1,14 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.view.main.MainActivity
@@ -31,11 +32,6 @@ class CalendarFragment : Fragment() {
 
     private lateinit var displayedDate: Date
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,7 +45,6 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as MainActivity).isBottomNavVisible(true)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-
 
         binding.calendarMeetingDate.setOnClickListener {
             val dialog = DatePickerDialogFragment(
@@ -71,20 +66,6 @@ class CalendarFragment : Fragment() {
         initRecyclerView()
 
         setupViewModel()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_calendar, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.menu_calendar_invitations -> true
-
-            R.id.menu_calendar_sync -> true
-
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun initRecyclerView() {

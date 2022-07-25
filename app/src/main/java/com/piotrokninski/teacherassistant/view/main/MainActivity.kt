@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         val factory = MainViewModel.Factory(application)
         mainActivityViewModel =
-            ViewModelProvider(this, factory).get(MainViewModel::class.java)
+            ViewModelProvider(this, factory)[MainViewModel::class.java]
 
         observeViewType()
         observeChannel()
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewType() {
-        mainActivityViewModel.viewType.observe(this) { viewType ->
+        mainActivityViewModel.viewType.observe(this) {
 
         }
     }

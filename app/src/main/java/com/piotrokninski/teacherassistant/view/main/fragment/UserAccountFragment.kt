@@ -3,6 +3,7 @@ package com.piotrokninski.teacherassistant.view.main.fragment
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,11 +21,6 @@ class UserAccountFragment : Fragment() {
 
     private lateinit var userAccountViewModel: UserAccountViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +35,42 @@ class UserAccountFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(false)
 
-        binding.userAccountToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked -> onToggleButtonClicked(checkedId, isChecked) }
+        requireActivity().addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_user_account, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_user_account_edit -> {
+                        userAccountViewModel.editing.value = !userAccountViewModel.editing.value!!
+                        val editing = userAccountViewModel.editing.value!!
+                        if (editing) {
+                            menuItem.setIcon(R.drawable.ic_accept_icon)
+
+                            Toast.makeText(activity, "Możesz edytować swój profil", Toast.LENGTH_SHORT).show()
+                        } else {
+                            menuItem.setIcon(R.drawable.ic_edit_icon)
+
+                            userAccountViewModel.updateUserData()
+
+                            Toast.makeText(activity, "Zmiany zaakceptowane", Toast.LENGTH_SHORT).show()
+                        }
+                        true
+                    }
+                    R.id.menu_user_account_settings -> {
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            .navigate(R.id.action_userAccount_to_settings)
+                        true
+                    }
+                    else -> true
+                }
+            }
+        })
+
+        binding.userAccountToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            onToggleButtonClicked(checkedId, isChecked)
+        }
 
         setupViewModel()
     }
@@ -73,39 +104,6 @@ class UserAccountFragment : Fragment() {
         observeEditing()
 
         observeUser()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_user_account, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_user_account_edit -> {
-                userAccountViewModel.editing.value = !userAccountViewModel.editing.value!!
-                val editing = userAccountViewModel.editing.value!!
-                if (editing) {
-                    item.setIcon(R.drawable.ic_accept_icon)
-
-                    Toast.makeText(activity, "Możesz edytować swój profil", Toast.LENGTH_SHORT).show()
-                } else {
-                    item.setIcon(R.drawable.ic_edit_icon)
-
-                    userAccountViewModel.updateUserData()
-
-                    Toast.makeText(activity, "Zmiany zaakceptowane", Toast.LENGTH_SHORT).show()
-                }
-                true
-            }
-            R.id.menu_user_account_settings -> {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_userAccount_to_settings)
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
-        }
     }
 
     private fun observeEditing() {
