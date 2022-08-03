@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.FragmentCoursesBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.course.Course
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.CoursesAdapter
@@ -50,8 +51,6 @@ class CoursesFragment : Fragment() {
     }
 
     private fun onAddCourseClicked() {
-//        val action = CoursesFragmentDirections.actionCoursesToNewCourse()
-//        this.findNavController().navigate(action)
         val action = CoursesFragmentDirections.actionCourseToInvitation(Invitation.Contract.TYPE_COURSE)
         this.findNavController().navigate(action)
     }
@@ -71,7 +70,7 @@ class CoursesFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = CoursesViewModel.Factory()
+        val factory = CoursesViewModel.Factory(DataStoreRepository(requireContext()))
         coursesViewModel =
             ViewModelProvider(this, factory)[CoursesViewModel::class.java]
 
@@ -92,11 +91,5 @@ class CoursesFragment : Fragment() {
                 adapter.setCourses(courses)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        coursesViewModel.updateViewType()
     }
 }

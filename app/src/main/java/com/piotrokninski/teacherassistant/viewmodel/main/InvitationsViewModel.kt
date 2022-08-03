@@ -4,23 +4,19 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.Invitation
-import com.piotrokninski.teacherassistant.model.course.Homework
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreHomeworkRepository
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreInvitationRepository
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
-import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.adapter.InvitationsAdapter
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class InvitationsViewModel : ViewModel() {
+class InvitationsViewModel(private val dataStoreRepository: DataStoreRepository) : ViewModel() {
     private val TAG = "HomeFragmentViewModel"
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
-    val viewType = MainPreferences.getViewType()
-        ?: throw IllegalStateException("No specified viewType")
+    var viewType: String? = null
 
     private val _homeFeedItems = MutableLiveData<List<InvitationsAdapter.Item>>()
     val homeFeedItems: LiveData<List<InvitationsAdapter.Item>> = _homeFeedItems
@@ -29,65 +25,43 @@ class InvitationsViewModel : ViewModel() {
     val eventFlow = eventChannel.receiveAsFlow()
 
     init {
-        getItems()
-    }
-
-    private fun getItems() {
         viewModelScope.launch {
-
-            val auxList = ArrayList<InvitationsAdapter.Item>()
-
-            val receivedInvitations = FirestoreInvitationRepository
-                .getReceivedInvitations(currentUserId, Invitation.Contract.STATUS_PENDING)
-
-            val sentInvitations = FirestoreInvitationRepository
-                .getSentInvitations(currentUserId, Invitation.Contract.STATUS_PENDING)
-
-            val assignedHomework = FirestoreHomeworkRepository.getHomework(
-                currentUserId,
-                viewType,
-                Homework.Contract.STATUS_ASSIGNED
-            )
-
-            if (!receivedInvitations.isNullOrEmpty()) {
-                val titleId = R.string.header_item_received_invitations
-
-                auxList.add(InvitationsAdapter.Item.Header(titleId))
-
-                receivedInvitations.forEach { invitation ->
-                    auxList.add(InvitationsAdapter.Item.Invitation(invitation, true))
-                }
-            }
-
-            if (!sentInvitations.isNullOrEmpty()) {
-                val titleId = R.string.header_item_sent_invitations
-
-                auxList.add(InvitationsAdapter.Item.Header(titleId))
-
-                sentInvitations.forEach { invitation ->
-                    auxList.add(InvitationsAdapter.Item.Invitation(invitation, false))
-                }
-            }
-
-            if (!assignedHomework.isNullOrEmpty()) {
-                val titleId = when (viewType) {
-                    AppConstants.VIEW_TYPE_STUDENT -> R.string.homework_student_header_text
-
-                    AppConstants.VIEW_TYPE_TUTOR -> R.string.homework_tutor_header_text
-
-                    else -> throw IllegalArgumentException("Unknown viewType")
-                }
-
-                auxList.add(InvitationsAdapter.Item.Header(titleId))
-
-                assignedHomework.forEach { homework ->
-                    auxList.add(InvitationsAdapter.Item.Homework(homework))
-                }
-            }
-
-            _homeFeedItems.value = auxList
+            viewType = dataStoreRepository.getString(DataStoreRepository.Constants.VIEW_TYPE)
+            getItems()
         }
     }
+
+    private suspend fun getItems() {
+
+        val auxList = ArrayList<InvitationsAdapter.Item>()
+
+        val receivedInvitations = FirestoreInvitationRepository
+            .getReceivedInvitations(currentUserId, Invitation.Contract.STATUS_PENDING)
+
+        val sentInvitations = FirestoreInvitationRepository
+            .getSentInvitations(currentUserId, Invitation.Contract.STATUS_PENDING)
+
+        if (!receivedInvitations.isNullOrEmpty()) {
+            val titleId = R.string.header_item_received_invitations
+
+            auxList.add(InvitationsAdapter.Item.Header(titleId))
+
+            receivedInvitations.forEach { invitation ->
+                auxList.add(InvitationsAdapter.Item.Invitation(invitation, true))
+            }
+        }
+
+        if (!sentInvitations.isNullOrEmpty()) {
+            val titleId = R.string.header_item_sent_invitations
+
+            auxList.add(InvitationsAdapter.Item.Header(titleId))
+
+            sentInvitations.forEach { invitation ->
+                auxList.add(InvitationsAdapter.Item.Invitation(invitation, false))
+            }
+        }
+
+        _homeFeedItems.value = auxList    }
 
     fun itemPositiveAction(invitationsAdapterItem: InvitationsAdapter.Item) {
         when (invitationsAdapterItem) {
@@ -144,10 +118,10 @@ class InvitationsViewModel : ViewModel() {
             HomeEvent()
     }
 
-    class Factory: ViewModelProvider.Factory {
+    class Factory(private val dataStoreRepository: DataStoreRepository): ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(InvitationsViewModel::class.java)) {
-                return InvitationsViewModel() as T
+                return InvitationsViewModel(dataStoreRepository) as T
             }
             throw IllegalArgumentException("View model not found")
         }

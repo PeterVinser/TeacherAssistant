@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -12,8 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeBinding
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
-import com.piotrokninski.teacherassistant.util.AppConstants
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter
 import com.piotrokninski.teacherassistant.viewmodel.main.HomeViewModel
@@ -75,18 +75,7 @@ class HomeFragment : Fragment() {
                     else -> true
                 }
             }
-        })
-
-        // TODO: move the data logic to view model with channel
-        val title = when(MainPreferences.getViewType()) {
-            AppConstants.VIEW_TYPE_STUDENT -> getString(R.string.tutors_label)
-
-            AppConstants.VIEW_TYPE_TUTOR -> getString(R.string.students_label)
-
-            else -> throw IllegalArgumentException("Unknown viewType")
-        }
-
-        (activity as MainActivity).setToolbarTitle(title)
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         initRecyclerView()
 
@@ -116,29 +105,32 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = HomeViewModel.Factory()
+        val factory = HomeViewModel.Factory(DataStoreRepository(requireContext()))
         homeViewModel =
             ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         observeContactItems()
+        observeTitle()
     }
 
     private fun observeContactItems() {
-        homeViewModel.chatItems.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
+        homeViewModel.chatItems.observe(viewLifecycleOwner) { chatItems ->
+            if (chatItems.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 binding.homeChatsNotFound.visibility = View.GONE
             } else {
                 recyclerView.visibility = View.GONE
                 binding.homeChatsNotFound.visibility = View.VISIBLE
             }
-            adapter.setChatItems(it)
+            adapter.setChatItems(chatItems)
         }
-
     }
 
-    override fun onResume() {
-        super.onResume()
-        homeViewModel.getChats()
+    private fun observeTitle() {
+        homeViewModel.titleId.observe(viewLifecycleOwner) { titleId ->
+            if (titleId != null) {
+                (activity as MainActivity).setToolbarTitle(getString(titleId))
+            }
+        }
     }
 }

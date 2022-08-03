@@ -10,17 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.HeaderListItemBinding
-import com.piotrokninski.teacherassistant.databinding.HomeHomeworkListItemBinding
 import com.piotrokninski.teacherassistant.databinding.InvitationListItemBinding
 import com.piotrokninski.teacherassistant.model.Invitation
-import com.piotrokninski.teacherassistant.util.AppConstants
-import java.text.SimpleDateFormat
 
 class InvitationsAdapter(
     private val itemClickListener: (Item) -> Unit,
     private val positiveButtonListener: (Item) -> Unit,
     private val negativeButtonListener: (Item) -> Unit,
-    private val viewType: String,
     private val context: Context
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -38,12 +34,6 @@ class InvitationsAdapter(
                 context
             )
 
-            Item.Homework.ID -> HomeworkViewHolder(
-                HomeworkViewHolder.initBinding(parent),
-                context,
-                this.viewType
-            )
-
             else -> throw ClassCastException("Unknown viewType")
         }
     }
@@ -57,13 +47,6 @@ class InvitationsAdapter(
 
             Item.Invitation.ID -> (holder as InvitationViewHolder).bind(
                 items[position] as Item.Invitation,
-                itemClickListener,
-                positiveButtonListener,
-                negativeButtonListener
-            )
-
-            Item.Homework.ID -> (holder as HomeworkViewHolder).bind(
-                items[position] as Item.Homework,
                 itemClickListener,
                 positiveButtonListener,
                 negativeButtonListener
@@ -227,59 +210,6 @@ class InvitationsAdapter(
                 }
             } else {
                 binding.invitationItemAttachmentButton.visibility = View.GONE
-            }
-        }
-    }
-
-    private class HomeworkViewHolder(
-        private val binding: HomeHomeworkListItemBinding,
-        private val context: Context,
-        private val viewType: String
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        companion object {
-            fun initBinding(parent: ViewGroup): HomeHomeworkListItemBinding {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                return HomeHomeworkListItemBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                )
-            }
-        }
-
-        fun bind(
-            homeworkItem: Item.Homework,
-            itemClickListener: (Item) -> Unit,
-            positiveButtonListener: (Item) -> Unit,
-            negativeButtonListener: (Item) -> Unit
-        ) {
-            val homework = homeworkItem.homework
-
-            binding.homework = homework
-
-            binding.homeHomeworkItemLayout.setOnClickListener { itemClickListener(homeworkItem) }
-
-            val simpleFormat = SimpleDateFormat.getInstance()
-
-            binding.homeHomeworkItemDueDate.text = context.getString(
-                R.string.home_homework_due_date_text,
-                simpleFormat.format(homework.dueDate!!)
-            )
-
-            if (viewType == AppConstants.VIEW_TYPE_STUDENT) {
-                binding.homeHomeworkItemButtonsLayout.visibility = View.GONE
-                binding.homeHomeworkItemDeleteButton.setOnClickListener {
-                    negativeButtonListener(
-                        homeworkItem
-                    )
-                }
-                binding.homeHomeworkItemEditButton.setOnClickListener {
-                    positiveButtonListener(
-                        homeworkItem
-                    )
-                }
             }
         }
     }

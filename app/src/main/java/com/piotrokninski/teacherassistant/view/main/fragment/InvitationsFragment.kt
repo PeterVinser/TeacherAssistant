@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentInvitationsBinding
 import com.piotrokninski.teacherassistant.model.Invitation
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.InvitationsAdapter
 import com.piotrokninski.teacherassistant.viewmodel.main.InvitationsViewModel
@@ -53,7 +54,7 @@ class InvitationsFragment : Fragment() {
         setupViewModel()
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(viewType: String?) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         adapter = InvitationsAdapter(
             { invitationsAdapterItem: InvitationsAdapter.Item -> itemClickListener(invitationsAdapterItem) },
@@ -63,7 +64,6 @@ class InvitationsFragment : Fragment() {
             { invitationsAdapterItem: InvitationsAdapter.Item ->
                 invitationsViewModel.itemNegativeAction(invitationsAdapterItem)
             },
-            invitationsViewModel.viewType,
             requireContext()
         )
         recyclerView.adapter = adapter
@@ -85,10 +85,10 @@ class InvitationsFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = InvitationsViewModel.Factory()
+        val factory = InvitationsViewModel.Factory(DataStoreRepository(requireContext()))
         invitationsViewModel = ViewModelProvider(this, factory)[InvitationsViewModel::class.java]
 
-        initRecyclerView()
+        initRecyclerView(invitationsViewModel.viewType)
 
         invitationsViewModel.homeFeedItems.observe(viewLifecycleOwner) {
             adapter.setItems(it)

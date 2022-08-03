@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentHomeworkBinding
 import com.piotrokninski.teacherassistant.model.course.Homework
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeworkAdapter
@@ -54,7 +55,7 @@ class HomeworkFragment : Fragment() {
         this.findNavController().navigate(R.id.action_homework_to_newHomework)
     }
 
-    private fun initRecyclerView(viewType: String) {
+    private fun initRecyclerView(viewType: String?) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         adapter = HomeworkAdapter(
             { homework: Homework -> homeworkClicked(homework) },
@@ -68,7 +69,7 @@ class HomeworkFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = HomeworkViewModel.Factory()
+        val factory = HomeworkViewModel.Factory(DataStoreRepository(requireContext()))
         homeworkViewModel = ViewModelProvider(this, factory)[HomeworkViewModel::class.java]
 
         initRecyclerView(homeworkViewModel.viewType)

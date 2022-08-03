@@ -24,7 +24,7 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.ActivityMainBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.user.User
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.util.PermissionsHelper
 import com.piotrokninski.teacherassistant.util.notifications.FcmManager
@@ -55,8 +55,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        MainPreferences.instantiate(this)
-
         createNotificationChannel()
 
         setupNavigation()
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val factory = MainViewModel.Factory(application)
+        val factory = MainViewModel.Factory(DataStoreRepository(this), application)
         mainActivityViewModel =
             ViewModelProvider(this, factory)[MainViewModel::class.java]
 
@@ -90,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeChannel() {
         lifecycleScope.launchWhenCreated {
-            mainActivityViewModel.eventFlow.collect{ event ->
+            mainActivityViewModel.eventFlow.collect { event ->
                 when (event) {
                     is MainViewModel.MainEvent.CalendarPermissionEvent -> checkCalendarPermissions()
                 }
@@ -99,9 +97,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewType() {
-        mainActivityViewModel.viewType.observe(this) {
-
-        }
+//        mainActivityViewModel.viewType.observe(this) {
+//
+//        }
     }
 
     private fun onUserRegistered() {

@@ -6,10 +6,12 @@ import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserAccountBinding
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.UserAccountViewModel
@@ -66,7 +68,7 @@ class UserAccountFragment : Fragment() {
                     else -> true
                 }
             }
-        })
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         binding.userAccountToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             onToggleButtonClicked(checkedId, isChecked)
@@ -93,7 +95,7 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val factory = UserAccountViewModel.Factory()
+        val factory = UserAccountViewModel.Factory(DataStoreRepository(requireContext()))
         userAccountViewModel = ViewModelProvider(this, factory)[UserAccountViewModel::class.java]
 
         binding.userViewModel = userAccountViewModel

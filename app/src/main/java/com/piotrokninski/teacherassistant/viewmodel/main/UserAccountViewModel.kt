@@ -4,14 +4,14 @@ import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
-import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.model.user.User
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import kotlinx.coroutines.launch
 
-class UserAccountViewModel: ViewModel(), Observable {
+class UserAccountViewModel(private val dataStoreRepository: DataStoreRepository): ViewModel(), Observable {
 
     private val userRepository: RoomUserRepository
 
@@ -23,19 +23,13 @@ class UserAccountViewModel: ViewModel(), Observable {
     @Bindable
     val user = MutableLiveData<User>()
 
-    //TODO add the check whether the text has changed or not before calling the database
-//    fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//        Log.d("TAG", "onTextChanged: the text has changed")
-//    }
-
-
     init {
         val userDao = AppDatabase.getInstance().userDao
         userRepository = RoomUserRepository(userDao)
 
-        _viewType.value = MainPreferences.getViewType()
-
         viewModelScope.launch {
+            _viewType.value = dataStoreRepository.getString(DataStoreRepository.Constants.VIEW_TYPE)
+
             user.value = FirestoreUserRepository.getUserDataOnce(FirebaseAuth.getInstance().currentUser!!.uid)
 
             if (user.value != null) {
@@ -51,9 +45,11 @@ class UserAccountViewModel: ViewModel(), Observable {
     }
 
     fun updateViewType(viewType: String) {
-        MainPreferences.updateViewType(viewType)
+        viewModelScope.launch {
+            dataStoreRepository.putString(DataStoreRepository.Constants.VIEW_TYPE, viewType)
 
-        _viewType.value = viewType
+            _viewType.value = viewType
+        }
     }
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
@@ -62,10 +58,10 @@ class UserAccountViewModel: ViewModel(), Observable {
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
     }
 
-    class Factory: ViewModelProvider.Factory {
+    class Factory(private val dataStore: DataStoreRepository): ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(UserAccountViewModel::class.java)) {
-                return UserAccountViewModel() as T
+                return UserAccountViewModel(dataStore) as T
             }
             throw IllegalArgumentException("View model not found")
         }

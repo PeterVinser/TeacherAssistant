@@ -57,7 +57,7 @@ class ChatFragment : Fragment() {
         linearLayoutManager.stackFromEnd = false
         recyclerView.layoutManager = linearLayoutManager
         adapter = ChatAdapter({ timestamp ->
-            chatViewModel.fetchMessagesBefore(timestamp)
+            chatViewModel.getMessagesBefore(timestamp)
         }, { position ->
             recyclerView.smoothScrollToPosition(position)
         })

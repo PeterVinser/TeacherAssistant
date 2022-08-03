@@ -4,25 +4,24 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.course.Homework
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreHomeworkRepository
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.adapter.HomeworkAdapter
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 
-class HomeworkViewModel : ViewModel() {
+class HomeworkViewModel(private val dataStoreRepository: DataStoreRepository) : ViewModel() {
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
-    var viewType: String = MainPreferences.getViewType()
-        ?: throw IllegalStateException("The view type has not been initialized")
+    var viewType: String? = null
 
     private val _homeworkItems = MutableLiveData<List<HomeworkAdapter.Item>>()
     val homeworkItems: LiveData<List<HomeworkAdapter.Item>> = _homeworkItems
 
     init {
         viewModelScope.launch {
+            viewType = dataStoreRepository.getString(DataStoreRepository.Constants.VIEW_TYPE)
             getHomework()
         }
     }
@@ -82,10 +81,10 @@ class HomeworkViewModel : ViewModel() {
         _homeworkItems.value = homeworkItems
     }
 
-    class Factory: ViewModelProvider.Factory {
+    class Factory(private val dataStoreRepository: DataStoreRepository): ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HomeworkViewModel::class.java)) {
-                return HomeworkViewModel() as T
+                return HomeworkViewModel(dataStoreRepository) as T
             }
             throw IllegalArgumentException("View model not found")
         }

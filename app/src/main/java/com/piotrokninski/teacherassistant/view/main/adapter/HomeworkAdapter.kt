@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 
 class HomeworkAdapter(
     private val clickListener: (Homework) -> Unit,
-    private val viewType: String,
+    private val viewType: String?,
     private val context: Context
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -91,7 +91,7 @@ class HomeworkAdapter(
         fun bind(
             homework: Homework,
             clickListener: (Homework) -> Unit,
-            viewType: String
+            viewType: String?
         ) {
             binding.homework = homework
             binding.homeworkItemLayout.setOnClickListener { clickListener(homework) }
@@ -146,7 +146,6 @@ class HomeworkAdapter(
     sealed class Item {
 
         abstract val id: String
-
 
         data class Header(val titleId: Int) : Item() {
             override val id = titleId.toString()

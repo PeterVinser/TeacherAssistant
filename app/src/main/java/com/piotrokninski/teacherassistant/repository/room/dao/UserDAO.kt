@@ -23,10 +23,10 @@ interface UserDAO {
     )
     fun getLiveUser(userId: String): LiveData<User>
 
-    @Query(
-        "SELECT * FROM ${User.Contract.TABLE_NAME} " +
-                "WHERE ${User.Contract.ROOM_USER_ID} = :userId" +
-                " LIMIT 1"
-    )
-    suspend fun getUser(userId: String): User?
+//    @Query(
+//        "SELECT * FROM ${User.Contract.TABLE_NAME} " +
+//                "WHERE ${User.Contract.ROOM_USER_ID} = :userId" +
+//                " LIMIT 1"
+//    )
+//    suspend fun getUser(userId: String): User?
 }

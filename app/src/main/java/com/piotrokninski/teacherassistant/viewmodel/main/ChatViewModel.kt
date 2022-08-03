@@ -33,7 +33,7 @@ class ChatViewModel(private val chatId: String): ViewModel() {
         }
     }
 
-    fun fetchMessagesBefore(timestamp: Timestamp) {
+    fun getMessagesBefore(timestamp: Timestamp) {
         viewModelScope.launch {
             FirestoreMessageRepository.getMessagesBefore(chatId, timestamp)?.let {
                 updateMessages(it)

@@ -11,7 +11,7 @@ import com.piotrokninski.teacherassistant.util.AppConstants
 
 class NotesAdapter(
     private val clickListener: (Lesson) -> Unit,
-    private val viewType: String,
+    private val viewType: String?,
     private val context: Context
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
@@ -48,7 +48,7 @@ class NotesAdapter(
         fun bind(
             lesson: Lesson,
             clickListener: (Lesson) -> Unit,
-            viewType: String
+            viewType: String?
         ) {
             binding.note = lesson
             binding.noteItemLayout.setOnClickListener { clickListener(lesson) }

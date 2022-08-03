@@ -7,21 +7,22 @@ import com.piotrokninski.teacherassistant.model.Meeting
 import com.piotrokninski.teacherassistant.model.user.User
 import com.piotrokninski.teacherassistant.model.user.UserHint
 import com.piotrokninski.teacherassistant.repository.calendar.CalendarProvider
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreMeetingRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserHintRepository
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomMeetingRepository
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
-import com.piotrokninski.teacherassistant.repository.sharedpreferences.MainPreferences
 import com.piotrokninski.teacherassistant.util.AppConstants
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(
+    private val dataStoreRepository: DataStoreRepository, application: Application
+) : AndroidViewModel(application) {
     private val TAG = "MainActivityViewModel"
 
     private val userRepository: RoomUserRepository
@@ -44,10 +45,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         meetingRepository = RoomMeetingRepository(roomInstance.meetingDAO)
 
         viewModelScope.launch {
-            _viewType.value = MainPreferences.getViewType()
-
-            //TODO: delete unnecessary user Room instance
-            saveCurrentUserData()
+            dataStoreRepository.getString(DataStoreRepository.Constants.VIEW_TYPE).let { viewType ->
+                if (viewType != null) {
+                    _viewType.value = viewType
+                } else {
+                    saveCurrentUserData().let { initViewType ->
+                        _viewType.value = initViewType
+                        dataStoreRepository.putString(DataStoreRepository.Constants.VIEW_TYPE, initViewType)
+                    }
+                }
+            }
 
             eventChannel.send(MainEvent.CalendarPermissionEvent)
         }
@@ -65,28 +72,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun saveCurrentUserData() {
+    private suspend fun saveCurrentUserData(): String {
         val currentUser = FirestoreUserRepository.getUserDataOnce(currentUserId)
 
         if (currentUser != null) {
             userRepository.insertUser(currentUser)
 
-            if (!(currentUser.student && currentUser.tutor)) {
-                if (currentUser.student) {
-                    updateViewType(AppConstants.VIEW_TYPE_STUDENT)
-                } else if (currentUser.tutor) {
-                    updateViewType(AppConstants.VIEW_TYPE_TUTOR)
-                }
-            } else {
-                updateViewType(AppConstants.VIEW_TYPE_TUTOR)
+            if (currentUser.student) {
+                return AppConstants.VIEW_TYPE_STUDENT
+            }
+
+            if (currentUser.tutor) {
+                return AppConstants.VIEW_TYPE_TUTOR
             }
         }
-    }
 
-    private fun updateViewType(viewType: String) {
-        MainPreferences.updateViewType(viewType)
-
-        _viewType.value = viewType
+        return AppConstants.VIEW_TYPE_STUDENT
     }
 
     fun updateCalendar() {
@@ -129,20 +130,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun equals(that: Meeting, other: Meeting): Boolean =
         that.title == other.title &&
-        that.description == other.description &&
-        that.date == other.date &&
-        that.durationHours == other.durationHours &&
-        that.durationMinutes == other.durationMinutes &&
-        that.weekDate == other.weekDate
+                that.description == other.description &&
+                that.date == other.date &&
+                that.durationHours == other.durationHours &&
+                that.durationMinutes == other.durationMinutes &&
+                that.weekDate == other.weekDate
 
     sealed class MainEvent {
         object CalendarPermissionEvent : MainEvent()
     }
 
-    class Factory(private val application: Application): ViewModelProvider.Factory {
+    class Factory(
+        private val dataStoreRepository: DataStoreRepository, private val application: Application
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                return MainViewModel(application) as T
+                return MainViewModel(dataStoreRepository, application) as T
             }
             throw IllegalArgumentException("View model not found")
         }

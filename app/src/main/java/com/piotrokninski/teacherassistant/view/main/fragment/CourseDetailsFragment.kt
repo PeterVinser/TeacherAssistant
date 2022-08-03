@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentCourseDetailsBinding
 import com.piotrokninski.teacherassistant.model.course.Course
 import com.piotrokninski.teacherassistant.model.course.Lesson
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.view.main.adapter.NotesAdapter
@@ -51,7 +53,7 @@ class CourseDetailsFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return true
             }
-        })
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         binding.courseDetailsAddLessonButton.setOnClickListener { onAddNoteClicked() }
 
@@ -92,7 +94,7 @@ class CourseDetailsFragment : Fragment() {
         courseDetailsViewModel.addLesson(newNote)
     }
 
-    private fun initRecyclerView(viewType: String) {
+    private fun initRecyclerView(viewType: String?) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         adapter =
             NotesAdapter({ lesson: Lesson -> noteClicked(lesson) }, viewType, requireActivity())
@@ -104,9 +106,9 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupViewModel(course: Course) {
-        val factory = CourseDetailsViewModel.Factory(course)
+        val factory = CourseDetailsViewModel.Factory(DataStoreRepository(requireContext()), course)
         courseDetailsViewModel =
-            ViewModelProvider(this, factory).get(CourseDetailsViewModel::class.java)
+            ViewModelProvider(this, factory)[CourseDetailsViewModel::class.java]
 
         initRecyclerView(courseDetailsViewModel.viewType)
 
