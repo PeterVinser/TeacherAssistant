@@ -21,6 +21,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentLoginBinding
 import com.piotrokninski.teacherassistant.model.user.UserNotificationSettings
+import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 
 class LoginFragment : Fragment() {
 

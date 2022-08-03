@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -59,8 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigation()
 
-        setupViewModel()
-
         onUserRegistered()
     }
 
@@ -77,12 +74,11 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun setupViewModel() {
-        val factory = MainViewModel.Factory(DataStoreRepository(this), application)
+    private fun setupViewModel(user: User?) {
+        val factory = MainViewModel.Factory(DataStoreRepository(this), application, user)
         mainActivityViewModel =
             ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        observeViewType()
         observeChannel()
     }
 
@@ -96,23 +92,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeViewType() {
-//        mainActivityViewModel.viewType.observe(this) {
-//
-//        }
-    }
-
     private fun onUserRegistered() {
 
         val registeredUser =
             intent.getSerializableExtra(AppConstants.REGISTERED_USER_EXTRA) as User?
 
-        if (registeredUser != null) {
-//            navController.navigate(R.id.action_home_to_user)
-            mainActivityViewModel.initUser(registeredUser)
-
-            Log.d(TAG, "onUserRegistered: registered")
-        }
+        setupViewModel(registeredUser)
     }
 
     private fun onInvitationReceived(): String? {

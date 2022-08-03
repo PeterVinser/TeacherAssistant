@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.model.Meeting
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class MainViewModel(
-    private val dataStoreRepository: DataStoreRepository, application: Application
+    private val dataStoreRepository: DataStoreRepository, application: Application, initUser: User?
 ) : AndroidViewModel(application) {
     private val TAG = "MainActivityViewModel"
 
@@ -45,23 +46,16 @@ class MainViewModel(
         meetingRepository = RoomMeetingRepository(roomInstance.meetingDAO)
 
         viewModelScope.launch {
-            dataStoreRepository.getString(DataStoreRepository.Constants.VIEW_TYPE).let { viewType ->
-                if (viewType != null) {
-                    _viewType.value = viewType
-                } else {
-                    saveCurrentUserData().let { initViewType ->
-                        _viewType.value = initViewType
-                        dataStoreRepository.putString(DataStoreRepository.Constants.VIEW_TYPE, initViewType)
-                    }
-                }
-            }
+            saveUser(initUser)
+
+            saveViewType()
 
             eventChannel.send(MainEvent.CalendarPermissionEvent)
         }
     }
 
-    fun initUser(user: User) {
-        viewModelScope.launch {
+    private suspend fun saveUser(user: User?) {
+        if (user != null) {
 
             val userHint = UserHint.createHint(user.userId, user.fullName)
 
@@ -69,25 +63,52 @@ class MainViewModel(
             FirestoreUserHintRepository.setUserHintData(userHint)
 
             userRepository.insertUser(user)
+
+            return
+        }
+
+        if (userRepository.getUser(currentUserId) == null) {
+            val currentUser = FirestoreUserRepository.getUserDataOnce(currentUserId)
+
+            if (currentUser != null) {
+                userRepository.insertUser(currentUser)
+            } else {
+                // TODO: add the logic in case saving the user goes wrong
+            }
         }
     }
 
-    private suspend fun saveCurrentUserData(): String {
-        val currentUser = FirestoreUserRepository.getUserDataOnce(currentUserId)
+    private suspend fun saveViewType() {
+        dataStoreRepository.getString(DataStoreRepository.Constants.VIEW_TYPE).let { viewType ->
+            if (viewType != null) {
+                _viewType.value = viewType
 
-        if (currentUser != null) {
-            userRepository.insertUser(currentUser)
-
-            if (currentUser.student) {
-                return AppConstants.VIEW_TYPE_STUDENT
+                return
             }
 
-            if (currentUser.tutor) {
-                return AppConstants.VIEW_TYPE_TUTOR
+            val currentUser = userRepository.getLiveUser(currentUserId).value
+
+            if (currentUser != null) {
+                if (currentUser.student) {
+                    _viewType.value = AppConstants.VIEW_TYPE_STUDENT
+                    dataStoreRepository
+                        .putString(DataStoreRepository.Constants.VIEW_TYPE, AppConstants.VIEW_TYPE_STUDENT)
+
+                    return
+                }
+
+                if (currentUser.tutor) {
+                    _viewType.value = AppConstants.VIEW_TYPE_TUTOR
+                    dataStoreRepository
+                        .putString(DataStoreRepository.Constants.VIEW_TYPE, AppConstants.VIEW_TYPE_TUTOR)
+
+                    return
+                }
             }
+
+            _viewType.value = AppConstants.VIEW_TYPE_STUDENT
+            dataStoreRepository.putString(DataStoreRepository.Constants.VIEW_TYPE, AppConstants.VIEW_TYPE_STUDENT)
         }
-
-        return AppConstants.VIEW_TYPE_STUDENT
     }
 
     fun updateCalendar() {
@@ -141,11 +162,13 @@ class MainViewModel(
     }
 
     class Factory(
-        private val dataStoreRepository: DataStoreRepository, private val application: Application
+        private val dataStoreRepository: DataStoreRepository,
+        private val application: Application,
+        private val user: User?
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                return MainViewModel(dataStoreRepository, application) as T
+                return MainViewModel(dataStoreRepository, application, user) as T
             }
             throw IllegalArgumentException("View model not found")
         }

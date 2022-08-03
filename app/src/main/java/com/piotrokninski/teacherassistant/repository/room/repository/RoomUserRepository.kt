@@ -22,7 +22,7 @@ class RoomUserRepository(private val dao: UserDAO) {
         return dao.getLiveUser(userId)
     }
 
-//    suspend fun getUser(userId: String): User? {
-//        return dao.getUser(userId)
-//    }
+    suspend fun getUser(userId: String): User? {
+        return dao.getUser(userId)
+    }
 }

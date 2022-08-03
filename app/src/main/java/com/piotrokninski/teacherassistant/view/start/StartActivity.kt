@@ -51,8 +51,6 @@ class StartActivity : AppCompatActivity() {
 
         FcmManager.subscribeToTopic(userId)
 
-//        startActivityViewModel.setNotifications(userId, true)
-
         Log.d(TAG, "onSignedSuccessful: called")
 
         val intent = Intent(this, MainActivity::class.java)

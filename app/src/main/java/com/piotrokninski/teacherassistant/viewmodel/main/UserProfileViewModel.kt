@@ -49,9 +49,7 @@ class UserProfileViewModel(private val searchedUserId: String) : ViewModel(), Ob
         viewModelScope.launch {
             _user.value = FirestoreUserRepository.getUserDataOnce(searchedUserId)
 
-            currentUser = userRepository.getLiveUser(currentUserId).value!!
-
-            Log.d(TAG, "CurrentUser: ${currentUser.fullName}")
+            currentUser = userRepository.getUser(currentUserId)!!
 
             friend = FirestoreFriendRepository.getFriendDataOnce(currentUserId, searchedUserId)
 
