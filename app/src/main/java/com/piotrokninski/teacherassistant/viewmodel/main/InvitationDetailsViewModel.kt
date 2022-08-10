@@ -129,6 +129,7 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
         }
 
         if (invitation?.isComplete == true) {
+            invitation.message?.ifEmpty { invitation.message = null }
             FirestoreInvitationRepository.addInvitation(invitation)
 
             return true
