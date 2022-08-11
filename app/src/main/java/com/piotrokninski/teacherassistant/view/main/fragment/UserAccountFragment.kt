@@ -65,7 +65,7 @@ class UserAccountFragment : Fragment() {
                             .navigate(R.id.action_userAccount_to_settings)
                         true
                     }
-                    else -> true
+                    else -> false
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)

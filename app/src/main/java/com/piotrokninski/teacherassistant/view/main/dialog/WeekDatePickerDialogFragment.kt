@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.view.main.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,13 +49,15 @@ class WeekDatePickerDialogFragment(
             binding.weekDatePickerDurationMinute.setText(weekDate.durationMinutes.toString())
         }
 
-        binding.weekDatePickerWeekDayPicker.addOnButtonCheckedListener { _, checkedId, _ ->
-            val weekDay = WeekDays.values().firstOrNull { it.buttonId == checkedId }
-            if (weekDay != null) {
-                weekDate.updateWeekDay(weekDay)
-            }
+        binding.weekDatePickerWeekDayPicker.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                WeekDays.values().firstOrNull { it.buttonId == checkedId }?.let { weekDay ->
 
-            binding.weekDatePickerDate.text = weekDate.toLocalString(requireContext())
+                    weekDate.updateWeekDay(weekDay)
+
+                    binding.weekDatePickerDate.text = weekDate.toLocalString(requireContext())
+                }
+            }
         }
 
         binding.weekDatePickerTimePicker.setOnTimeChangedListener { _, hour, minute ->
@@ -76,7 +79,6 @@ class WeekDatePickerDialogFragment(
             }
         }
 
-
         binding.weekDatePickerCancelButton.setOnClickListener {
             dismiss()
         }
@@ -85,5 +87,9 @@ class WeekDatePickerDialogFragment(
             callback(weekDate)
             dismiss()
         }
+    }
+    
+    companion object {
+        private const val TAG = "WeekDatePickerDialogFra"
     }
 }

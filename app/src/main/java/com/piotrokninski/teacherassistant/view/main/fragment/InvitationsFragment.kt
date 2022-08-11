@@ -5,11 +5,9 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentInvitationsBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
@@ -54,7 +52,7 @@ class InvitationsFragment : Fragment() {
         setupViewModel()
     }
 
-    private fun initRecyclerView(viewType: String?) {
+    private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         adapter = InvitationsAdapter(
             { invitationsAdapterItem: InvitationsAdapter.Item -> itemClickListener(invitationsAdapterItem) },
@@ -88,7 +86,7 @@ class InvitationsFragment : Fragment() {
         val factory = InvitationsViewModel.Factory(DataStoreRepository(requireContext()))
         invitationsViewModel = ViewModelProvider(this, factory)[InvitationsViewModel::class.java]
 
-        initRecyclerView(invitationsViewModel.viewType)
+        initRecyclerView()
 
         invitationsViewModel.homeFeedItems.observe(viewLifecycleOwner) {
             adapter.setItems(it)

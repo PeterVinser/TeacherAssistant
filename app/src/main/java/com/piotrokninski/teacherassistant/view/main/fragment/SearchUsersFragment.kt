@@ -71,7 +71,7 @@ class SearchUsersFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return true
+                return false
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
