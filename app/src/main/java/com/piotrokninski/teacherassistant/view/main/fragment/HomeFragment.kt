@@ -94,7 +94,7 @@ class HomeFragment : Fragment() {
 
     private fun chatItemClicked(chatItem: HomeAdapter.ChatItem) {
         if (chatItem.chat.id != null) {
-            homeViewModel.markAsRead(chatItem.chat.id)
+            homeViewModel.markAsRead(chatItem)
 
             HomeFragmentDirections.actionHomeToChat(chatItem).let { action ->
                 this.findNavController().navigate(action)

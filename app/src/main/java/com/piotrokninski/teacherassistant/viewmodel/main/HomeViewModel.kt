@@ -1,6 +1,5 @@
 package com.piotrokninski.teacherassistant.viewmodel.main
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
@@ -56,8 +55,6 @@ class HomeViewModel(private val dataStoreRepository: DataStoreRepository) : View
             chats?.forEach { chat ->
                 val fullName = chat.fullNames.minus(currentUserId).values.first()
 
-                Log.d(TAG, "getFriends: ${chat.latestMessage?.toSnapshot()}")
-
                 val read = chat.read || currentUserId == chat.latestMessage?.senderId
                 chatItems.add(HomeAdapter.ChatItem(chat, fullName, read))
             }
@@ -66,8 +63,10 @@ class HomeViewModel(private val dataStoreRepository: DataStoreRepository) : View
         }
     }
 
-    fun markAsRead(chatId: String) {
-        FirestoreChatRepository.updateChat(chatId, Chat.Contract.READ, true)
+    fun markAsRead(chatItem: HomeAdapter.ChatItem) {
+        if (chatItem.chat.latestMessage?.senderId != currentUserId) {
+            chatItem.chat.id?.let { FirestoreChatRepository.updateChat(it, Chat.Contract.READ, true) }
+        }
     }
 
     class Factory(private val repository: DataStoreRepository): ViewModelProvider.Factory {

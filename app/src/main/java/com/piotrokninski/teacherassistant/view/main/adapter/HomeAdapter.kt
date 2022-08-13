@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.HomeChatItemBinding
 import com.piotrokninski.teacherassistant.model.chat.Chat
 import java.io.Serializable
+import java.lang.reflect.Type
 
 class HomeAdapter(
     private val clickListener: (ChatItem) -> Unit
@@ -46,10 +47,10 @@ class HomeAdapter(
         ) {
             binding.chatItem = chatItem
             binding.contactItemLayout.setOnClickListener { clickListener(chatItem) }
-            if (!chatItem.chat.read) {
-                binding.contactFriendItemFullName.typeface = Typeface.DEFAULT_BOLD
-                binding.contactFriendItemMessage.typeface = Typeface.DEFAULT_BOLD
-            }
+
+            val typeface = if (chatItem.read) Typeface.DEFAULT else Typeface.DEFAULT_BOLD
+            binding.contactFriendItemFullName.typeface = typeface
+            binding.contactFriendItemMessage.typeface = typeface
         }
     }
 
