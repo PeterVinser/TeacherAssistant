@@ -49,10 +49,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainActivityViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+        if (intent.extras?.getBoolean(AppConstants.VIEW_TYPE_UPDATED) == true) {
+            super.onCreate(null)
+        } else {
+            super.onCreate(savedInstanceState)
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        isFABVisible(false)
 
         setSupportActionBar(binding.toolbar)
 
@@ -190,6 +195,15 @@ class MainActivity : AppCompatActivity() {
         if (activeFragment is CalendarFragment) {
             activeFragment.onPermissionResult(permissionGranted)
         }
+    }
+
+    fun isFABVisible(visible: Boolean) {
+        val visibility = if (visible) View.VISIBLE else View.GONE
+        binding.mainFab.visibility = visibility
+    }
+
+    fun setFABListener(listener: () -> Unit) {
+        binding.mainFab.setOnClickListener { listener() }
     }
 
     override fun onBackPressed() {

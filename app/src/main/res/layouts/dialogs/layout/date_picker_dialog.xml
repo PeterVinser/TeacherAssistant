@@ -68,10 +68,10 @@
             android:hint="@string/meeting_dialog_duration_hour_hint"
             android:inputType="number"
             android:minWidth="48dp"
-            android:textSize="18sp"
-            android:textAlignment="textEnd"
             android:minHeight="48dp"
-            tools:ignore="TextFields" />
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            tools:ignore="TextFields,TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/date_picker_duration_hour_unit"
@@ -88,10 +88,10 @@
             android:hint="@string/meeting_dialog_duration_minute_hint"
             android:inputType="number"
             android:minWidth="48dp"
-            android:textSize="18sp"
-            android:textAlignment="textEnd"
             android:minHeight="48dp"
-            tools:ignore="TextFields" />
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            tools:ignore="TextFields,TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/date_picker_duration_minute_unit"

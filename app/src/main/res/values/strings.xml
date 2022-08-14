@@ -252,4 +252,11 @@
     <string name="menu_calendar_sync_desc">Synchronizuj</string>
 
     <string name="invitation_student_full_name">Uczeń: %1$s</string>
+    <string name="main_fab_desc">main_fab</string>
+    <string name="calendar_add_meeting_text">Dodaj spotkanie</string>
+
+    <string name="view_type_confirmation_message">Czy na pewno chcesz zmienić widok na %1$s?</string>
+    <string name="view_type_confirmation_student">ucznia</string>
+    <string name="view_type_confirmation_tutor">korepetytora</string>
+    <string name="view_type_confirmation_title">Zmiana widoku</string>
 </resources>

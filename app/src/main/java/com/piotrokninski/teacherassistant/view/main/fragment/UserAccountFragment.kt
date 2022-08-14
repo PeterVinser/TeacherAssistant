@@ -1,6 +1,8 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.MenuProvider
@@ -9,19 +11,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.databinding.FragmentUserAccountBinding
 import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.viewmodel.main.UserAccountViewModel
-import java.lang.IllegalArgumentException
 
 class UserAccountFragment : Fragment() {
-
+    private val TAG = "UserAccountFragment"
+    
     private lateinit var binding: FragmentUserAccountBinding
 
     private lateinit var userAccountViewModel: UserAccountViewModel
+
+    private var viewTypeCancelled = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,27 +75,60 @@ class UserAccountFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        binding.userAccountToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            onToggleButtonClicked(checkedId, isChecked)
-        }
-
         setupViewModel()
     }
 
-    private fun onToggleButtonClicked(checkedId: Int, isChecked: Boolean) {
+    private fun onToggleButtonClicked(group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean) {
+
+        val mainActivity = activity
 
         if (isChecked) {
-            val viewType = when (checkedId) {
-                R.id.user_account_student_toggle_button -> AppConstants.VIEW_TYPE_STUDENT
+            if (!viewTypeCancelled) {
 
-                R.id.user_account_tutor_toggle_button -> AppConstants.VIEW_TYPE_TUTOR
+                val viewType = when (checkedId) {
+                    R.id.user_account_student_toggle_button -> AppConstants.VIEW_TYPE_STUDENT
 
-                else -> {
-                    throw IllegalArgumentException("No such id is legal: $checkedId")
+                    R.id.user_account_tutor_toggle_button -> AppConstants.VIEW_TYPE_TUTOR
+
+                    else -> null
+                }
+
+                val message = when (viewType) {
+                    AppConstants.VIEW_TYPE_STUDENT -> getString(R.string.view_type_confirmation_student)
+
+                    AppConstants.VIEW_TYPE_TUTOR -> getString(R.string.view_type_confirmation_tutor)
+
+                    else -> null
+                }
+
+                if (viewType != null) {
+                    val dialog = activity?.let { AlertDialog.Builder(it) }
+                        ?.setMessage(getString(R.string.view_type_confirmation_message, message))
+                        ?.setTitle(getString(R.string.view_type_confirmation_title))
+                        ?.apply { setPositiveButton(R.string.confirm_button_text) { _, _ ->
+                                userAccountViewModel.updateViewType(viewType) {
+                                    mainActivity?.intent?.putExtra(AppConstants.VIEW_TYPE_UPDATED, true)
+                                    mainActivity?.recreate()
+                                }
+                            }
+                        }
+                        ?.apply { setNegativeButton(R.string.cancel_button_text) { dialog, _ ->
+                                dialog.cancel()
+                            }
+                        }
+                        ?.apply { setOnCancelListener {
+                                viewTypeCancelled = true
+
+                                group.check(checkedId)
+                            }
+                        }
+                        ?.create()
+
+                    dialog?.show()
                 }
             }
 
-            userAccountViewModel.updateViewType(viewType)
+            viewTypeCancelled = false
         }
     }
 
@@ -140,6 +178,10 @@ class UserAccountFragment : Fragment() {
             AppConstants.VIEW_TYPE_STUDENT -> binding.userAccountStudentToggleButton.isChecked = true
 
             AppConstants.VIEW_TYPE_TUTOR -> binding.userAccountTutorToggleButton.isChecked = true
+        }
+
+        binding.userAccountToggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            onToggleButtonClicked(group, checkedId, isChecked)
         }
     }
 }

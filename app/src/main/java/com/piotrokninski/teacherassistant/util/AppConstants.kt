@@ -17,6 +17,8 @@ object AppConstants {
     const val VIEW_TYPE_STUDENT = "viewTypeStudent"
     const val VIEW_TYPE_TUTOR = "viewTypeTutor"
 
+    const val VIEW_TYPE_UPDATED = "viewTypeUpdated"
+
     const val PERMISSION_CALENDAR = 123
 
     const val RECEIVED_INVITATIONS = "received"

@@ -9,6 +9,7 @@ import com.piotrokninski.teacherassistant.repository.datastore.DataStoreReposito
 import com.piotrokninski.teacherassistant.repository.firestore.FirestoreUserRepository
 import com.piotrokninski.teacherassistant.repository.room.AppDatabase
 import com.piotrokninski.teacherassistant.repository.room.repository.RoomUserRepository
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class UserAccountViewModel(private val dataStoreRepository: DataStoreRepository): ViewModel(), Observable {
@@ -44,11 +45,15 @@ class UserAccountViewModel(private val dataStoreRepository: DataStoreRepository)
         FirestoreUserRepository.setUserData(user.value!!)
     }
 
-    fun updateViewType(viewType: String) {
+    fun updateViewType(viewType: String, onComplete: () -> Unit) {
         viewModelScope.launch {
-            dataStoreRepository.putString(DataStoreRepository.Constants.VIEW_TYPE, viewType)
+            val completed = dataStoreRepository.putString(DataStoreRepository.Constants.VIEW_TYPE, viewType)
 
             _viewType.value = viewType
+
+            if (!completed) cancel()
+        }.invokeOnCompletion {
+            onComplete()
         }
     }
 
