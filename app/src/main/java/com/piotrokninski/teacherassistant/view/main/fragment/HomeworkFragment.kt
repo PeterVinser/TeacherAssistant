@@ -46,8 +46,6 @@ class HomeworkFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).isBottomNavVisible(true)
 
-        binding.homeworkAddButton.setOnClickListener { onAddHomeworkClicked() }
-
         setupViewModel()
     }
 
@@ -87,15 +85,30 @@ class HomeworkFragment : Fragment() {
                 binding.homeworkEmptyText.visibility = View.VISIBLE
                 binding.homeworkRecyclerView.visibility = View.GONE
 
+                binding.homeworkAddButton.visibility = View.VISIBLE
+                binding.homeworkAddButton.setOnClickListener { onAddHomeworkClicked() }
+
+                (activity as MainActivity).isFABVisible(false)
+
                 binding.homeworkLayout.gravity = Gravity.CENTER
             } else {
                 binding.homeworkEmptyText.visibility = View.GONE
                 binding.homeworkRecyclerView.visibility = View.VISIBLE
+
+                binding.homeworkAddButton.visibility = View.GONE
+
+                (activity as MainActivity).isFABVisible(true)
+                (activity as MainActivity).setFABListener { onAddHomeworkClicked() }
 
                 binding.homeworkLayout.gravity = Gravity.TOP
 
                 adapter.setItems(homework)
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as MainActivity).isFABVisible(false)
     }
 }

@@ -1,6 +1,7 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,11 +57,6 @@ class CalendarFragment : Fragment() {
             dialog.show(childFragmentManager, "tag")
         }
 
-        binding.calendarAddMeetingsFab.setOnClickListener {
-            val action = CalendarFragmentDirections.actionCalendarToInvitation(Invitation.Contract.TYPE_MEETING)
-            this.findNavController().navigate(action)
-        }
-
         recyclerView = binding.calendarMeetingsRecyclerView
 
         initRecyclerView()
@@ -77,6 +73,10 @@ class CalendarFragment : Fragment() {
         recyclerView.adapter = adapter
     }
 
+    private fun onAddMeetingClicked() {
+        val action = CalendarFragmentDirections.actionCalendarToInvitation(Invitation.Contract.TYPE_MEETING)
+        this.findNavController().navigate(action)
+    }
 
     private fun updateButtonMeetingDate(date: Date) {
         displayedDate = date
@@ -98,10 +98,24 @@ class CalendarFragment : Fragment() {
                 binding.calendarMeetingDate.visibility = View.GONE
                 binding.calendarMeetingsRecyclerView.visibility = View.GONE
                 binding.calendarNoMeetings.visibility = View.VISIBLE
+
+                binding.calendarAddMeeting.visibility = View.VISIBLE
+                binding.calendarLayout.setOnClickListener { onAddMeetingClicked() }
+
+                (activity as MainActivity).isFABVisible(false)
+
+                binding.calendarLayout.gravity = Gravity.CENTER
             } else {
                 binding.calendarMeetingDate.visibility = View.VISIBLE
                 binding.calendarMeetingsRecyclerView.visibility = View.VISIBLE
                 binding.calendarNoMeetings.visibility = View.GONE
+
+                binding.calendarAddMeeting.visibility = View.GONE
+
+                (activity as MainActivity).isFABVisible(true)
+                (activity as MainActivity).setFABListener { onAddMeetingClicked() }
+
+                binding.calendarLayout.gravity = Gravity.TOP
 
                 adapter.setCalendarItems(meetings)
             }
@@ -110,5 +124,11 @@ class CalendarFragment : Fragment() {
 
     fun onPermissionResult(permissionGranted: Boolean) {
         calendarPermissionAsked = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        (activity as MainActivity).isFABVisible(false)
     }
 }

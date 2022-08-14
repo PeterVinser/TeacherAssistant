@@ -1,9 +1,11 @@
 package com.piotrokninski.teacherassistant.view.main.fragment
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -45,8 +47,6 @@ class CoursesFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).isBottomNavVisible(true)
 
-        binding.coursesAddButton.setOnClickListener { onAddCourseClicked() }
-
         setupViewModel()
     }
 
@@ -84,12 +84,31 @@ class CoursesFragment : Fragment() {
             if (courses.isNullOrEmpty()) {
                 recyclerView.visibility = View.GONE
                 binding.coursesNotFound.visibility = View.VISIBLE
+
+                binding.coursesAddButton.visibility = View.VISIBLE
+                binding.coursesAddButton.setOnClickListener { onAddCourseClicked() }
+
+                (activity as MainActivity).isFABVisible(false)
+
+                binding.coursesLayout.gravity = Gravity.CENTER
             } else {
                 recyclerView.visibility = View.VISIBLE
                 binding.coursesNotFound.visibility = View.GONE
 
+                binding.coursesAddButton.visibility = View.GONE
+
+                (activity as MainActivity).isFABVisible(true)
+                (activity as MainActivity).setFABListener { onAddCourseClicked() }
+
+                binding.coursesLayout.gravity = Gravity.TOP
+
                 adapter.setCourses(courses)
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as MainActivity).isFABVisible(false)
     }
 }
