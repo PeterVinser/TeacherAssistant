@@ -129,12 +129,11 @@ class InvitationsAdapter(
 
             Log.d(TAG, "bind: $meeting")
 
-            // TODO: add the functionality to display invitation details
-//            binding.invitationItemLayout.setOnClickListener {
-//                itemClickListener(
-//                    invitationItem
-//                )
-//            }
+            binding.invitationItemLayout.setOnClickListener {
+                itemClickListener(
+                    invitationItem
+                )
+            }
 
             if (!invitationItem.received) {
                 binding.invitationItemConfirmButton.text = context.getString(R.string.edit_button_text)

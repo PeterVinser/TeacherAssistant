@@ -78,7 +78,7 @@ class UserAccountFragment : Fragment() {
         setupViewModel()
     }
 
-    private fun onToggleButtonClicked(group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean) {
+    private fun onToggleButtonClicked(checkedId: Int, isChecked: Boolean) {
 
         val mainActivity = activity
 
@@ -119,7 +119,14 @@ class UserAccountFragment : Fragment() {
                         ?.apply { setOnCancelListener {
                                 viewTypeCancelled = true
 
-                                group.check(checkedId)
+                                when (userAccountViewModel.viewType.value) {
+
+                                    AppConstants.VIEW_TYPE_STUDENT ->
+                                        binding.userAccountStudentToggleButton.isChecked = true
+
+                                    AppConstants.VIEW_TYPE_TUTOR ->
+                                        binding.userAccountTutorToggleButton.isChecked = true
+                                }
                             }
                         }
                         ?.create()
@@ -181,7 +188,7 @@ class UserAccountFragment : Fragment() {
         }
 
         binding.userAccountToggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            onToggleButtonClicked(group, checkedId, isChecked)
+            onToggleButtonClicked(checkedId, isChecked)
         }
     }
 }

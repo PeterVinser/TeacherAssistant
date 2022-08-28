@@ -11,7 +11,7 @@ data class Message(
     val text: String,
     val senderId: String,
     val senderFullName: String,
-    val itemId: String?,
+    val attachment: Attachment?,
     val timestamp: Timestamp
 ) {
 
@@ -45,13 +45,18 @@ data class Message(
         }
 
         fun toMessage(map: Map<String, Any>): Message? {
+
             return try {
+                val attachment = (map[Contract.ATTACHMENT] as Map<String, Any>?)?.let {
+                    Attachment.toAttachment(it)
+                }
+
                 Message(
                     map[Contract.ID] as String?,
                     map[Contract.TEXT] as String,
                     map[Contract.SENDER_ID] as String,
                     map[Contract.SENDER_FULL_NAME] as String,
-                    map[Contract.ITEM_ID] as String?,
+                    attachment,
                     map[Contract.TIMESTAMP] as Timestamp
                 )
             } catch (e: Exception) {
@@ -70,7 +75,7 @@ data class Message(
         const val TEXT = "text"
         const val SENDER_ID = "senderId"
         const val SENDER_FULL_NAME = "senderFullName"
-        const val ITEM_ID = "itemId"
         const val TIMESTAMP = "timestamp"
+        const val ATTACHMENT = "attachment"
     }
 }

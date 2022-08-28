@@ -108,13 +108,23 @@
         android:name="com.piotrokninski.teacherassistant.view.main.fragment.InvitationDetailsFragment"
         tools:layout="@layout/fragment_invitation_details">
         <argument
+            android:name="editable"
+            app:argType="boolean"/>
+        <argument
+            android:name="type"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
             android:name="invitation"
             app:argType="com.piotrokninski.teacherassistant.model.Invitation"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
-            android:name="type"
-            app:argType="string"/>
+            android:name="invitationId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_invitation_to_home"
             app:destination="@id/destination_home" />
@@ -140,5 +150,8 @@
         <argument
             android:name="chatItem"
             app:argType="com.piotrokninski.teacherassistant.view.main.adapter.HomeAdapter$ChatItem" />
+        <action
+            android:id="@+id/action_chat_to_invitationDetails"
+            app:destination="@id/destination_invitation_details"/>
     </fragment>
 </navigation>

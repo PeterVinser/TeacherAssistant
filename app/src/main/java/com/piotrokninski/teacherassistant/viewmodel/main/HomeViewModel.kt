@@ -43,8 +43,8 @@ class HomeViewModel(private val dataStoreRepository: DataStoreRepository) : View
         val chatItems = ArrayList<HomeAdapter.ChatItem>()
 
         val type = when (viewType) {
-            AppConstants.VIEW_TYPE_STUDENT -> Chat.Contract.TUTOR
-            AppConstants.VIEW_TYPE_TUTOR -> Chat.Contract.STUDENT
+            AppConstants.VIEW_TYPE_STUDENT -> Chat.Contract.STUDENT
+            AppConstants.VIEW_TYPE_TUTOR -> Chat.Contract.TUTOR
             else -> null
         }
 

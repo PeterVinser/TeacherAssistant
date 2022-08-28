@@ -67,8 +67,9 @@ class UserProfileFragment : Fragment() {
         if (invitationType == Invitation.Contract.STUDENT) {
 
             val action = UserProfileFragmentDirections.actionUserProfileToInvitation(
-                Invitation.Contract.TYPE_FRIENDSHIP,
-                userProfileViewModel.prepareInvitation(invitationType, invitationMessage)
+                editable = true,
+                type = Invitation.Contract.TYPE_FRIENDSHIP,
+                invitation = userProfileViewModel.prepareInvitation(invitationType, invitationMessage)
             )
             this.findNavController().navigate(action)
         } else {
@@ -79,7 +80,7 @@ class UserProfileFragment : Fragment() {
     private fun setupViewModel(userId: String) {
         val factory = UserProfileViewModel.Factory(userId)
 
-        userProfileViewModel = ViewModelProvider(this, factory).get(UserProfileViewModel::class.java)
+        userProfileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
 
         binding.userProfileViewModel = userProfileViewModel
         binding.lifecycleOwner = viewLifecycleOwner

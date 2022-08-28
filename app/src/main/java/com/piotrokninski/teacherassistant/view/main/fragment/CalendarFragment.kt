@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.util.newStringBuilder
 import com.piotrokninski.teacherassistant.databinding.FragmentCalendarBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.view.main.MainActivity
@@ -74,7 +75,11 @@ class CalendarFragment : Fragment() {
     }
 
     private fun onAddMeetingClicked() {
-        val action = CalendarFragmentDirections.actionCalendarToInvitation(Invitation.Contract.TYPE_MEETING)
+        val action = CalendarFragmentDirections.actionCalendarToInvitation(
+            editable = true,
+            type = Invitation.Contract.TYPE_MEETING
+        )
+
         this.findNavController().navigate(action)
     }
 

@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.piotrokninski.teacherassistant.model.chat.Chat
 import com.piotrokninski.teacherassistant.model.chat.Chat.Companion.toChat
+import com.piotrokninski.teacherassistant.model.chat.Message
 import kotlinx.coroutines.tasks.await
 
 object FirestoreChatRepository {
@@ -34,7 +35,10 @@ object FirestoreChatRepository {
         val db = FirebaseFirestore.getInstance()
 
         val query = db.collection(Chat.Contract.COLLECTION_NAME)
-            .whereGreaterThan("${Chat.Contract.USERS}.${userId}", type)
+            .whereEqualTo("${Chat.Contract.USERS}.$userId", type)
+//            .orderBy(
+//                "${Chat.Contract.LATEST_MESSAGE}.${Message.Contract.TIMESTAMP}",
+//                Query.Direction.DESCENDING)
 
         return try {
             val chats = ArrayList<Chat>()

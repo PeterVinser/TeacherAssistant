@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piotrokninski.teacherassistant.databinding.FragmentChatBinding
@@ -58,7 +59,11 @@ class ChatFragment : Fragment() {
             chatViewModel.getMessagesBefore(timestamp)
         }, { position ->
             recyclerView.smoothScrollToPosition(position)
-        })
+        }, { itemId ->
+            onAttachmentClicked(itemId)
+        },
+            requireContext()
+        )
         recyclerView.adapter = adapter
     }
 
@@ -68,6 +73,15 @@ class ChatFragment : Fragment() {
         chatViewModel = ViewModelProvider(this, factory)[ChatViewModel::class.java]
 
         observeChatItems()
+    }
+
+    private fun onAttachmentClicked(itemId: String) {
+        val action = ChatFragmentDirections.actionChatToInvitationDetails(
+            editable = false,
+            invitationId = itemId
+        )
+
+        this.findNavController().navigate(action)
     }
 
     private fun observeChatItems() {

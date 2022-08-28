@@ -19,7 +19,8 @@ import com.piotrokninski.teacherassistant.util.WeekDate
 import kotlinx.coroutines.launch
 import java.util.*
 
-class InvitationDetailsViewModel(private val type: String, preparedInvitation: Invitation?) : ViewModel(), Observable {
+class InvitationDetailsViewModel(newInvitationType: String?, preparedInvitation: Invitation?, invitationId: String?) :
+    ViewModel(), Observable {
     private val TAG = "InvitationDetailsViewMo"
 
     private val registry = PropertyChangeRegistry()
@@ -32,8 +33,6 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
     private val _friendFullNames = MutableLiveData<Array<String>>()
     val friendFullNames: LiveData<Array<String>> = _friendFullNames
 
-    var editing: Boolean = false
-
     @Bindable
     val invitation = MutableLiveData<Invitation>()
 
@@ -44,25 +43,13 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
     val meeting = MutableLiveData<Meeting?>()
 
     init {
+        viewModelScope.launch {
 
-        if (preparedInvitation != null) {
-            invitation.value = preparedInvitation
-
-            course.value = preparedInvitation.course
-            meeting.value = preparedInvitation.meeting
-
-            invitation.value?.course = course.value
-
-            _friendFullNames.value = arrayListOf(preparedInvitation.invitedUserFullName!!).toTypedArray()
-
-            if (type != Invitation.Contract.TYPE_FRIENDSHIP) {
-                editing = true
-            }
-        } else {
-            viewModelScope.launch {
+            if (newInvitationType != null) {
                 currentUser = FirestoreUserRepository.getUserDataOnce(currentUserId)!!
 
-                val friendType = when (type) {
+                // Getting only students in case of course invitations
+                val friendType = when (newInvitationType) {
                     Invitation.Contract.TYPE_COURSE -> Friend.Contract.TYPE_STUDENT
                     else -> Friend.Contract.TYPE_ALL
                 }
@@ -82,20 +69,19 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
                     _friendFullNames.value = friendFullNames.toTypedArray()
                 }
 
-                val invitedAs = if (type == Invitation.Contract.TYPE_MEETING) {
-                    Invitation.Contract.FRIEND
-                } else {
-                    Invitation.Contract.STUDENT
+                val invitedAs = when (newInvitationType) {
+                    Invitation.Contract.TYPE_MEETING -> Invitation.Contract.FRIEND
+                    else -> Invitation.Contract.STUDENT
                 }
 
                 invitation.value = Invitation(
                     invitingUserId = currentUserId,
                     invitingUserFullName = currentUser.fullName,
                     invitedAs = invitedAs,
-                    type = type
+                    type = newInvitationType
                 )
 
-                when (type) {
+                when (newInvitationType) {
                     Invitation.Contract.TYPE_COURSE -> {
                         course.value = Course(
                             tutorId = currentUserId,
@@ -114,6 +100,22 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
                         invitation.value?.meeting = meeting.value
                     }
                 }
+            } else {
+
+                if (preparedInvitation != null) {
+                    invitation.value = preparedInvitation
+                } else if (invitationId != null) {
+                    invitation.value = FirestoreInvitationRepository.getInvitation(invitationId)
+                }
+
+                course.value = invitation.value?.course
+                meeting.value = invitation.value?.meeting
+
+                _friendFullNames.value = if (invitation.value?.invitedUserFullName != null) {
+                    arrayListOf(invitation.value?.invitedUserFullName!!).toTypedArray()
+                } else {
+                    null
+                }
             }
         }
     }
@@ -121,21 +123,30 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
     fun sendInvitation(): Boolean {
         val invitation = invitation.value
 
-        if (editing) {
-            invitation?.let {
-                FirestoreInvitationRepository.updateInvitation(it)
-            }
-            return true
-        }
-
-        if (invitation?.isComplete == true) {
+        return if (invitation?.isComplete == true) {
             invitation.message?.ifEmpty { invitation.message = null }
             FirestoreInvitationRepository.addInvitation(invitation)
 
-            return true
+            true
+        } else {
+            false
         }
+    }
 
-        return false
+    fun updateInvitation(): Boolean {
+        return invitation.value?.let {
+            FirestoreInvitationRepository.updateInvitation(it)
+            true
+        } ?: false
+    }
+
+    fun confirmInvitation(): Boolean {
+        return invitation.value?.id?.let {
+            FirestoreInvitationRepository.updateInvitation(
+                it, Invitation.Contract.STATUS, Invitation.Contract.STATUS_APPROVED
+            )
+            true
+        } ?: false
     }
 
     fun addCourse() {
@@ -172,7 +183,7 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
         invitation.value?.invitedUserFullName = selectedFriend.fullName
         invitation.value?.chatId = selectedFriend.chatId
 
-        when (type) {
+        when (invitation.value?.type) {
             Invitation.Contract.TYPE_COURSE -> {
                 course.value?.studentId = selectedFriend.userId
                 course.value?.studentFullName = selectedFriend.fullName
@@ -185,7 +196,7 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
     }
 
     fun updateMeetingType(singular: Boolean) {
-        meeting.value!!.singular = singular
+        meeting.value?.singular = singular
 
         registry.notifyChange(this, BR.meeting)
     }
@@ -218,10 +229,11 @@ class InvitationDetailsViewModel(private val type: String, preparedInvitation: I
         registry.remove(callback)
     }
 
-    class Factory(private val type: String, private val invitation: Invitation?) : ViewModelProvider.Factory {
+    class Factory(private val type: String?, private val invitation: Invitation?, private val invitationId: String?) :
+        ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(InvitationDetailsViewModel::class.java)) {
-                return InvitationDetailsViewModel(type, invitation) as T
+                return InvitationDetailsViewModel(type, invitation, invitationId) as T
             }
             throw IllegalArgumentException("View model not found")
         }

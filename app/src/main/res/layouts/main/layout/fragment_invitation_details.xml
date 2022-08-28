@@ -8,6 +8,11 @@
         <variable
             name="invitationViewModel"
             type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationDetailsViewModel" />
+        <variable
+            name="editable"
+            type="boolean" />
+
+        <import type="android.view.View"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,7 +85,8 @@
                     android:hint="@string/invitation_message_hint"
                     android:inputType="textMultiLine"
                     android:minHeight="48dp"
-                    android:text="@={invitationViewModel.invitation.message}" />
+                    android:text="@={invitationViewModel.invitation.message}"
+                    android:enabled="@{editable}"/>
 
                 <Button
                     android:id="@+id/invitation_add_course_button"

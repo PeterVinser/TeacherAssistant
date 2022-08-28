@@ -6,6 +6,11 @@
         <variable
             name="invitationViewModel"
             type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationDetailsViewModel" />
+
+        <variable
+            name="editable"
+            type="boolean" />
+        <import type="android.view.View"/>
     </data>
 
     <FrameLayout
@@ -37,7 +42,8 @@
                         android:layout_height="wrap_content"
                         android:minWidth="160dp"
                         android:text="@string/singular_meeting_text"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:enabled="@{editable}"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/invitation_meeting_recurring_toggle_button"
@@ -45,7 +51,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="160dp"
-                        android:text="@string/recurring_meeting_text" />
+                        android:text="@string/recurring_meeting_text"
+                        android:enabled="@{editable}"/>
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -60,7 +67,8 @@
                     android:minHeight="48dp"
                     android:text="@={invitationViewModel.meeting.title}"
                     android:textAlignment="center"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:enabled="@{editable}"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,7 +83,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="@string/new_meeting_date_button_text" />
+                        android:text="@string/new_meeting_date_button_text"
+                        android:visibility="@{editable ? View.VISIBLE : View.GONE}"/>
 
                     <TextView
                         android:id="@+id/invitation_meeting_date"
@@ -98,7 +107,8 @@
                     android:hint="@string/new_meeting_description_hint"
                     android:inputType="textMultiLine"
                     android:text="@={invitationViewModel.meeting.description}"
-                    android:minHeight="48dp" />
+                    android:minHeight="48dp"
+                    android:enabled="@{editable}"/>
 
 
             </LinearLayout>

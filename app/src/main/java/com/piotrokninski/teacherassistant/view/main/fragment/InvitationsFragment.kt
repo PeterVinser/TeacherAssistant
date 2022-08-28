@@ -42,13 +42,6 @@ class InvitationsFragment : Fragment() {
 
         (activity as MainActivity).isBottomNavVisible(false)
 
-        arguments?.let {
-            val userId = it.getString(Invitation.Contract.INVITING_USER_ID)
-            if (userId != null) {
-                navigateToProfile(userId)
-            }
-        }
-
         setupViewModel()
     }
 
@@ -69,7 +62,7 @@ class InvitationsFragment : Fragment() {
 
     private fun itemClickListener(invitationsAdapterItem: InvitationsAdapter.Item) {
         when (invitationsAdapterItem) {
-            is InvitationsAdapter.Item.Invitation -> navigateToProfile(invitationsAdapterItem.invitation.invitingUserId)
+            is InvitationsAdapter.Item.Invitation -> navigateToInvitation(invitationsAdapterItem.invitation)
 
             is InvitationsAdapter.Item.Homework -> {}
 
@@ -77,8 +70,11 @@ class InvitationsFragment : Fragment() {
         }
     }
 
-    private fun navigateToProfile(userId: String) {
-        val action = InvitationsFragmentDirections.actionHomeToUserProfile(userId)
+    private fun navigateToInvitation(invitation: Invitation) {
+        val action = InvitationsFragmentDirections.actionInvitationsToInvitationDetails(
+            editable = false,
+            invitation = invitation
+        )
         this.findNavController().navigate(action)
     }
 
@@ -106,7 +102,8 @@ class InvitationsFragment : Fragment() {
         val action = when (item) {
             is InvitationsAdapter.Item.Invitation ->
                 InvitationsFragmentDirections.actionInvitationsToInvitationDetails(
-                    item.invitation.type, item.invitation
+                    editable = true,
+                    invitation = item.invitation
                 )
 
             else -> null

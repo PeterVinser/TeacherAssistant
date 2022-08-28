@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.util.newStringBuilder
 import com.piotrokninski.teacherassistant.databinding.FragmentCoursesBinding
 import com.piotrokninski.teacherassistant.model.Invitation
 import com.piotrokninski.teacherassistant.model.course.Course
@@ -51,7 +52,10 @@ class CoursesFragment : Fragment() {
     }
 
     private fun onAddCourseClicked() {
-        val action = CoursesFragmentDirections.actionCourseToInvitation(Invitation.Contract.TYPE_COURSE)
+        val action = CoursesFragmentDirections.actionCourseToInvitation(
+            editable = true,
+            type = Invitation.Contract.TYPE_COURSE
+        )
         this.findNavController().navigate(action)
     }
 

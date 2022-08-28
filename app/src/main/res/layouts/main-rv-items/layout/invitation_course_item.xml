@@ -8,6 +8,10 @@
         <variable
             name="invitationViewModel"
             type="com.piotrokninski.teacherassistant.viewmodel.main.InvitationDetailsViewModel" />
+        <variable
+            name="editable"
+            type="boolean" />
+        <import type="android.view.View"/>
     </data>
 
     <FrameLayout
@@ -43,6 +47,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        android:enabled="@{editable}"
                         tools:ignore="TextContrastCheck" />
 
                     <Button
@@ -80,7 +85,8 @@
                     android:layout_width="192dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:hint="@string/lesson_type_hint">
+                    android:hint="@string/lesson_type_hint"
+                    android:enabled="@{editable}">
 
                     <AutoCompleteTextView
                         android:id="@+id/invitation_course_type_text_view"
@@ -95,7 +101,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="8dp"
+                    android:visibility="@{editable ? View.VISIBLE : View.GONE}">
 
                     <TextView
                         android:id="@+id/invitation_course_item_time_title"
