@@ -4,12 +4,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -65,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigation()
 
-        onUserRegistered()
+        onUserSigned()
     }
 
     private fun createNotificationChannel() {
@@ -99,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onUserRegistered() {
+    private fun onUserSigned() {
 
         val registeredUser =
             intent.getSerializableExtra(AppConstants.REGISTERED_USER_EXTRA) as User?

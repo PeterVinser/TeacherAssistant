@@ -77,6 +77,6 @@ class RegisterDetailsFragment : Fragment() {
 
         val user = User(userId, fullName, username, email, isStudent, isTutor, subjects, localization, null, null, summary)
 
-        (activity as StartActivity).onSignedSuccessful(null, user)
+        (activity as StartActivity).onSignedSuccessful(user)
     }
 }

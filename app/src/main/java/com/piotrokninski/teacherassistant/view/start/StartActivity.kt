@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.piotrokninski.teacherassistant.R
 import com.piotrokninski.teacherassistant.model.user.User
+import com.piotrokninski.teacherassistant.repository.datastore.DataStoreRepository
 import com.piotrokninski.teacherassistant.util.AppConstants
 import com.piotrokninski.teacherassistant.util.notifications.FcmManager
 import com.piotrokninski.teacherassistant.view.main.MainActivity
 import com.piotrokninski.teacherassistant.viewmodel.start.StartViewModel
+import kotlinx.coroutines.flow.collect
 
 class StartActivity : AppCompatActivity() {
     private val TAG = "StartActivity"
@@ -20,6 +23,8 @@ class StartActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     private lateinit var startViewModel: StartViewModel
+
+    private var newUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,33 +46,49 @@ class StartActivity : AppCompatActivity() {
 
         if (auth.currentUser != null) {
             Log.d(TAG, "onStart: called")
-            onSignedSuccessful(extras, null)
+//            onSignedSuccessful(extras, null, true)
+            launchApp(extras)
         }
     }
 
-    fun onSignedSuccessful(extras: Bundle?, newUser: User?) {
-
+    fun onSignedSuccessful(newUser: User?) {
         val userId = auth.currentUser!!.uid
 
         FcmManager.subscribeToTopic(userId)
 
-        Log.d(TAG, "onSignedSuccessful: called")
+        this.newUser = newUser
 
+        startViewModel.initApp(newUser, userId)
+    }
+
+    private fun launchApp(extras: Bundle?) {
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(AppConstants.REGISTERED_USER_EXTRA, newUser)
 
         if (extras != null) {
             intent.putExtras(extras)
         }
+
+        intent.putExtra(AppConstants.REGISTERED_USER_EXTRA, newUser)
 
         startActivity(intent)
         finish()
     }
 
     private fun setupViewModel() {
-        val factory = StartViewModel.Factory()
+        val factory = StartViewModel.Factory(DataStoreRepository(this))
 
-        startViewModel = ViewModelProvider(this, factory).get(StartViewModel::class.java)
+        startViewModel = ViewModelProvider(this, factory)[StartViewModel::class.java]
+
+        observeChannel()
     }
 
+    private fun observeChannel() {
+        lifecycleScope.launchWhenCreated {
+            startViewModel.eventFlow.collect { event ->
+                when (event) {
+                    is StartViewModel.StartEvent.SignedEvent -> launchApp(null)
+                }
+            }
+        }
+    }
 }
